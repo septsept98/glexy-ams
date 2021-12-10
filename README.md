@@ -1,7 +1,7 @@
 GLEXY - AMMS
 
 ANGOTA KELOMPOK
-1) 
+1) Septian Ardiansyah
 2)
 3)
 
