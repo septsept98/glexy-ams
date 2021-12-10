@@ -6,5 +6,6 @@ public class App {
 		System.out.println("Masukkan Angka : ");
 		System.out.println("Masukkan Huruf : ");
 		System.out.println("Masukkan symbol : ");
+		System.out.println("Masukkan Alamat : ");
 	}
 }
