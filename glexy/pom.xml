@@ -6,7 +6,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>glexy</artifactId>
-  
+
   <dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -36,4 +36,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
