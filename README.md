@@ -2,8 +2,8 @@ GLEXY - AMMS
 
 ANGOTA KELOMPOK
 1) Septian Ardiansyah
-2)
-3)
+2) Febri Ufaira Hasan
+3) Glenn Nazari
 
 ##How to start##
 
