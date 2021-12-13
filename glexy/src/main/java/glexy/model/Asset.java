@@ -1,16 +1,46 @@
 package glexy.model;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
-public class Asset {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.lawencon.base.BaseEntity;
+
+@Entity
+public class Asset extends BaseEntity{
 	
+	private static final long serialVersionUID = 2389556928749584507L;
+
 	private String name;
+	
 	private String code;
-	private Date expiredDate;
+	
+	@Column(name = "expired_date")
+	private LocalDateTime expiredDate;
+	
+	@ManyToOne
+	@JoinColumn(name = "invoice_id", columnDefinition = "varchar")
 	private Invoice invoiceId;
+	
+	@ManyToOne
+	@JoinColumn(name = "company_id", columnDefinition = "varchar")
 	private Company companyId;
+	
+	@ManyToOne
+	@JoinColumn(name = "asset_type_id", columnDefinition = "varchar")
 	private AssetType assetTypeId;
+	
+	@ManyToOne
+	@JoinColumn(name = "inventory_id", columnDefinition = "varchar")
 	private Inventory inventoryId;
+	
+	@ManyToOne
+	@JoinColumn(name = "status_asset_id", columnDefinition = "varchar")
+	private StatusAsset statusAssetId;
+	
 	public String getName() {
 		return name;
 	}
@@ -23,10 +53,10 @@ public class Asset {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public Date getExpiredDate() {
+	public LocalDateTime getExpiredDate() {
 		return expiredDate;
 	}
-	public void setExpiredDate(Date expiredDate) {
+	public void setExpiredDate(LocalDateTime expiredDate) {
 		this.expiredDate = expiredDate;
 	}
 	public Invoice getInvoiceId() {
@@ -52,6 +82,12 @@ public class Asset {
 	}
 	public void setInventoryId(Inventory inventoryId) {
 		this.inventoryId = inventoryId;
+	}
+	public StatusAsset getStatusAssetId() {
+		return statusAssetId;
+	}
+	public void setStatusAssetId(StatusAsset statusAssetId) {
+		this.statusAssetId = statusAssetId;
 	}
 	
 	

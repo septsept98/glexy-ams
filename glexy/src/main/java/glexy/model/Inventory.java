@@ -1,10 +1,23 @@
 package glexy.model;
 
-public class Inventory {
-	
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+import com.lawencon.base.BaseEntity;
+
+@Entity
+public class Inventory extends BaseEntity{
+
+	private static final long serialVersionUID = 5393625517737723312L;
+
+	@Column(name = "name_asset")
 	private String nameAsset;
+	
 	private String code;
+	
 	private int stock;
+	
+	@Column(name = "latest_stock")
 	private int latestStock;
 	
 	public String getNameAsset() {
