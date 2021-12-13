@@ -24,6 +24,5 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 	public TransactionDetail saveOrUpdate(TransactionDetail data) throws Exception {
 		return save(data);
 	}
-
 	
 }
