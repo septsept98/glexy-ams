@@ -2,9 +2,12 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.StatusTransaction;
 
+@Repository
 public class StatusTransactionDaoImpl extends BaseDaoImpl<StatusTransaction> implements StatusTransactionDao{
 
 	@Override
@@ -19,14 +22,12 @@ public class StatusTransactionDaoImpl extends BaseDaoImpl<StatusTransaction> imp
 
 	@Override
 	public StatusTransaction saveOrUpdate(StatusTransaction data) throws Exception {
-		save(data);
-		return null;
+		return save(data);
 	}
 
 	@Override
 	public boolean deleteById(String id) throws Exception {
-		super.deleteById(id);
-		return false;
+		return super.deleteById(id);
 	}
 
 }

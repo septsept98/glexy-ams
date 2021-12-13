@@ -2,9 +2,12 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.TrackAsset;
 
+@Repository
 public class TrackAssetDaoImpl extends BaseDaoImpl<TrackAsset> implements TrackAssetDao {
 
 	@Override
@@ -19,8 +22,7 @@ public class TrackAssetDaoImpl extends BaseDaoImpl<TrackAsset> implements TrackA
 
 	@Override
 	public TrackAsset saveOrUpdate(TrackAsset data) throws Exception {
-		save(data);
-		return null;
+		return save(data);
 	}
 
 }
