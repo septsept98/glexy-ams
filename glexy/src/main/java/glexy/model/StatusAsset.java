@@ -12,10 +12,10 @@ public class StatusAsset extends BaseEntity {
 
 	private static final long serialVersionUID = -8607376696599223467L;
 
-	@Column(name = "code_status_asset")
+	@Column(name = "code_status_asset", length = 20, nullable = false)
 	private String codeStatusAsset;
 	
-	@Column(name = "name_status_asset")
+	@Column(name = "name_status_asset", length = 30, nullable = false)
 	private String nameStatusAsset;
 
 	public String getCodeStatusAsset() {

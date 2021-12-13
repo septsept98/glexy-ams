@@ -14,10 +14,10 @@ public class Transactions extends BaseEntity{
 	
 	private static final long serialVersionUID = -8411698396500371421L;
 
-	@Column(name = "code_transaction")
+	@Column(name = "code_transaction", length = 20, nullable = false)
 	private String codeTransaction;
 	
-	@Column(name = "checkout_date")
+	@Column(name = "checkout_date", nullable = false)
 	private LocalDate checkOutDate;
 	
 	private Integer quantity;

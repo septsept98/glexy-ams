@@ -14,14 +14,14 @@ public class StatusTransaction extends BaseEntity {
 
 	private static final long serialVersionUID = -2957305505468618480L;
 
-	@Column(name = "code_status_tr")
+	@Column(name = "code_status_tr", length = 20, nullable = false)
 	private String codeStatusTr;
 	
-	@Column(name = "name_status_tr")
+	@Column(name = "name_status_tr", length = 30, nullable = false)
 	private String nameStatusTr;
 	
 	@ManyToOne
-	@JoinColumn(name = "status_asset_id", columnDefinition = "varchar")
+	@JoinColumn(name = "status_asset_id", columnDefinition = "varchar", nullable = false)
 	private StatusAsset statusAssetId;
 
 	public String getCodeStatusTr() {
