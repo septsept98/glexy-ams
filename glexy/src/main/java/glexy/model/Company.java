@@ -19,6 +19,8 @@ public class Company extends BaseEntity{
 	
 	private String address;
 	
+	
+	
 	public String getName() {
 		return name;
 	}

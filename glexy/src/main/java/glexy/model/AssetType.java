@@ -1,7 +1,6 @@
 package glexy.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
 
