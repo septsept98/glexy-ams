@@ -54,16 +54,18 @@ public class BaseDaoImpl<T extends BaseEntity> {
 		em().remove(entity);
 	}
 
-	protected void deleteById(final Object entityId) throws Exception {
+	protected boolean deleteById(final Object entityId) throws Exception {
 		T entity = null;
 		if (entityId != null && entityId instanceof String) {
 			entity = getById((String) entityId);
 		}
 
-		if (entity != null)
+		if (entity != null) {
 			delete(entity);
-		else
-			throw new Exception("ID Not Found");
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private EntityManager em() {
