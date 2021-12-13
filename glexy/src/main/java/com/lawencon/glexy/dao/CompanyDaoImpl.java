@@ -2,19 +2,22 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.Company;
 
+@Repository
 public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {
 
 	@Override
-	public void insert(Company data) throws Exception {
-		save(data);		
+	public Company saveOrUpdate(Company data) throws Exception {
+		return save(data);
 	}
 
 	@Override
-	public void update(Company data) throws Exception {
-		save(data);		
+	public boolean deleteById(String id) throws Exception {
+		return super.deleteById(id);
 	}
 
 	@Override
