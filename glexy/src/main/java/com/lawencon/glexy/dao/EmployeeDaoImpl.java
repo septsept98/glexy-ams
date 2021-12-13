@@ -1,0 +1,34 @@
+package com.lawencon.glexy.dao;
+
+import java.util.List;
+
+import com.lawencon.base.BaseDaoImpl;
+import com.lawencon.glexy.model.Employee;
+
+public class EmployeeDaoImpl extends BaseDaoImpl<Employee> implements EmployeeDao {
+
+	@Override
+	public List<Employee> findAll() throws Exception {
+		
+		return getAll();
+	}
+
+	@Override
+	public Employee findById(String id) throws Exception {
+		
+		return getById(id);
+	}
+
+	@Override
+	public Employee saveOrUpdate(Employee employee) throws Exception {
+		
+		return save(employee);
+	}
+
+	@Override
+	public boolean deleteById(String id) throws Exception {
+		
+		return deleteById(id);
+	}
+
+}

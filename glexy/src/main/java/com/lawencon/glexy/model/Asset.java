@@ -25,7 +25,7 @@ public class Asset extends BaseEntity{
 	
 	@ManyToOne
 	@JoinColumn(name = "asset_img", columnDefinition = "varchar")
-	private String assetImg;
+	private File assetImg;
 	
 	@ManyToOne
 	@JoinColumn(name = "invoice_id", columnDefinition = "varchar")
@@ -95,12 +95,13 @@ public class Asset extends BaseEntity{
 	public void setStatusAssetId(StatusAsset statusAssetId) {
 		this.statusAssetId = statusAssetId;
 	}
-	public String getAssetImg() {
+	public File getAssetImg() {
 		return assetImg;
 	}
-	public void setAssetImg(String assetImg) {
+	public void setAssetImg(File assetImg) {
 		this.assetImg = assetImg;
 	}
+	
 	
 	
 }
