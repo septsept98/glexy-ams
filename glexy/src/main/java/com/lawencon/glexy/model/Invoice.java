@@ -14,8 +14,8 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name = "invoices")
 public class Invoice extends BaseEntity{
-	
-	private static final long serialVersionUID = -2035680468034920096L;
+
+	private static final long serialVersionUID = -5480037153902387528L;
 
 	private String code;
 	
@@ -28,32 +28,38 @@ public class Invoice extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name = "invoice_img", columnDefinition = "varchar")
 	private File invoiceImg;
-	
+  
 	public String getCode() {
 		return code;
 	}
+
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	public Date getPurchaseDate() {
 		return purchaseDate;
 	}
+
 	public void setPurchaseDate(Date purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
+
 	public BigDecimal getTotalPrice() {
 		return totalPrice;
 	}
+
 	public void setTotalPrice(BigDecimal totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+
 	public File getInvoiceImg() {
 		return invoiceImg;
 	}
+
 	public void setInvoiceImg(File invoiceImg) {
 		this.invoiceImg = invoiceImg;
 	}
-	
-	
+
 	
 }
