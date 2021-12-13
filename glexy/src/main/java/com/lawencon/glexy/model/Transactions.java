@@ -13,8 +13,8 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table
 public class Transactions extends BaseEntity{
-	
-	private static final long serialVersionUID = -8411698396500371421L;
+
+	private static final long serialVersionUID = 3620722082804737286L;
 
 	@Column(name = "code_transaction", length = 20, nullable = false)
 	private String codeTransaction;
@@ -23,6 +23,8 @@ public class Transactions extends BaseEntity{
 	private LocalDate checkOutDate;
 	
 	private Integer quantity;
+	
+	private String description;
 	
 	@ManyToOne
 	@JoinColumn(name = "employee_id", columnDefinition = "varchar")
@@ -58,6 +60,14 @@ public class Transactions extends BaseEntity{
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Employee getEmployeeId() {
