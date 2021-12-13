@@ -1,10 +1,17 @@
 package glexy.model;
 
-public class Company {
-	
+import com.lawencon.base.BaseEntity;
+
+public class Company extends BaseEntity{
+
+	private static final long serialVersionUID = -7368437893815303686L;
+
 	private String name;
+	
 	private String code;
+	
 	private String description;
+	
 	private String address;
 	
 	public String getName() {

@@ -1,8 +1,20 @@
 package glexy.model;
 
-public class AssetType {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.lawencon.base.BaseEntity;
+
+@Entity
+@Table(name = "asset_type")
+public class AssetType extends BaseEntity{
+
+	private static final long serialVersionUID = 7115761567608885366L;
+
 	private String name;
+	
 	private String code;
+	
 	public String getName() {
 		return name;
 	}
