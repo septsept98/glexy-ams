@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import com.lawencon.base.BaseEntity;
 
 @Entity
+@Table(name = "asset_types")
 public class AssetType extends BaseEntity{
 
 	private static final long serialVersionUID = 7115761567608885366L;

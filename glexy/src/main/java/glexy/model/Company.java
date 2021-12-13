@@ -1,10 +1,12 @@
 package glexy.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
+@Table(name = "companies")
 public class Company extends BaseEntity{
 
 	private static final long serialVersionUID = -7368437893815303686L;

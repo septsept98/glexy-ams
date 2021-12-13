@@ -6,10 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
+@Table(name = "assets")
 public class Asset extends BaseEntity{
 	
 	private static final long serialVersionUID = 2389556928749584507L;

@@ -40,28 +40,32 @@ public class BaseDaoImpl<T extends BaseEntity> {
 		return em().createQuery("FROM " + clazz.getName(), clazz).getResultList();
 	}
 
-	protected void save(final T entity) throws Exception {
+	protected T save(T entity) throws Exception {
 		if (entity.getId() != null) {
-			em().merge(entity);
+			entity = em().merge(entity);
+			em().flush();
 		} else {
 			em().persist(entity);
 		}
+		return entity;
 	}
 
 	protected void delete(final T entity) throws Exception {
 		em().remove(entity);
 	}
 
-	protected void deleteById(final Object entityId) throws Exception {
+	protected boolean deleteById(final Object entityId) throws Exception {
 		T entity = null;
 		if (entityId != null && entityId instanceof String) {
 			entity = getById((String) entityId);
 		}
 
-		if (entity != null)
+		if (entity != null) {
 			delete(entity);
-		else
-			throw new Exception("ID Not Found");
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private EntityManager em() {
