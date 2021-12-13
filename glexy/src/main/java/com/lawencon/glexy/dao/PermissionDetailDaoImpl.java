@@ -12,7 +12,7 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 		
 		
 		
-		return ;
+		return getAll();
 	}
 
 	@Override
