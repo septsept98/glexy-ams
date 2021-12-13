@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "track_asset")
+@Table(name = "track_assets")
 public class TrackAsset extends BaseEntity {
 
 	private static final long serialVersionUID = 1251049900399795603L;

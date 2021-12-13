@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "transaction_detail")
+@Table(name = "transaction_details")
 public class TransactionDetail extends BaseEntity {
 
 	private static final long serialVersionUID = -1764075380875113839L;

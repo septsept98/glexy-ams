@@ -40,12 +40,14 @@ public class BaseDaoImpl<T extends BaseEntity> {
 		return em().createQuery("FROM " + clazz.getName(), clazz).getResultList();
 	}
 
-	protected void save(final T entity) throws Exception {
+	protected T save(T entity) throws Exception {
 		if (entity.getId() != null) {
-			em().merge(entity);
+			entity = em().merge(entity);
+			em().flush();
 		} else {
 			em().persist(entity);
 		}
+		return entity;
 	}
 
 	protected void delete(final T entity) throws Exception {
