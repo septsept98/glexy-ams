@@ -6,13 +6,11 @@ import com.lawencon.glexy.model.Location;
 
 public interface LocationDao {
 	
-	void insert(Location data) throws Exception;
-
-	void update(Location data) throws Exception;
+	Location saveOrUpdate(Location data) throws Exception;
 
 	Location findById(String id) throws Exception;
 	
 	List<Location> findAll() throws Exception;
 	
-
+	boolean deleteById(String id) throws Exception;
 }

@@ -2,19 +2,22 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.Location;
 
+@Repository
 public class LocationDaoImpl extends BaseDaoImpl<Location> implements LocationDao {
 
 	@Override
-	public void insert(Location data) throws Exception {
-		save(data);		
+	public Location saveOrUpdate(Location data) throws Exception {
+		return save(data);
 	}
 
 	@Override
-	public void update(Location data) throws Exception {
-		save(data);		
+	public boolean deleteById(String id) throws Exception {
+		return super.deleteById(id);
 	}
 
 	@Override

@@ -2,19 +2,22 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.Invoice;
 
+@Repository
 public class InvoiceDaoImpl extends BaseDaoImpl<Invoice> implements InvoiceDao {
 
 	@Override
-	public void insert(Invoice data) throws Exception {
-		save(data);
+	public Invoice saveOrUpdate(Invoice data) throws Exception {
+		return save(data);
 	}
 
 	@Override
-	public void update(Invoice data) throws Exception {
-		save(data);		
+	public boolean deleteById(String id) throws Exception {
+		return super.deleteById(id);
 	}
 
 	@Override

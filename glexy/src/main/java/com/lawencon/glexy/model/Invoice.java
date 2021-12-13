@@ -28,7 +28,7 @@ public class Invoice extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name = "invoice_img", columnDefinition = "varchar")
 	private File invoiceImg;
-
+  
 	public String getCode() {
 		return code;
 	}
@@ -60,5 +60,6 @@ public class Invoice extends BaseEntity{
 	public void setInvoiceImg(File invoiceImg) {
 		this.invoiceImg = invoiceImg;
 	}
+
 	
 }
