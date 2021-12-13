@@ -2,19 +2,22 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.AssetType;
 
+@Repository
 public class AssetTypeDaoImpl extends BaseDaoImpl<AssetType> implements AssetTypeDao{
 
 	@Override
-	public void insert(AssetType data) throws Exception {
-		save(data);		
+	public AssetType saveOrUpdate(AssetType data) throws Exception {
+		return save(data);
 	}
 
 	@Override
-	public void update(AssetType data) throws Exception {
-		save(data);		
+	public boolean deleteById(String id) throws Exception {
+		return super.deleteById(id);
 	}
 
 	@Override

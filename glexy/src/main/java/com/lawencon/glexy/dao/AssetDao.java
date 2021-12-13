@@ -6,13 +6,13 @@ import com.lawencon.glexy.model.Asset;
 
 public interface AssetDao {
 	
-	void insert(Asset data) throws Exception;
-	
-	void update(Asset data) throws Exception;
+	Asset saveOrUpdate(Asset data) throws Exception;
 
 	Asset findById(String id) throws Exception;
 	
 	List<Asset> findAll() throws Exception;
+	
+	boolean deleteById(String id) throws Exception;
 	
 	
 

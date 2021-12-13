@@ -2,9 +2,12 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.Transactions;
 
+@Repository
 public class TransactionDaoImpl extends BaseDaoImpl<Transactions> implements TransactionDao {
 
 	@Override
@@ -19,7 +22,6 @@ public class TransactionDaoImpl extends BaseDaoImpl<Transactions> implements Tra
 
 	@Override
 	public Transactions saveOrUpdate(Transactions data) throws Exception {
-		save(data);
-		return null;
+		return save(data);
 	}
 }
