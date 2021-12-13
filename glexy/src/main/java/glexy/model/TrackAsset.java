@@ -2,8 +2,13 @@ package glexy.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.lawencon.base.BaseEntity;
 
+@Entity
+@Table(name = "track_asset")
 public class TrackAsset extends BaseEntity {
 
 	private static final long serialVersionUID = 1251049900399795603L;
