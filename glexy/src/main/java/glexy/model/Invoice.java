@@ -5,6 +5,8 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.lawencon.base.BaseEntity;
 
@@ -20,6 +22,10 @@ public class Invoice extends BaseEntity{
 	
 	@Column(name = "total_price")
 	private BigDecimal totalPrice;
+	
+	@ManyToOne
+	@JoinColumn(name = "invoice_img", columnDefinition = "varchar")
+	private String invoiceImg;
 	
 	public String getCode() {
 		return code;

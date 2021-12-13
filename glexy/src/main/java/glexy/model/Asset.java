@@ -22,6 +22,10 @@ public class Asset extends BaseEntity{
 	private LocalDateTime expiredDate;
 	
 	@ManyToOne
+	@JoinColumn(name = "asset_img", columnDefinition = "varchar")
+	private String assetImg;
+	
+	@ManyToOne
 	@JoinColumn(name = "invoice_id", columnDefinition = "varchar")
 	private Invoice invoiceId;
 	
@@ -88,6 +92,12 @@ public class Asset extends BaseEntity{
 	}
 	public void setStatusAssetId(StatusAsset statusAssetId) {
 		this.statusAssetId = statusAssetId;
+	}
+	public String getAssetImg() {
+		return assetImg;
+	}
+	public void setAssetImg(String assetImg) {
+		this.assetImg = assetImg;
 	}
 	
 	
