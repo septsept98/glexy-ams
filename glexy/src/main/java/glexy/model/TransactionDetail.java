@@ -2,6 +2,7 @@ package glexy.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,6 +20,7 @@ public class TransactionDetail extends BaseEntity {
 	@JoinColumn(name = "transaction_id", columnDefinition = "varchar")
 	private Transactions transactionId;
 	
+	@Column(name = "duration_date")
 	private LocalDate durationDate;
 	
 	@ManyToOne
@@ -28,7 +30,8 @@ public class TransactionDetail extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "status_asset_checkout_id", columnDefinition = "varchar")
 	private StatusAsset statusAssetCheckoutId;
-	
+
+	@Column(name = "date_checkin")
 	private LocalDate dateCheckin;
 
 	@ManyToOne

@@ -2,6 +2,7 @@ package glexy.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,14 +14,19 @@ public class TrackAsset extends BaseEntity {
 
 	private static final long serialVersionUID = 1251049900399795603L;
 
+	@Column(name = "code_asset", length = 20, nullable = false)
 	private String codeAsset;
-	
+
+	@Column(name = "name_activity", length = 30, nullable = false)
 	private String nameActivity;
-	
+
+	@Column(name = "date_activity", nullable = false)
 	private LocalDate dateActivity;
-	
+
+	@Column(name = "user_id", length = 36, nullable = false)
 	private String userId;
-	
+
+	@Column(name = "transaction_code", length = 20, nullable = false)
 	private String transactionCode;
 
 	public String getCodeAsset() {
