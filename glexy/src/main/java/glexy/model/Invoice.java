@@ -5,10 +5,12 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
+@Table(name = "invoices")
 public class Invoice extends BaseEntity{
 	
 	private static final long serialVersionUID = -2035680468034920096L;
