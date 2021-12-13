@@ -10,7 +10,9 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 	@Override
 	public List<PermissionDetail> findAll() throws Exception {
 		
-		return getAll();
+		
+		
+		return ;
 	}
 
 	@Override
