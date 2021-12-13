@@ -2,9 +2,12 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.Users;
 
+@Repository
 public class UsersDaoImpl extends BaseDaoImpl<Users> implements UsersDao {
 
 	@Override
