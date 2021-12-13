@@ -2,9 +2,12 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.model.Roles;
 
+@Repository
 public class RolesDaoImpl extends BaseDaoImpl<Roles> implements RolesDao {
 
 	@Override
@@ -22,13 +25,13 @@ public class RolesDaoImpl extends BaseDaoImpl<Roles> implements RolesDao {
 	@Override
 	public Roles saveOrUpdate(Roles roles) throws Exception {
 		
-		return null;
+		return save(roles);
 	}
 
 	@Override
 	public boolean deleteById(String id) throws Exception {
-		// TODO Auto-generated method stub
-		return true;
+	
+		return super.deleteById(id);
 	}
 
 }

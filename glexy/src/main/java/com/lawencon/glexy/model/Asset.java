@@ -103,4 +103,5 @@ public class Asset extends BaseEntity{
 	}
 	
 	
+	
 }
