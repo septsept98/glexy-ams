@@ -32,7 +32,10 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 				data.setCodeStatusTr(statusTr.getCodeStatusTr());
 				data.setCreatedAt(statusTr.getCreatedAt());
 				data.setCreatedBy(statusTr.getCreatedBy());
+				data.setUpdatedBy("1");
 				data.setVersion(statusTr.getVersion());
+			} else {
+				data.setCreatedBy("3");
 			}
 			
 			StatusAsset statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());

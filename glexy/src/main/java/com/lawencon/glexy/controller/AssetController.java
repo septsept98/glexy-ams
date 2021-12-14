@@ -19,7 +19,7 @@ import com.lawencon.glexy.service.AssetService;
 
 @RestController
 @RequestMapping("assets")
-public class AssetController {
+public class AssetController extends BaseController{
 	
 	@Autowired
 	private AssetService assetService;

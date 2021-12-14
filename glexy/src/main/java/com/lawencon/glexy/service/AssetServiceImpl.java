@@ -3,11 +3,13 @@ package com.lawencon.glexy.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.model.Asset;
 
+@Service
 public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	
 	@Autowired
