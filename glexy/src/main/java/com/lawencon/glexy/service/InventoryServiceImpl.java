@@ -43,8 +43,8 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return inventoryDao.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return inventoryDao.removeById(id);
 	}
 	
 	

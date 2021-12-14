@@ -14,9 +14,10 @@ public class Location extends BaseEntity{
 	
 	private static final long serialVersionUID = 4995297169641303960L;
 	
-	@Column(name = "name_place")
+	@Column(name = "name_place", length = 30, nullable = false)
 	private String namePlace;
 	
+	@Column(length = 20, nullable = false)
 	private String code;
 	
 	@ManyToOne

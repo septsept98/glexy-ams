@@ -8,12 +8,28 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.AssetType;
+import com.lawencon.glexy.model.Company;
+import com.lawencon.glexy.model.Inventory;
+import com.lawencon.glexy.model.Invoice;
+import com.lawencon.glexy.model.StatusAsset;
 
 @Service
 public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	
 	@Autowired
 	private AssetDao assetDao;
+	@Autowired
+	private StatusAssetService statusAssetService;
+	@Autowired
+	private InvoiceService invoiceService;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private AssetTypeService assetTypeService;
+	@Autowired
+	private InventoryService inventoryService;
+	
 	
 	@Override
 	public Asset saveOrUpdate(Asset data) throws Exception {
@@ -25,9 +41,24 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				data.setVersion(asset.getVersion());
 			}
 			
-			begin();
-			data = assetDao.saveOrUpdate(data);
-			commit();
+			StatusAsset statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
+			Invoice invoice = invoiceService.findById(data.getInvoiceId().getId());
+			Company company = companyService.findById(data.getCompanyId().getId());
+			Inventory inventory = inventoryService.findById(data.getInventoryId().getId());
+			AssetType assetType = assetTypeService.findById(data.getAssetTypeId().getId());
+			
+			if(statusAsset != null && invoice != null && company != null && inventory != null && assetType != null) {
+				data.setStatusAssetId(statusAsset);
+				data.setInvoiceId(invoice);
+				data.setCompanyId(company);
+				data.setInventoryId(inventory);
+				data.setAssetTypeId(assetType);
+
+				begin();
+				data = assetDao.saveOrUpdate(data);
+				commit();
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
@@ -46,8 +77,8 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return assetDao.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return assetDao.removeById(id);
 	}
 	
 	

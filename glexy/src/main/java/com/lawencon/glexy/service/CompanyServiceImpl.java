@@ -44,8 +44,8 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return companyDao.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return companyDao.removeById(id);
 	}
 	
 	

@@ -12,14 +12,16 @@ public class Inventory extends BaseEntity{
 
 	private static final long serialVersionUID = 5393625517737723312L;
 
-	@Column(name = "name_asset")
+	@Column(name = "name_asset", length = 30, nullable = false)
 	private String nameAsset;
 	
+	@Column(length = 20, nullable = false)
 	private String code;
 	
+	@Column(nullable = false)
 	private int stock;
 	
-	@Column(name = "latest_stock")
+	@Column(name = "latest_stock", nullable = false)
 	private int latestStock;
 	
 	public String getNameAsset() {

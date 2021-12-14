@@ -46,8 +46,8 @@ public class InvoiceServiceImpl extends BaseServiceImpl implements InvoiceServic
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return invoiceDao.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return invoiceDao.removeById(id);
 	}
 	
 	

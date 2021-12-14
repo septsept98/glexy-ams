@@ -16,8 +16,8 @@ public class LocationDaoImpl extends BaseDaoImpl<Location> implements LocationDa
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return super.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return deleteById(id);
 	}
 
 	@Override
