@@ -46,8 +46,8 @@ public class LocationServiceImpl extends BaseServiceImpl implements LocationServ
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return locationDao.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return locationDao.removeById(id);
 	}
 	
 	

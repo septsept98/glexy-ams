@@ -12,6 +12,6 @@ public interface CompanyService {
 
 	List<Company> findAll() throws Exception;
 	
-	boolean deleteById(String id) throws Exception;
+	boolean removeById(String id) throws Exception;
 
 }

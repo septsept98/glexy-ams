@@ -44,8 +44,8 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return assetTypeDao.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return assetTypeDao.removeById(id);
 	}
 	
 	
