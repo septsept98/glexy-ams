@@ -2,6 +2,9 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
@@ -36,8 +39,19 @@ public class UsersDaoImpl extends BaseDaoImpl<Users> implements UsersDao {
 
 	@Override
 	public Users getEmail(String email) throws Exception {
-		
-		return null;
+		Users users = null;
+		try {
+
+			users = createQuery("SELECT u FROM Users u WHERE u.email = :email", Users.class)
+					.setParameter("email", email).getSingleResult();
+
+		} catch (NoResultException e) {
+			e.printStackTrace();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+		}
+
+		return users;
 	}
 
 }
