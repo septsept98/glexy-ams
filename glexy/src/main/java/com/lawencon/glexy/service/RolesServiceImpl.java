@@ -47,6 +47,7 @@ public class RolesServiceImpl extends BaseServiceImpl implements RolesService  {
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 		return data;
 	}
