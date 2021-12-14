@@ -3,13 +3,14 @@ package com.lawencon.glexy.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.EmployeeDao;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
-import com.lawencon.glexy.model.Roles;
 
+@Service
 public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeService {
 
 	@Autowired
@@ -41,10 +42,11 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeServ
 				data.setVersion(employee.getVersion());
 				data.setIsActive(employee.getIsActive());
 				
-				Company company = companyService.findById(data.getCompanyId().getId());
-				data.setCompanyId(company);
 			}
-
+			
+			Company company = companyService.findById(data.getCompanyId().getId());
+			data.setCompanyId(company);
+			
 			begin();
 			data = employeeDao.saveOrUpdate(data);
 			commit();
@@ -58,8 +60,17 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeServ
 
 	@Override
 	public boolean deleteById(String id) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = false;
+		try {
+			begin();
+			result = employeeDao.deleteById(id);
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+			throw new Exception(e);
+		}
+		return result;
 	}
 
 	
