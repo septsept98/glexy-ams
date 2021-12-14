@@ -13,5 +13,6 @@ public interface StatusTransactionDao {
 
 	StatusTransaction saveOrUpdate(StatusTransaction data) throws Exception;
 
-	boolean deleteById(String id) throws Exception;
+	boolean removeById(String id) throws Exception;
+
 }
