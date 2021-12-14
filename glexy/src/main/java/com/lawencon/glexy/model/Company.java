@@ -1,5 +1,6 @@
 package com.lawencon.glexy.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,12 +14,16 @@ public class Company extends BaseEntity{
 
 	private static final long serialVersionUID = -7368437893815303686L;
 
-	private String name;
+	@Column(length = 30, nullable = false)
+	private String names;
 	
+	@Column(length = 20, nullable = false)
 	private String code;
 	
+	@Column(nullable = false)
 	private String description;
 	
+	@Column(nullable = false)
 	private String address;
 	
 	@ManyToOne
@@ -26,11 +31,11 @@ public class Company extends BaseEntity{
 	private File company_img;
 	
 	
-	public String getName() {
-		return name;
+	public String getNames() {
+		return names;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setNames(String names) {
+		this.names = names;
 	}
 	public String getCode() {
 		return code;

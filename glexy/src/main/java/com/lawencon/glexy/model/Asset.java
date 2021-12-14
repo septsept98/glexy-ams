@@ -16,11 +16,13 @@ public class Asset extends BaseEntity{
 	
 	private static final long serialVersionUID = 2389556928749584507L;
 
-	private String name;
+	@Column(length = 30, nullable = false)
+	private String names;
 	
+	@Column(length = 20, nullable = false)
 	private String code;
 	
-	@Column(name = "expired_date")
+	@Column(name = "expired_date", nullable = false)
 	private LocalDateTime expiredDate;
 	
 	@ManyToOne
@@ -47,11 +49,11 @@ public class Asset extends BaseEntity{
 	@JoinColumn(name = "status_asset_id", columnDefinition = "varchar")
 	private StatusAsset statusAssetId;
 	
-	public String getName() {
-		return name;
+	public String getNames() {
+		return names;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setNames(String names) {
+		this.names = names;
 	}
 	public String getCode() {
 		return code;
