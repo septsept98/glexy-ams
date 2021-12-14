@@ -2,10 +2,13 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.PermissionsDao;
 import com.lawencon.glexy.model.Permissions;
 
+@Service
 public class PermissionsServiceImpl extends BaseServiceImpl implements PermissionsService {
 
 	private PermissionsDao permissionsDao;
