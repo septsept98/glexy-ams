@@ -20,32 +20,32 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.service.AssetService;
+import com.lawencon.glexy.model.Inventory;
+import com.lawencon.glexy.service.InventoryService;
 
 @RestController
-@RequestMapping("assets")
-public class AssetController extends BaseController{
+@RequestMapping("inventories")
+public class InventoryController {
 	
 	@Autowired
-	private AssetService assetService;
+	private InventoryService inventoryService;
 	
 	@GetMapping
 	public ResponseEntity<?> getAll() throws Exception {
-		List<Asset> result = assetService.findAll();
+		List<Inventory> result = inventoryService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
+		Inventory result = inventoryService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody Asset data) throws Exception {
-		data = assetService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestBody Inventory data) throws Exception {
+		data = inventoryService.saveOrUpdate(data);
 		
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(data.getId());
@@ -58,8 +58,8 @@ public class AssetController extends BaseController{
 	}
 
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
-		data = assetService.saveOrUpdate(data);
+	public ResponseEntity<?> update(@RequestBody Inventory data) throws Exception {
+		data = inventoryService.saveOrUpdate(data);
 		
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(data.getVersion());
@@ -73,7 +73,7 @@ public class AssetController extends BaseController{
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean data = assetService.removeById(id);
+		boolean data = inventoryService.removeById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		

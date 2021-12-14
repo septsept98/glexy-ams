@@ -44,7 +44,16 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 
 	@Override
 	public boolean removeById(String id) throws Exception {
-		return inventoryDao.removeById(id);
+		boolean result = false;
+		try {
+			begin();
+			result = inventoryDao.removeById(id);
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+		return result;
 	}
 	
 	

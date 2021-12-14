@@ -8,7 +8,6 @@ import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.EmployeeDao;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
-import com.lawencon.glexy.model.Roles;
 
 public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeService {
 

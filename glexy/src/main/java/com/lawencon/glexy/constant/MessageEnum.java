@@ -2,7 +2,7 @@ package com.lawencon.glexy.constant;
 
 public enum MessageEnum {
 	
-	SUCCESS("Success"), FAILED("Failed delete"), CREATED("Created"), UPDATED("Updated");
+	SUCCESS("Success"), FAILED("Failed"), CREATED("Created"), UPDATED("Updated");
 
 	private String msg;
 
