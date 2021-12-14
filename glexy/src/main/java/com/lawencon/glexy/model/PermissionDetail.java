@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "permission_details")
+@Table(name = "permission_role")
 public class PermissionDetail extends BaseEntity {
 	
 	private static final long serialVersionUID = -7585163916237895433L;

@@ -20,6 +20,7 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.dto.asset.InsertReqDataAsset;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.service.AssetService;
 
@@ -44,11 +45,11 @@ public class AssetController extends BaseController{
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody Asset data) throws Exception {
-		data = assetService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestBody InsertReqDataAsset data) throws Exception {
+		Asset asset = assetService.saveOrUpdate(data);
 		
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(data.getId());
+		id.setId(asset.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -58,11 +59,11 @@ public class AssetController extends BaseController{
 	}
 
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
-		data = assetService.saveOrUpdate(data);
+	public ResponseEntity<?> update(@RequestBody InsertReqDataAsset data) throws Exception {
+		Asset asset = assetService.saveOrUpdate(data);
 		
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(data.getVersion());
+		ver.setVersion(asset.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
