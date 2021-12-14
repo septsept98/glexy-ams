@@ -12,6 +12,6 @@ public interface InventoryDao {
 	
 	List<Inventory> findAll() throws Exception;
 	
-	boolean deleteById(String id) throws Exception;
+	boolean removeById(String id) throws Exception;
 	
 }

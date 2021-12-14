@@ -16,8 +16,8 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 	}
 
 	@Override
-	public boolean deleteById(String id) throws Exception {
-		return super.deleteById(id);
+	public boolean removeById(String id) throws Exception {
+		return deleteById(id);
 	}
 
 	@Override
