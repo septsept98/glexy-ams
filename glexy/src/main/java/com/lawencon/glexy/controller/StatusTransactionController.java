@@ -9,17 +9,24 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.glexy.constant.MessageEnum;
+import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.InsertResDataDto;
+import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.UpdateResDataDto;
+import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.service.StatusTransactionService;
 
 
 @RestController
 @RequestMapping("status-transactions")
-public class StatusTransactionController {
+public class StatusTransactionController extends BaseController {
 
 	@Autowired
 	private StatusTransactionService statusTransactionService;
@@ -37,14 +44,42 @@ public class StatusTransactionController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> saveOrUpdate(@RequestBody StatusTransaction data) throws Exception {
+	public ResponseEntity<?> insert(@RequestBody StatusTransaction data) throws Exception {
 		data = statusTransactionService.saveOrUpdate(data);
-		return new ResponseEntity<>(data, HttpStatus.OK);
+		
+		InsertResDataDto id = new InsertResDataDto();
+		id.setId(data.getId());
+		
+		InsertResDto result = new InsertResDto();
+		result.setData(id);
+		result.setMsg(MessageEnum.CREATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody StatusTransaction data) throws Exception {
+		data = statusTransactionService.saveOrUpdate(data);
+
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(data.getVersion());
+		
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> deleteById(@PathVariable("id") String id) throws Exception {
 		boolean data = statusTransactionService.removeById(id);
-		return new ResponseEntity<>(data, HttpStatus.OK);
+		
+		DeleteResDto result = new DeleteResDto();
+		
+		if(data) {
+			result.setMsg(MessageEnum.SUCCESS.getMsg());
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

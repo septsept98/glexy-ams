@@ -2,6 +2,8 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
@@ -17,7 +19,13 @@ public class StatusTransactionDaoImpl extends BaseDaoImpl<StatusTransaction> imp
 
 	@Override
 	public StatusTransaction findById(String id) throws Exception {
-		return getById(id);
+		StatusTransaction result = new StatusTransaction();
+		try {
+			result = getById(id);
+		} catch (NoResultException e) {
+			throw new NoResultException("Status Transaction not found");
+		}
+		return result;
 	}
 
 	@Override
