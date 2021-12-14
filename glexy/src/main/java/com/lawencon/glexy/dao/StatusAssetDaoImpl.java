@@ -2,8 +2,6 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
@@ -19,13 +17,7 @@ public class StatusAssetDaoImpl extends BaseDaoImpl<StatusAsset> implements Stat
 
 	@Override
 	public StatusAsset findById(String id) throws Exception {
-		StatusAsset result = new StatusAsset();
-		try {
-			result = getById(id);
-		} catch (NoResultException e) {
-			throw new NoResultException("Status Asset not found");
-		}
-		return result;
+		return getById(id);
 	}
 
 	@Override
