@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.glexy.constant.MessageEnum;
+import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.InsertResDataDto;
+import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.UpdateResDataDto;
+import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.service.AssetTypeService;
 
@@ -39,19 +45,41 @@ public class AssetTypeController {
 	
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestBody AssetType data) throws Exception {
-		assetTypeService.saveOrUpdate(data);
-		return new ResponseEntity<>(data, HttpStatus.OK);
+		data = assetTypeService.saveOrUpdate(data);
+		
+		InsertResDataDto id = new InsertResDataDto();
+		id.setId(data.getId());
+		
+		InsertResDto result = new InsertResDto();
+		result.setData(id);
+		result.setMsg(MessageEnum.CREATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody AssetType data) throws Exception {
-		assetTypeService.saveOrUpdate(data);
-		return new ResponseEntity<>(data, HttpStatus.OK);
+		data = assetTypeService.saveOrUpdate(data);
+		
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(data.getVersion());
+		
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean result = assetTypeService.removeById(id);
+		boolean data = assetTypeService.removeById(id);
+		
+		DeleteResDto result = new DeleteResDto();
+		
+		if(data) {
+			result.setMsg(MessageEnum.SUCCESS.getMsg());
+		}
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

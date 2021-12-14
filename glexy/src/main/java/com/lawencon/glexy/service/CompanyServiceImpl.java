@@ -47,7 +47,16 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 
 	@Override
 	public boolean removeById(String id) throws Exception {
-		return companyDao.removeById(id);
+		boolean result = false;
+		try {
+			begin();
+			result = companyDao.removeById(id);
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+		return result;
 	}
 	
 	

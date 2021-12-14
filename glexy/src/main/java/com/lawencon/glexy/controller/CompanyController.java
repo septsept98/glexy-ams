@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.glexy.constant.MessageEnum;
+import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.InsertResDataDto;
+import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.UpdateResDataDto;
+import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.service.CompanyService;
 
@@ -39,19 +45,41 @@ public class CompanyController {
 	
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestBody Company data) throws Exception {
-		companyService.saveOrUpdate(data);
-		return new ResponseEntity<>(data, HttpStatus.OK);
+		data = companyService.saveOrUpdate(data);
+		
+		InsertResDataDto id = new InsertResDataDto();
+		id.setId(data.getId());
+		
+		InsertResDto result = new InsertResDto();
+		result.setData(id);
+		result.setMsg(MessageEnum.CREATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody Company data) throws Exception {
-		companyService.saveOrUpdate(data);
-		return new ResponseEntity<>(data, HttpStatus.OK);
+		data = companyService.saveOrUpdate(data);
+		
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(data.getVersion());
+		
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean result = companyService.removeById(id);
+		boolean data = companyService.removeById(id);
+		
+		DeleteResDto result = new DeleteResDto();
+		
+		if(data) {
+			result.setMsg(MessageEnum.SUCCESS.getMsg());
+		}
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

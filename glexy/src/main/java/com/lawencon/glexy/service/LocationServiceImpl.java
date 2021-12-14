@@ -49,7 +49,16 @@ public class LocationServiceImpl extends BaseServiceImpl implements LocationServ
 
 	@Override
 	public boolean removeById(String id) throws Exception {
-		return locationDao.removeById(id);
+		boolean result = false;
+		try {
+			begin();
+			result = locationDao.removeById(id);
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+		return result;
 	}
 	
 	

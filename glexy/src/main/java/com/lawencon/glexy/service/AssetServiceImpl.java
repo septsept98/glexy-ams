@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
+import com.lawencon.glexy.dto.asset.InsertReqDataAsset;
 import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.AssetType;
-import com.lawencon.glexy.model.Company;
+import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.Invoice;
-import com.lawencon.glexy.model.StatusAsset;
 
 @Service
 public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
@@ -20,50 +19,94 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	@Autowired
 	private AssetDao assetDao;
 	@Autowired
-	private StatusAssetService statusAssetService;
-	@Autowired
 	private InvoiceService invoiceService;
 	@Autowired
-	private CompanyService companyService;
-	@Autowired
-	private AssetTypeService assetTypeService;
-	@Autowired
 	private InventoryService inventoryService;
+	@Autowired
+	private FileService fileService;
 	
 	
 	@Override
-	public Asset saveOrUpdate(Asset data) throws Exception {
+	public Asset saveOrUpdate(InsertReqDataAsset data) throws Exception {
+		Asset asset = new Asset();
 		try {
-			if(data.getId() != null) {
-				Asset asset = findById(data.getId());
-				data.setCreatedAt(asset.getCreatedAt());
-				data.setCreatedBy(asset.getCreatedBy());
-				data.setVersion(asset.getVersion());
+			asset = data.getAsset();
+			Invoice invoice = data.getInvoice();
+			File imgInvoice = data.getImgInvoice();
+			File imgAsset = data.getImgAsset();
+			Inventory inven = data.getInventory();
+			int invenStock = 0;
+			inven.setCreatedBy("2");
+			int stockInven = inven.getStock();
+			
+			List<Inventory> inventoryList = inventoryService.findAll();
+			int index = 0;
+			boolean same = false;
+			
+			for(int i = 0; i < inventoryList.size(); i++) {
+				if(inventoryList.get(i).getNameAsset() == inven.getNameAsset()) {
+					index = i;
+					same = true;
+				}
 			}
+			Inventory inventory = new Inventory();
+			if(same) {
+				inventory = inventoryList.get(index);
+				int stok = inventory.getStock() + inven.getStock();
+				int latest = inventory.getLatestStock() + inven.getStock();
+				inven.setId(inventory.getId());
+				inven.setStock(stok);
+				inven.setLatestStock(latest);
+				inven.setCreatedBy(inventory.getCreatedBy());
+				inven.setCreatedAt(inventory.getCreatedAt());
+				inven.setUpdatedBy("4");
+				inven.setVersion(inventory.getVersion());
+				inven.setIsActive(inventory.getIsActive());
+				invenStock = stok;
+			}
+			begin();
+			inven = inventoryService.saveOrUpdate(inven);
+			commit();
 			
-			StatusAsset statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
-			Invoice invoice = invoiceService.findById(data.getInvoiceId().getId());
-			Company company = companyService.findById(data.getCompanyId().getId());
-			Inventory inventory = inventoryService.findById(data.getInventoryId().getId());
-			AssetType assetType = assetTypeService.findById(data.getAssetTypeId().getId());
+			imgInvoice.setCreatedBy("3");
+			imgInvoice.setIsActive(true);
+			begin();
+			imgInvoice = fileService.saveOrUpdate(imgInvoice);
+			commit();
 			
-			if(statusAsset != null && invoice != null && company != null && inventory != null && assetType != null) {
-				data.setStatusAssetId(statusAsset);
-				data.setInvoiceId(invoice);
-				data.setCompanyId(company);
-				data.setInventoryId(inventory);
-				data.setAssetTypeId(assetType);
-
+			imgAsset.setCreatedBy("3");
+			imgAsset.setIsActive(true);
+			begin();
+			imgAsset = fileService.saveOrUpdate(imgAsset);
+			commit();
+			
+			invoice.setInvoiceImg(imgInvoice);
+			invoice.setCreatedBy("3");
+			invoice.setIsActive(true);
+			
+			begin();
+			invoice = invoiceService.saveOrUpdate(invoice);
+			commit();
+			
+			for(int i = 0; i < stockInven; i++) {
+				String codeAsset = inven.getCode() + (invenStock+i+1);
+				asset.setCode(codeAsset);
+				asset.setCreatedBy("4");
+				asset.setAssetImg(imgAsset);
+				asset.setInvoiceId(invoice);
+				asset.setInventoryId(inven);
+				
 				begin();
-				data = assetDao.saveOrUpdate(data);
+				assetDao.saveOrUpdate(asset);
 				commit();
+				
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 		}
-		return data;
+		return asset;
 	}
 
 	@Override
@@ -78,7 +121,16 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 
 	@Override
 	public boolean removeById(String id) throws Exception {
-		return assetDao.removeById(id);
+		boolean result = false;
+		try {
+			begin();
+			result = assetDao.removeById(id);
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+		return result;
 	}
 	
 	

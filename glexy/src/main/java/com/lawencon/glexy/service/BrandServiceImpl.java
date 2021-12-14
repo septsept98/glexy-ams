@@ -47,7 +47,16 @@ public class BrandServiceImpl extends BaseServiceImpl implements BrandService {
 
 	@Override
 	public boolean removeById(String id) throws Exception {
-		return brandDao.removeById(id);
+		boolean result = false;
+		try {
+			begin();
+			result = brandDao.removeById(id);
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+		return result;
 	}
 	
 	

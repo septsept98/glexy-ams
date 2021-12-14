@@ -27,6 +27,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 
 	@Override
 	public List<Asset> findAll() throws Exception {
+		
 		return getAll();
 	}
 
