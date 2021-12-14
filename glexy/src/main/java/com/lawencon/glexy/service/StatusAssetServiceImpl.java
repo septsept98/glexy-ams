@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,10 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 				data.setCodeStatusAsset(statusAsset.getCodeStatusAsset());
 				data.setCreatedAt(statusAsset.getCreatedAt());
 				data.setCreatedBy(statusAsset.getCreatedBy());
+				data.setUpdatedBy("1");
 				data.setVersion(statusAsset.getVersion());
+			} else {
+				data.setCreatedBy("3");
 			}
 
 			begin();
@@ -33,6 +38,7 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 		return data;
 	}
@@ -47,13 +53,20 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 		return result;
 	}
 
 	@Override
 	public StatusAsset findById(String id) throws Exception {
-		return statusAssetDao.findById(id);
+		StatusAsset result = new StatusAsset();
+		try {
+			result = statusAssetDao.findById(id);
+		} catch (NoResultException e) {
+			throw new NoResultException("Status Asset not found");
+		}
+		return result;
 	}
 
 	@Override
