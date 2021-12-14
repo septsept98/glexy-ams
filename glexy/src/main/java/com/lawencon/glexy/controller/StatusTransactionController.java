@@ -44,7 +44,7 @@ public class StatusTransactionController {
 
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> deleteById(@PathVariable("id") String id) throws Exception {
-		boolean data = statusTransactionService.deleteById(id);
+		boolean data = statusTransactionService.removeById(id);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 }
