@@ -2,6 +2,8 @@ package com.lawencon.glexy.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
@@ -17,7 +19,13 @@ public class TrackAssetDaoImpl extends BaseDaoImpl<TrackAsset> implements TrackA
 
 	@Override
 	public TrackAsset findById(String id) throws Exception {
-		return getById(id);
+		TrackAsset result = new TrackAsset();
+		try {
+			result = getById(id);
+		} catch (NoResultException e) {
+			throw new NoResultException("Track Asset not found");
+		}
+		return result;
 	}
 
 	@Override
