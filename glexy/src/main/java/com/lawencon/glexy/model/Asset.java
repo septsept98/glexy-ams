@@ -49,6 +49,10 @@ public class Asset extends BaseEntity{
 	@JoinColumn(name = "status_asset_id", columnDefinition = "varchar")
 	private StatusAsset statusAssetId;
 	
+	@ManyToOne
+	@JoinColumn(name = "brand_id", columnDefinition = "varchar")
+	private Brand brandId;
+	
 	public String getNames() {
 		return names;
 	}
@@ -102,6 +106,12 @@ public class Asset extends BaseEntity{
 	}
 	public void setAssetImg(File assetImg) {
 		this.assetImg = assetImg;
+	}
+	public Brand getBrandId() {
+		return brandId;
+	}
+	public void setBrandId(Brand brandId) {
+		this.brandId = brandId;
 	}
 	
 	
