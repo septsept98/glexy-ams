@@ -3,13 +3,14 @@ package com.lawencon.glexy.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.EmployeeDao;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
-import com.lawencon.glexy.model.Roles;
 
+@Service
 public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeService {
 
 	@Autowired

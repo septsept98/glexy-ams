@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 
 	@Autowired
 	private StatusTransactionDao statusTransactionDao;
-	
+
 	@Autowired
 	private StatusAssetService statusAssetService;
 
@@ -27,7 +29,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 	@Override
 	public StatusTransaction saveOrUpdate(StatusTransaction data) throws Exception {
 		try {
-			if(data.getId() != null) {
+			if (data.getId() != null) {
 				StatusTransaction statusTr = findById(data.getId());
 				data.setCodeStatusTr(statusTr.getCodeStatusTr());
 				data.setCreatedAt(statusTr.getCreatedAt());
@@ -37,9 +39,9 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 			} else {
 				data.setCreatedBy("3");
 			}
-			
+
 			StatusAsset statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
-			if(statusAsset != null) {
+			if (statusAsset != null) {
 				data.setStatusAssetId(statusAsset);
 
 				begin();
@@ -49,6 +51,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 		return data;
 	}
@@ -63,14 +66,21 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 		return result;
 	}
 
 	@Override
 	public StatusTransaction findById(String id) throws Exception {
-		return statusTransactionDao.findById(id);
+		StatusTransaction result = new StatusTransaction();
+		try {
+			result = statusTransactionDao.findById(id);
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			throw new NoResultException("Status Transaction not found");
+		}
+		return result;
 	}
-	
-	
+
 }
