@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.StatusAsset;
@@ -21,20 +22,18 @@ import com.lawencon.glexy.model.Transactions;
 public class TransactionDetailServiceImpl extends BaseServiceImpl implements TransactionDetailService {
 
 	private TransactionDetailDao transactionDetailDao;
-	private AssetService assetService;
+	private AssetDao assetDao;
 	private TransactionService transactionService;
 	private StatusTransactionService statusTransactionService;
 	private TrackAssetService trackAssetService;
 	
 	public TransactionDetailServiceImpl(@Autowired TransactionDetailDao transactionDetailDao,
-			AssetService assetService, StatusTransactionService statusTransactionService,
-			TransactionService transactionService,
+			AssetDao assetDao, StatusTransactionService statusTransactionService,
 			TrackAssetService trackAssetService) {
 		this.transactionDetailDao = transactionDetailDao;
-		this.assetService = assetService;
+		this.assetDao = assetDao;
 		this.statusTransactionService = statusTransactionService;
 		this.trackAssetService = trackAssetService;
-		this.transactionService = transactionService;
 	}
 
 	@Override
@@ -69,11 +68,11 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				StatusAsset statusAsset = new StatusAsset();
 				statusAsset.setId(statusTransaction.getStatusAssetId().getId());
 				
-				Asset asset = assetService.findById(data.getAssetId().getId());
+				Asset asset = assetDao.findById(data.getAssetId().getId());
 				asset.setStatusAssetId(statusAsset);
 				asset.setUpdatedBy("22");
 				begin();
-				assetService.saveOrUpdate(asset);
+				assetDao.saveOrUpdate(asset);
 				commit();
 				
 				Transactions transactions = transactionService.findById(data.getTransactionId().getId());

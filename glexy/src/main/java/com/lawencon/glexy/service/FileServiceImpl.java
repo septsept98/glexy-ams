@@ -33,7 +33,7 @@ public class FileServiceImpl extends BaseServiceImpl implements FileService {
 		try {
 			if (data.getId() != null) {
 				File file = findById(data.getId());
-				data.setFiles(file.getFiles()); 
+				data.setFile(file.getFile()); 
 				data.setExtension(file.getExtension()); 
 				data.setCreatedAt(file.getCreatedAt());
 				data.setCreatedBy(file.getCreatedBy());

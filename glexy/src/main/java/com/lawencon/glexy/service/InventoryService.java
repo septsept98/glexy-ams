@@ -14,4 +14,6 @@ public interface InventoryService {
 	
 	boolean removeById(String id) throws Exception;
 	
+	String generateCode(int index) throws Exception;
+	
 }

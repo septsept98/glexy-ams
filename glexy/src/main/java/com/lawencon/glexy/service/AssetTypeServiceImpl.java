@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 				data.setCreatedAt(assetType.getCreatedAt());
 				data.setCreatedBy(assetType.getCreatedBy());
 				data.setVersion(assetType.getVersion());
+			} else {
+				data.setCreatedBy("3");
 			}
 			
 			begin();
@@ -37,7 +41,14 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 
 	@Override
 	public AssetType findById(String id) throws Exception {
-		return assetTypeDao.findById(id);
+		AssetType result = new AssetType();
+		try {
+			result = assetTypeDao.findById(id);
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			throw new NoResultException("Asset Type not found");
+		}
+		return result;
 	}
 
 	@Override
