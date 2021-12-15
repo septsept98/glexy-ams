@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +22,12 @@ public class BrandServiceImpl extends BaseServiceImpl implements BrandService {
 		try {
 			if(data.getId() != null) {
 				Brand brand = findById(data.getId());
+				data.setCode(brand.getCode());
 				data.setCreatedAt(brand.getCreatedAt());
 				data.setCreatedBy(brand.getCreatedBy());
 				data.setVersion(brand.getVersion());
+			} else {
+				data.setCreatedBy("3");
 			}
 			
 			begin();
@@ -37,7 +42,14 @@ public class BrandServiceImpl extends BaseServiceImpl implements BrandService {
 
 	@Override
 	public Brand findById(String id) throws Exception {
-		return brandDao.findById(id);
+		Brand result = new Brand();
+		try {
+			result = brandDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new NoResultException("Brand not found");
+		}
+		return result;
 	}
 
 	@Override

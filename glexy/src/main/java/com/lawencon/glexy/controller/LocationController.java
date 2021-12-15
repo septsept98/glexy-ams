@@ -12,48 +12,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.asset.InsertReqDataAsset;
-import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.service.AssetService;
+import com.lawencon.glexy.model.Location;
+import com.lawencon.glexy.service.LocationService;
 
 @RestController
-@RequestMapping("assets")
-public class AssetController extends BaseController{
+@RequestMapping("locations")
+public class LocationController {
 	
 	@Autowired
-	private AssetService assetService;
+	private LocationService locationService;
 	
 	@GetMapping
 	public ResponseEntity<?> getAll() throws Exception {
-		List<Asset> result = assetService.findAll();
+		List<Location> result = locationService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
+		Location result = locationService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
-		InsertReqDataAsset insertReqDataAsset = new ObjectMapper().readValue(data, InsertReqDataAsset.class);
-		Asset asset = assetService.save(insertReqDataAsset, invoiceImg, assetImg);
+	public ResponseEntity<?> insert(@RequestBody Location data) throws Exception {
+		data = locationService.saveOrUpdate(data);
 		
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(asset.getId());
+		id.setId(data.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -63,11 +58,11 @@ public class AssetController extends BaseController{
 	}
 
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
-		Asset asset = assetService.update(data);
+	public ResponseEntity<?> update(@RequestBody Location data) throws Exception {
+		data = locationService.saveOrUpdate(data);
 		
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(asset.getVersion());
+		ver.setVersion(data.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
@@ -78,7 +73,7 @@ public class AssetController extends BaseController{
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean data = assetService.removeById(id);
+		boolean data = locationService.removeById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		

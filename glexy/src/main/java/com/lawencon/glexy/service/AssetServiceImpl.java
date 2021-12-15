@@ -1,9 +1,13 @@
 package com.lawencon.glexy.service;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
@@ -12,6 +16,8 @@ import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.Invoice;
+import com.lawencon.glexy.model.StatusAsset;
+import com.lawencon.glexy.model.TrackAsset;
 
 @Service
 public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
@@ -24,17 +30,43 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	private InventoryService inventoryService;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private TrackAssetService trackAssetService;
 	
 	
 	@Override
-	public Asset saveOrUpdate(InsertReqDataAsset data) throws Exception {
+	public Asset save(InsertReqDataAsset data, MultipartFile invoiceImg, MultipartFile assetImg) throws Exception {
 		Asset asset = new Asset();
 		try {
 			asset = data.getAsset();
 			Invoice invoice = data.getInvoice();
-			File imgInvoice = data.getImgInvoice();
-			File imgAsset = data.getImgAsset();
+			File imgInvoice = new File();
+			File imgAsset = new File();
 			Inventory inven = data.getInventory();
+			
+			
+			invoice.setCreatedBy("3");
+			invoice.setPurchaseDate(LocalDate.now());
+			if(invoiceImg == null) {
+				Invoice invo = invoiceService.findById(invoice.getId());
+				invoice.setInvoiceImg(invo.getInvoiceImg());
+			} else {
+				imgInvoice.setFile(invoiceImg.getBytes());
+				String ext = invoiceImg.getOriginalFilename();
+				ext = ext.substring(ext.lastIndexOf(".")+1, ext.length());
+				imgInvoice.setExtension(ext);
+				
+				begin();
+				imgInvoice = fileService.saveOrUpdate(imgInvoice);
+				commit();
+				
+				invoice.setInvoiceImg(imgInvoice);
+			}
+			
+			begin();
+			invoice = invoiceService.saveOrUpdate(invoice);
+			commit();
+				
 			int invenStock = 0;
 			inven.setCreatedBy("2");
 			int stockInven = inven.getStock();
@@ -64,38 +96,39 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				inven.setIsActive(inventory.getIsActive());
 				invenStock = stok;
 			}
+			
 			begin();
 			inven = inventoryService.saveOrUpdate(inven);
 			commit();
 			
-			imgInvoice.setCreatedBy("3");
-			imgInvoice.setIsActive(true);
-			begin();
-			imgInvoice = fileService.saveOrUpdate(imgInvoice);
-			commit();
-			
 			imgAsset.setCreatedBy("3");
 			imgAsset.setIsActive(true);
-			begin();
-			imgAsset = fileService.saveOrUpdate(imgAsset);
-			commit();
 			
-			invoice.setInvoiceImg(imgInvoice);
-			invoice.setCreatedBy("3");
-			invoice.setIsActive(true);
+			if(assetImg == null) {
+				Asset ass = assetDao.findById(asset.getId());
+				asset.setAssetImg(ass.getAssetImg());
+			} else {
+				imgAsset.setFile(assetImg.getBytes());
+				String ext = assetImg.getOriginalFilename();
+				ext = ext.substring(ext.lastIndexOf(".")+1, ext.length());
+				imgAsset.setExtension(ext);
+				
+				begin();
+				imgAsset = fileService.saveOrUpdate(imgAsset);
+				commit();
+				
+				asset.setAssetImg(imgAsset);
+			}
 			
-			begin();
-			invoice = invoiceService.saveOrUpdate(invoice);
-			commit();
 			
 			for(int i = 0; i < stockInven; i++) {
-				String codeAsset = inven.getCode() + (invenStock+i+1);
+				String codeAsset = generateCode(inven.getCode(), invenStock, i);
+				asset.setNames(inven.getNameAsset() + (invenStock+i+1));
 				asset.setCode(codeAsset);
 				asset.setCreatedBy("4");
-				asset.setAssetImg(imgAsset);
 				asset.setInvoiceId(invoice);
 				asset.setInventoryId(inven);
-				
+	
 				begin();
 				assetDao.saveOrUpdate(asset);
 				commit();
@@ -105,13 +138,50 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 		return asset;
 	}
+	
+	
+	@Override
+	public Asset update(Asset data) throws Exception {
+		Asset asset = findById(data.getId());
+		StatusAsset statusAsset = new StatusAsset();
+		statusAsset.setId(data.getStatusAssetId().getId());
+		asset.setStatusAssetId(statusAsset);
+		asset.setUpdatedBy("1");
+		
+		begin();
+		asset = assetDao.saveOrUpdate(asset);
+		commit();
+		
+		TrackAsset trackAsset = new TrackAsset();
+		trackAsset.setCodeAsset(asset.getCode());
+		trackAsset.setNameActivity("Update Status Asset");
+		trackAsset.setDateActivity(LocalDate.now());
+		trackAsset.setUserId("2");
+		trackAsset.setTransactionCode("BBA");
+		
+		begin();
+		trackAssetService.saveOrUpdate(trackAsset);
+		commit();
+		
+		
+		return asset;
+	}
+
 
 	@Override
 	public Asset findById(String id) throws Exception {
-		return assetDao.findById(id);
+		Asset result = new Asset();
+		try {
+			result = assetDao.findById(id);
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			throw new NoResultException("Asset not found");
+		}
+		return result;
 	}
 
 	@Override
@@ -132,6 +202,13 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 		}
 		return result;
 	}
+
+	@Override
+	public String generateCode(String invenCode,int stock, int index) throws Exception {
+		return invenCode + "" + (stock+index+1);
+	}
+	
+	
 	
 	
 	

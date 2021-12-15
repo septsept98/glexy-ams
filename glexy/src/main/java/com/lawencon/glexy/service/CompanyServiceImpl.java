@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 				data.setCreatedAt(company.getCreatedAt());
 				data.setCreatedBy(company.getCreatedBy());
 				data.setVersion(company.getVersion());
+			} else {
+				data.setCreatedBy("3");
 			}
 			
 			begin();
@@ -37,7 +41,14 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 
 	@Override
 	public Company findById(String id) throws Exception {
-		return companyDao.findById(id);
+		Company result = new Company();
+		try {
+			result = companyDao.findById(id);
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			throw new NoResultException("Company not found");
+		}
+		return result;
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 		this.assetDao = assetDao;
 		this.statusTransactionService = statusTransactionService;
 		this.trackAssetService = trackAssetService;
-		
+
 	}
 
 	@Override
