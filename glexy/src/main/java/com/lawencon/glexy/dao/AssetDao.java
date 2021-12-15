@@ -14,6 +14,8 @@ public interface AssetDao {
 	
 	boolean removeById(String id) throws Exception;
 	
+	List<Asset> findByBrandId(String brandId) throws Exception;
 	
+	List<Asset> findByCompanyId(String companyId) throws Exception;
 
 }
