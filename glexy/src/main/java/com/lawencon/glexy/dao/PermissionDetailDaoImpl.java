@@ -42,8 +42,8 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 	public List<PermissionDetail> findByRoleId(String id) throws Exception {
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT pe.name_permission FROM permission_detail ");
-		sql.append("INNER JOIN permissions as pe ");
+		sql.append("SELECT pe.name_permission, pr.id FROM permission_role AS pr ");
+		sql.append("INNER JOIN permissions AS pe ON pr.permissions_id = pe.id ");
 		sql.append("WHERE roles_id = :id");
 		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id)
 				.getResultList();
@@ -54,9 +54,11 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 			Object[] objArr = (Object[]) rs;
 			
 			PermissionDetail data = new PermissionDetail();
+			
 			Permissions permissions = new Permissions();
 			permissions.setNamePermission(objArr[0].toString());
 			data.setPermissionsId(permissions);
+			data.setId(objArr[1].toString());
 			resultPermissionDetail.add(data);
 		});
 		

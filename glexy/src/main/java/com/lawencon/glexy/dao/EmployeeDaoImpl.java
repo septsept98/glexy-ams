@@ -27,7 +27,8 @@ public class EmployeeDaoImpl extends BaseDaoImpl<Employee> implements EmployeeDa
 
 	@Override
 	public boolean deleteById(String id) throws Exception {	
-		return deleteById(id);
+		
+		return super.deleteById(id);
 	}
 
 

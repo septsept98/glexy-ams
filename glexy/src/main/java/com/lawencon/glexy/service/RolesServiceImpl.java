@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.RolesDao;
+import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
+import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Roles;
 
 @Service
@@ -14,6 +16,9 @@ public class RolesServiceImpl extends BaseServiceImpl implements RolesService  {
 	
 	@Autowired
 	private RolesDao rolesDao;
+	
+	@Autowired
+	private PermissionDetailService permissionDetailService;
 	
 	@Override
 	public List<Roles> findAll() throws Exception {
@@ -28,28 +33,31 @@ public class RolesServiceImpl extends BaseServiceImpl implements RolesService  {
 	}
 
 	@Override
-	public Roles saveOrUpdate(Roles data) throws Exception {
+	public Roles saveOrUpdate(RolesInsertReqDto data) throws Exception {
 		
 		try {
-			if (data.getId() != null) {
-				Roles roles = findById(data.getId());
-				data.setCode(roles.getCode()); 
-				data.setCreatedAt(roles.getCreatedAt());
-				data.setCreatedBy(roles.getCreatedBy());
-				data.setVersion(roles.getVersion());
-				data.setIsActive(roles.getIsActive());
+			if (data.getRoles().getId() != null) {
+				Roles roles = findById(data.getRoles().getId());
+				roles.setNameRole(data.getRoles().getNameRole());
+				data.setRoles(roles);
 			}
 
 			begin();
-			data = rolesDao.saveOrUpdate(data);
+			Roles rolesNew = rolesDao.saveOrUpdate(data.getRoles());
+			if (data.getRoles().getId() == null) {
+			for(int i = 0;i<data.getData().size();i++) {
+				data.getData().get(i).setRolesId(rolesNew);
+				permissionDetailService.saveOrUpdate(data.getData().get(i));
+			}}
 			commit();
+			return data.getRoles();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
-		return data;
+		
 	}
 
 	@Override
@@ -59,11 +67,13 @@ public class RolesServiceImpl extends BaseServiceImpl implements RolesService  {
 			begin();
 			result = rolesDao.deleteById(id);
 			commit();
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
-		return result;
+		
 	}
 
 	
