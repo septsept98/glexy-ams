@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.glexy.constant.StatusAssetEnum;
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
@@ -20,21 +23,24 @@ import com.lawencon.glexy.model.Transactions;
 @Service
 public class TransactionDetailServiceImpl extends BaseServiceImpl implements TransactionDetailService {
 
+	@Autowired
 	private TransactionDetailDao transactionDetailDao;
-	private AssetService assetService;
+	
+	@Autowired
+	private AssetDao assetDao;
+	
 	private TransactionService transactionService;
 	private StatusTransactionService statusTransactionService;
 	private TrackAssetService trackAssetService;
+	private InventoryService inventoryService;
 	
-	public TransactionDetailServiceImpl(@Autowired TransactionDetailDao transactionDetailDao,
-			AssetService assetService, StatusTransactionService statusTransactionService,
-			TransactionService transactionService,
+	public TransactionDetailServiceImpl(
+			InventoryService inventoryService,
+			StatusTransactionService statusTransactionService,
 			TrackAssetService trackAssetService) {
-		this.transactionDetailDao = transactionDetailDao;
-		this.assetService = assetService;
+		this.inventoryService = inventoryService;
 		this.statusTransactionService = statusTransactionService;
 		this.trackAssetService = trackAssetService;
-		this.transactionService = transactionService;
 	}
 
 	@Override
@@ -69,12 +75,22 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				StatusAsset statusAsset = new StatusAsset();
 				statusAsset.setId(statusTransaction.getStatusAssetId().getId());
 				
-				Asset asset = assetService.findById(data.getAssetId().getId());
+				Asset asset = assetDao.findById(data.getAssetId().getId());
 				asset.setStatusAssetId(statusAsset);
 				asset.setUpdatedBy("22");
 				begin();
-				assetService.saveOrUpdate(asset);
-				commit();
+				asset = assetDao.saveOrUpdate(asset);
+				
+				Inventory inventory = inventoryService.findById(asset.getInventoryId().getId());
+				if(asset.getStatusAssetId().getCodeStatusAsset() == StatusAssetEnum.DEPLOY.getCode()) {
+					int stockInventory = inventory.getLatestStock();
+					int latestStock = stockInventory - 1;
+					
+					inventory.setUpdatedBy("22");
+					inventory.setLatestStock(latestStock);
+					
+					inventory = inventoryService.saveOrUpdate(inventory);
+				}
 				
 				Transactions transactions = transactionService.findById(data.getTransactionId().getId());
 				
@@ -86,19 +102,24 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				trackAsset.setTransactionCode(transactions.getCodeTransaction());
 				trackAsset.setCreatedBy(data.getCreatedBy());
 				trackAsset.setIsActive(data.getIsActive());
-				begin();
 				trackAssetService.saveOrUpdate(trackAsset);
+				
+				data = transactionDetailDao.saveOrUpdate(data);
 				commit();
+			} else {
+				data = transactionDetailDao.saveOrUpdate(data);
 			}
-			begin();
-			data = transactionDetailDao.saveOrUpdate(data);
-			commit();				
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
 		return data;
+	}
+
+	@Override
+	public List<TransactionDetail> findByTr(String id) throws Exception {
+		return transactionDetailDao.findByTr(id);
 	}
 	
 	

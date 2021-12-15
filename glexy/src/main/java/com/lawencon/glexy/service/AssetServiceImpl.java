@@ -132,9 +132,10 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 		}
 		return result;
 	}
-	
-	
-	
-	
+
+	@Override
+	public List<Asset> findByInvent(String idInvent) throws Exception {
+		return assetDao.findByInvent(idInvent);
+	}
 
 }

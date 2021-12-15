@@ -1,5 +1,6 @@
 package com.lawencon.glexy.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -31,6 +32,27 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 	@Override
 	public TransactionDetail saveOrUpdate(TransactionDetail data) throws Exception {
 		return save(data);
+	}
+
+	@Override
+	public List<TransactionDetail> findByTr(String id) throws Exception {
+		List<TransactionDetail> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select id ");
+		sql.append("FROM transaction_details ");
+		sql.append("WHERE transaction_id=:id");
+		List<?> result = createNativeQuery(sql.toString())
+				.setParameter("id", id)
+				.getResultList();
+
+		result.forEach(rs -> {
+			TransactionDetail transactionDetail = new TransactionDetail();
+			transactionDetail.setId(rs.toString());
+			transactionDetail = getById(transactionDetail.getId());
+			
+			listResult.add(transactionDetail);
+		});
+		return listResult;
 	}
 	
 }

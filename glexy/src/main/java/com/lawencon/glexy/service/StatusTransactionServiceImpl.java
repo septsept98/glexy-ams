@@ -48,12 +48,12 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 				data = statusTransactionDao.saveOrUpdate(data);
 				commit();
 			}
+			return data;
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
-		return data;
 	}
 
 	@Override
@@ -63,12 +63,12 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 			begin();
 			result = statusTransactionDao.removeById(id);
 			commit();
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
-		return result;
 	}
 
 	@Override
@@ -76,11 +76,11 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 		StatusTransaction result = new StatusTransaction();
 		try {
 			result = statusTransactionDao.findById(id);
+			return result;
 		} catch (NoResultException e) {
 			e.printStackTrace();
 			throw new NoResultException("Status Transaction not found");
 		}
-		return result;
 	}
 
 }

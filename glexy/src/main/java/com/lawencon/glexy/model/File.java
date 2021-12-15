@@ -11,16 +11,16 @@ public class File extends BaseEntity {
 
 	private static final long serialVersionUID = 5892756716165668671L;
 
-	private byte[] files;
+	private byte[] file;
 	
 	private String extension;
 
 	public byte[] getFiles() {
-		return files;
+		return file;
 	}
 
-	public void setFiles(byte[] files) {
-		this.files = files;
+	public void setFiles(byte[] file) {
+		this.file = file;
 	}
 
 	public String getExtension() {
