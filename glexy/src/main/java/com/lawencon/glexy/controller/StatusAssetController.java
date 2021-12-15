@@ -20,31 +20,37 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.model.StatusTransaction;
-import com.lawencon.glexy.service.StatusTransactionService;
+import com.lawencon.glexy.model.StatusAsset;
+import com.lawencon.glexy.service.StatusAssetService;
 
 @RestController
-@RequestMapping("status-transactions")
-public class StatusTransactionController extends BaseController {
-
+@RequestMapping("status-assets")
+public class StatusAssetController {
+	
 	@Autowired
-	private StatusTransactionService statusTransactionService;
+	private StatusAssetService statusAssetService;
 	
 	@GetMapping()
 	public ResponseEntity<?> getAll() throws Exception {
-		List<StatusTransaction> result = statusTransactionService.findAll();
+		List<StatusAsset> result = statusAssetService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		StatusTransaction result = statusTransactionService.findById(id);
+		StatusAsset result = statusAssetService.findById(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/code/{id}")
+	public ResponseEntity<?> getByCode(@PathVariable("id") String code) throws Exception {
+		StatusAsset result = statusAssetService.findByCode(code);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody StatusTransaction data) throws Exception {
-		data = statusTransactionService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestBody StatusAsset data) throws Exception {
+		data = statusAssetService.saveOrUpdate(data);
 		
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(data.getId());
@@ -57,8 +63,8 @@ public class StatusTransactionController extends BaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody StatusTransaction data) throws Exception {
-		data = statusTransactionService.saveOrUpdate(data);
+	public ResponseEntity<?> update(@RequestBody StatusAsset data) throws Exception {
+		data = statusAssetService.saveOrUpdate(data);
 
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(data.getVersion());
@@ -72,7 +78,7 @@ public class StatusTransactionController extends BaseController {
 
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> deleteById(@PathVariable("id") String id) throws Exception {
-		boolean data = statusTransactionService.removeById(id);
+		boolean data = statusAssetService.removeById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		

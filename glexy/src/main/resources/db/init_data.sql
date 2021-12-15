@@ -38,17 +38,18 @@ INSERT INTO users(email, pass, roles_id,employee_id, "version", created_by, crea
 
 
 INSERT INTO status_assets(code_status_asset,name_status_asset,"version",created_by,created_at,is_active, id) VALUES
-		('STR1','Deployable',0,'1',now(),true, '1'),
-		('STR2','Undeployble',0,'1',now(),true, '2'),
-		('STR3','Archived',0,'1',now(),true, '3'),
-		('STR4','Pending',0,'1',now(),true, '4');
+		('SA1','Deployable',0,'1',now(),true, '1'),
+		('SA2','Undeployble',0,'1',now(),true, '2'),
+		('SA3','Archived',0,'1',now(),true, '3'),
+		('SA4','Pending',0,'1',now(),true, '4'),
+		('SA5','Assign',0,'1',now(),true, '5');
 
 
 INSERT INTO status_transactions(code_status_tr,name_status_tr,status_asset_id,"version",created_by,created_at,is_active, id) VALUES
-		('STS1','Ready to Deploy','1',0,'1',now(),true,'1'),
-		('STS2','Broken','2',0,'1',now(),true,'2'),
-		('STS3','Lost','2',0,'1',now(),true,'3'),
-		('STS4','Repair','3',0,'1',now(),true,'4');
+		('STR1','Ready to Deploy','1',0,'1',now(),true,'1'),
+		('STR2','Broken','2',0,'1',now(),true,'2'),
+		('STR3','Lost','2',0,'1',now(),true,'3'),
+		('STR4','Repair','3',0,'1',now(),true,'4');
 
 
 INSERT INTO asset_types(names, code, "version", created_by, created_at, is_active, id) VALUES 
@@ -76,13 +77,22 @@ INSERT INTO brands (names,code,"version",created_by,created_at,is_active,id) VAL
 	('snowman','sw',0,'1',now(),true,'2');
 
 INSERT INTO inventories(code, name_asset, stock, latest_stock, "version", created_by, created_at, is_active,id) VALUES 
-	('LPA', 'Laptop Acer', 10, 10, 0, 1, now(), true,'1'),
-	('SPS', 'Spidol Snowman', 10, 10, 0, 1, now(), true, '2');
+	('LTP', 'Laptop', 10, 10, 0, 1, now(), true,'1'),
+	('SPL', 'Spidol Snowman', 10, 10, 0, 1, now(), true, '2');
 
 
 INSERT INTO assets(names, code, status_asset_id,brand_id, invoice_id, company_id, asset_type_id, inventory_id, "version", created_by, created_at, is_active, id) VALUES 
 	('Laptop', 'LTP1', '1','1', '1','1', '1', '1', 0, 1, now(), true, '1'),
-	('Spidol', 'SPL', '2','2', '2','2', '4', '2', 0, 1, now(), true, '2');
+	('Laptop', 'LTP2', '1','1', '1','1', '1', '1', 0, 1, now(), true, '2'),
+	('Laptop', 'LTP3', '1','1', '1','1', '1', '1', 0, 1, now(), true, '3'),
+	('Laptop', 'LTP4', '1','1', '1','1', '1', '1', 0, 1, now(), true, '4'),
+	('Laptop', 'LTP5', '1','1', '1','1', '1', '1', 0, 1, now(), true, '5'),
+	('Laptop', 'LTP6', '1','1', '1','1', '1', '1', 0, 1, now(), true, '6'),
+	('Laptop', 'LTP7', '1','1', '1','1', '1', '1', 0, 1, now(), true, '7'),
+	('Laptop', 'LTP8', '1','1', '1','1', '1', '1', 0, 1, now(), true, '8'),
+	('Laptop', 'LTP9', '1','1', '1','1', '1', '1', 0, 1, now(), true, '9'),
+	('Laptop', 'LTP10', '1','1', '1','1', '1', '1', 0, 1, now(), true, '10'),
+	('Spidol', 'SPL1', '2','2', '2','2', '4', '2', 0, 1, now(), true, '11');
 
 
 INSERT INTO transactions(code_transaction,checkout_date,quantity,location_id,"version",created_by,created_at,is_active, id) VALUES 

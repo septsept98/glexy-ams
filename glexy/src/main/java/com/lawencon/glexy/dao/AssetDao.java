@@ -10,6 +10,8 @@ public interface AssetDao {
 
 	Asset findById(String id) throws Exception;
 	
+	List<Asset> findByInvent(String idInvent) throws Exception;
+	
 	List<Asset> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;

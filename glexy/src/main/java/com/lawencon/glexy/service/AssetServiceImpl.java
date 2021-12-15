@@ -204,14 +204,11 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	}
 
 	@Override
+	public List<Asset> findByInvent(String idInvent) throws Exception {
+		return assetDao.findByInvent(idInvent);
+	}
+  
 	public String generateCode(String invenCode,int stock, int index) throws Exception {
 		return invenCode + "" + (stock+index+1);
 	}
-	
-	
-	
-	
-	
-	
-
 }

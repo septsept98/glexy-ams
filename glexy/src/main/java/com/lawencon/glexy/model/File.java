@@ -19,7 +19,6 @@ public class File extends BaseEntity {
 		return file;
 	}
 
-
 	public void setFiles(byte[] file) {
 
 		this.file = file;

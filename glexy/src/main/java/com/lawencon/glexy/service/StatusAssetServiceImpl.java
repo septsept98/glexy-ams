@@ -34,13 +34,12 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 			begin();
 			data = statusAssetDao.saveOrUpdate(data);
 			commit();
-			
+			return data;
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
-		return data;
 	}
 
 	@Override
@@ -50,12 +49,12 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 			begin();
 			result = statusAssetDao.removeById(id);
 			commit();
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
-		return result;
 	}
 
 	@Override
@@ -63,15 +62,20 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		StatusAsset result = new StatusAsset();
 		try {
 			result = statusAssetDao.findById(id);
+			return result;
 		} catch (NoResultException e) {
 			throw new NoResultException("Status Asset not found");
 		}
-		return result;
 	}
 
 	@Override
 	public List<StatusAsset> findAll() throws Exception {
 		return statusAssetDao.findAll();
+	}
+
+	@Override
+	public StatusAsset findByCode(String code) throws Exception {
+		return statusAssetDao.findByCode(code);
 	}
 
 }

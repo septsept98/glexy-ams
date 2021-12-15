@@ -10,5 +10,7 @@ public interface TransactionDetailService {
 
 	TransactionDetail findById(String id) throws Exception;
 
+	List<TransactionDetail> findByTr(String id) throws Exception;
+
 	TransactionDetail saveOrUpdate(TransactionDetail data) throws Exception;
 }

@@ -47,6 +47,13 @@ public class AssetController extends BaseController{
 
 	}
 	
+	@GetMapping("/invent/{id}")
+	public ResponseEntity<?> getByInvent(@PathVariable("id") String id) throws Exception {
+		Asset result = assetService.findById(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
 		InsertReqDataAsset insertReqDataAsset = new ObjectMapper().readValue(data, InsertReqDataAsset.class);

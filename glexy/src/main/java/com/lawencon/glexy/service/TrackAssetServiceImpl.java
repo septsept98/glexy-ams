@@ -27,11 +27,11 @@ public class TrackAssetServiceImpl extends BaseServiceImpl implements TrackAsset
 		TrackAsset result = new TrackAsset();
 		try {
 			result = trackAssetDao.findById(id);
+			return result;
 		} catch (NoResultException e) {
 			e.printStackTrace();
 			throw new NoResultException("Status Transaction not found");
 		}
-		return result;
 	}
 
 	@Override
@@ -40,12 +40,12 @@ public class TrackAssetServiceImpl extends BaseServiceImpl implements TrackAsset
 			begin();
 			trackAssetDao.saveOrUpdate(data);
 			commit();
+			return data;
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
-		return data;
 	}
 
 }
