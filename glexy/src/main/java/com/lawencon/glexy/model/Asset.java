@@ -1,6 +1,6 @@
 package com.lawencon.glexy.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +23,7 @@ public class Asset extends BaseEntity{
 	private String code;
 	
 	@Column(name = "expired_date", nullable = false)
-	private LocalDateTime expiredDate;
+	private LocalDate expiredDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "asset_img", columnDefinition = "varchar")
@@ -65,10 +65,10 @@ public class Asset extends BaseEntity{
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public LocalDateTime getExpiredDate() {
+	public LocalDate getExpiredDate() {
 		return expiredDate;
 	}
-	public void setExpiredDate(LocalDateTime expiredDate) {
+	public void setExpiredDate(LocalDate expiredDate) {
 		this.expiredDate = expiredDate;
 	}
 	public Invoice getInvoiceId() {

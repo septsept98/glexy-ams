@@ -1,5 +1,6 @@
 package com.lawencon.glexy.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -15,6 +16,8 @@ import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.Invoice;
+import com.lawencon.glexy.model.StatusAsset;
+import com.lawencon.glexy.model.TrackAsset;
 
 @Service
 public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
@@ -27,6 +30,8 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	private InventoryService inventoryService;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private TrackAssetService trackAssetService;
 	
 	
 	@Override
@@ -41,6 +46,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			
 			
 			invoice.setCreatedBy("3");
+			invoice.setPurchaseDate(LocalDate.now());
 			if(invoiceImg == null) {
 				Invoice invo = invoiceService.findById(invoice.getId());
 				invoice.setInvoiceImg(invo.getInvoiceImg());
@@ -117,6 +123,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			
 			for(int i = 0; i < stockInven; i++) {
 				String codeAsset = generateCode(inven.getCode(), invenStock, i);
+				asset.setNames(inven.getNameAsset() + (invenStock+i+1));
 				asset.setCode(codeAsset);
 				asset.setCreatedBy("4");
 				asset.setInvoiceId(invoice);
@@ -138,9 +145,30 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	
 	
 	@Override
-	public Asset update(Asset asset) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Asset update(Asset data) throws Exception {
+		Asset asset = findById(data.getId());
+		StatusAsset statusAsset = new StatusAsset();
+		statusAsset.setId(data.getStatusAssetId().getId());
+		asset.setStatusAssetId(statusAsset);
+		asset.setUpdatedBy("1");
+		
+		begin();
+		asset = assetDao.saveOrUpdate(asset);
+		commit();
+		
+		TrackAsset trackAsset = new TrackAsset();
+		trackAsset.setCodeAsset(asset.getCode());
+		trackAsset.setNameActivity("Update Status Asset");
+		trackAsset.setDateActivity(LocalDate.now());
+		trackAsset.setUserId("2");
+		trackAsset.setTransactionCode("BBA");
+		
+		begin();
+		trackAssetService.saveOrUpdate(trackAsset);
+		commit();
+		
+		
+		return asset;
 	}
 
 

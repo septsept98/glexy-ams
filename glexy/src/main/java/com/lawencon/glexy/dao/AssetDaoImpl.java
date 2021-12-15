@@ -1,6 +1,6 @@
 package com.lawencon.glexy.dao;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 				asset.setId(objArr[0].toString());
 				asset.setNames(objArr[1].toString());
 				asset.setCode(objArr[2].toString());
-				asset.setExpiredDate(Timestamp.valueOf(objArr[3].toString()).toLocalDateTime());
+				asset.setExpiredDate((LocalDate) objArr[3]);
 				
 				file.setId(objArr[4].toString());
 				asset.setAssetImg(file);
@@ -156,7 +156,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 				asset.setId(objArr[0].toString());
 				asset.setNames(objArr[1].toString());
 				asset.setCode(objArr[2].toString());
-				asset.setExpiredDate(Timestamp.valueOf(objArr[3].toString()).toLocalDateTime());
+				asset.setExpiredDate((LocalDate) objArr[3]);
 				
 				file.setId(objArr[4].toString());
 				asset.setAssetImg(file);

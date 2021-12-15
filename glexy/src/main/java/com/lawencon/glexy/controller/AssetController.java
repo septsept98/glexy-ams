@@ -50,7 +50,7 @@ public class AssetController extends BaseController{
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
 		InsertReqDataAsset insertReqDataAsset = new ObjectMapper().readValue(data, InsertReqDataAsset.class);
-		Asset asset = assetService.saveOrUpdate(insertReqDataAsset, invoiceImg, assetImg);
+		Asset asset = assetService.save(insertReqDataAsset, invoiceImg, assetImg);
 		
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(asset.getId());
@@ -63,8 +63,8 @@ public class AssetController extends BaseController{
 	}
 
 	@PutMapping
-	public ResponseEntity<?> update(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
-		Asset asset = assetService.saveOrUpdate(data);
+	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
+		Asset asset = assetService.update(data);
 		
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(asset.getVersion());

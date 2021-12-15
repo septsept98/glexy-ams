@@ -11,7 +11,7 @@ public interface AssetService {
 	
 	Asset save(InsertReqDataAsset data, MultipartFile invoiceImg, MultipartFile assetImg) throws Exception;
 	
-	Asset update(Asset asset) throws Exception;
+	Asset update(Asset data) throws Exception;
 	
 	Asset findById(String id) throws Exception;
 	
