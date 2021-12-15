@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +41,14 @@ public class InvoiceServiceImpl extends BaseServiceImpl implements InvoiceServic
 
 	@Override
 	public Invoice findById(String id) throws Exception {
-		return invoiceDao.findById(id);
+		Invoice result = new Invoice();
+		try {
+			result = invoiceDao.findById(id);
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			throw new NoResultException("Invoice not found");
+		}
+		return result;
 	}
 
 	@Override

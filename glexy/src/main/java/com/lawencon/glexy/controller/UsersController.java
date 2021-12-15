@@ -23,58 +23,47 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.asset.InsertReqDataAsset;
-import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.service.AssetService;
+import com.lawencon.glexy.model.Permissions;
+import com.lawencon.glexy.model.Users;
+import com.lawencon.glexy.service.UsersService;
 
 @RestController
-@RequestMapping("assets")
-public class AssetController extends BaseController{
+@RequestMapping("users")
+public class UsersController {
 	
 	@Autowired
-	private AssetService assetService;
+	private UsersService usersService;
 	
 	@GetMapping
 	public ResponseEntity<?> getAll() throws Exception {
-		List<Asset> result = assetService.findAll();
+		List<Users> result = usersService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-
-	}
-	
-	@GetMapping("/invent/{id}")
-	public ResponseEntity<?> getByInvent(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
+		Users result = usersService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
-		InsertReqDataAsset insertReqDataAsset = new ObjectMapper().readValue(data, InsertReqDataAsset.class);
-		Asset asset = assetService.save(insertReqDataAsset, invoiceImg, assetImg);
-		
+	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Users user =   usersService.save(new ObjectMapper().readValue(data, Users.class), file);
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(asset.getId());
+		id.setId(user.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
 		result.setMsg(MessageEnum.CREATED.getMsg());
-		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
-		Asset asset = assetService.update(data);
-		
+	public ResponseEntity<?> update(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Users user = usersService.update(new ObjectMapper().readValue(data, Users.class), file);
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(asset.getVersion());
+		ver.setVersion(user.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
@@ -85,15 +74,21 @@ public class AssetController extends BaseController{
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean data = assetService.removeById(id);
+		boolean data = usersService.deleteById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		
 		if(data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
 		}
-		
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/email/{id}")
+	public ResponseEntity<?> getByEmail(@PathVariable("id") String id) throws Exception {
+		Users result = usersService.getEmail(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
 	}
 	
 

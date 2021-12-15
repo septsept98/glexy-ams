@@ -1,7 +1,7 @@
 package com.lawencon.glexy.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ public class Invoice extends BaseEntity{
 	private String code;
 	
 	@Column(name = "purchase_date", nullable = false)
-	private LocalDateTime purchaseDate;
+	private LocalDate purchaseDate;
 	
 	@Column(name = "total_price", nullable = false)
 	private BigDecimal totalPrice;
@@ -38,11 +38,11 @@ public class Invoice extends BaseEntity{
 		this.code = code;
 	}
 
-	public LocalDateTime getPurchaseDate() {
+	public LocalDate getPurchaseDate() {
 		return purchaseDate;
 	}
 
-	public void setPurchaseDate(LocalDateTime purchaseDate) {
+	public void setPurchaseDate(LocalDate purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
 

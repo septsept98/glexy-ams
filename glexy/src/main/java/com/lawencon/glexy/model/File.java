@@ -15,11 +15,12 @@ public class File extends BaseEntity {
 	
 	private String extension;
 
-	public byte[] getFiles() {
+	public byte[] getFile() {
 		return file;
 	}
 
 	public void setFiles(byte[] file) {
+
 		this.file = file;
 	}
 

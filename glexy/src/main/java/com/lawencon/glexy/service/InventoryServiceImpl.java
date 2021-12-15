@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +22,21 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 		try {
 			if(data.getId() != null) {
 				Inventory inventory = findById(data.getId());
+				data.setNameAsset(inventory.getNameAsset());
+				data.setCode(inventory.getCode());
+				data.setStock(inventory.getStock());
 				data.setCreatedAt(inventory.getCreatedAt());
 				data.setCreatedBy(inventory.getCreatedBy());
+				data.setUpdatedBy("1");
 				data.setVersion(inventory.getVersion());
+			} else {
+				List<Inventory> invenList = inventoryDao.findAll();
+				int index = 0;
+				if(invenList != null) {
+					index = invenList.size();
+				} 
+				data.setCode(generateCode(index));
+				data.setCreatedBy("3");
 			}
 			begin();
 			data = inventoryDao.saveOrUpdate(data);
@@ -36,7 +50,14 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 
 	@Override
 	public Inventory findById(String id) throws Exception {
-		return inventoryDao.findById(id);
+		Inventory result = new Inventory();
+		try {
+			result = inventoryDao.findById(id);
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			throw new NoResultException("Inventory not found");
+		}
+		return result;
 	}
 
 	@Override
@@ -57,6 +78,13 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 		}
 		return result;
 	}
+
+	@Override
+	public String generateCode(int index) throws Exception {
+		return "inven" + "" + (index+1);
+	}
+	
+	
 	
 	
 

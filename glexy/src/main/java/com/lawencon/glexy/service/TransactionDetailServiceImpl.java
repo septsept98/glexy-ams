@@ -25,10 +25,10 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Autowired
 	private TransactionDetailDao transactionDetailDao;
-	
+
 	@Autowired
 	private AssetDao assetDao;
-	
+  
 	private TransactionService transactionService;
 	private StatusTransactionService statusTransactionService;
 	private TrackAssetService trackAssetService;

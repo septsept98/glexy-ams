@@ -2,6 +2,8 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +23,13 @@ public class LocationServiceImpl extends BaseServiceImpl implements LocationServ
 		try {
 			if(data.getId() != null) {
 				Location location = findById(data.getId());
+				data.setCode(location.getCode());
 				data.setCreatedAt(location.getCreatedAt());
 				data.setCreatedBy(location.getCreatedBy());
+				data.setUpdatedBy("1");
 				data.setVersion(location.getVersion());
+			} else {
+				data.setCreatedBy("3");
 			}
 			
 			begin();
@@ -39,7 +45,14 @@ public class LocationServiceImpl extends BaseServiceImpl implements LocationServ
 
 	@Override
 	public Location findById(String id) throws Exception {
-		return locationDao.findById(id);
+		Location result = new Location();
+		try {
+			result = locationDao.findById(id);
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			throw new NoResultException("Location not found");
+		}
+		return result;
 	}
 
 	@Override

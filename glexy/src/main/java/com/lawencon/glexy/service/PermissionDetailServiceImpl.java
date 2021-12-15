@@ -52,9 +52,9 @@ public class PermissionDetailServiceImpl extends BaseServiceImpl implements Perm
 			Permissions permissions = permissionsService.findById(data.getPermissionsId().getId());
 			data.setPermissionsId(permissions);
 
-			begin();
+			
 			data = permissionDetailDao.saveOrUpdate(data);
-			commit();
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

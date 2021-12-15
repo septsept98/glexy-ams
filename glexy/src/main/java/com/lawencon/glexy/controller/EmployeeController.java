@@ -12,69 +12,55 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.asset.InsertReqDataAsset;
-import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.service.AssetService;
+import com.lawencon.glexy.model.Employee;
+import com.lawencon.glexy.model.Permissions;
+import com.lawencon.glexy.service.EmployeeService;
 
 @RestController
-@RequestMapping("assets")
-public class AssetController extends BaseController{
+@RequestMapping("employees")
+public class EmployeeController {
 	
 	@Autowired
-	private AssetService assetService;
+	private EmployeeService employeeService;
 	
 	@GetMapping
 	public ResponseEntity<?> getAll() throws Exception {
-		List<Asset> result = assetService.findAll();
+		List<Employee> result = employeeService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-
-	}
-	
-	@GetMapping("/invent/{id}")
-	public ResponseEntity<?> getByInvent(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
+		Employee result = employeeService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
-		InsertReqDataAsset insertReqDataAsset = new ObjectMapper().readValue(data, InsertReqDataAsset.class);
-		Asset asset = assetService.save(insertReqDataAsset, invoiceImg, assetImg);
-		
+	public ResponseEntity<?> insert(@RequestBody Employee data) throws Exception {
+		employeeService.saveOrUpdate(data);
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(asset.getId());
+		id.setId(data.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
 		result.setMsg(MessageEnum.CREATED.getMsg());
-		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
-		Asset asset = assetService.update(data);
-		
+	public ResponseEntity<?> update(@RequestBody Employee data) throws Exception {
+		data = employeeService.saveOrUpdate(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(asset.getVersion());
+		ver.setVersion(data.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
@@ -85,16 +71,15 @@ public class AssetController extends BaseController{
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean data = assetService.removeById(id);
+		boolean data = employeeService.deleteById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		
 		if(data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
 		}
-		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 
 }
