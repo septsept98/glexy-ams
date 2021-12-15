@@ -33,17 +33,18 @@ public class FileServiceImpl extends BaseServiceImpl implements FileService {
 		try {
 			if (data.getId() != null) {
 				File file = findById(data.getId());
-				data.setFiles(file.getFiles()); 
-				data.setExtension(file.getExtension()); 
 				data.setCreatedAt(file.getCreatedAt());
 				data.setCreatedBy(file.getCreatedBy());
 				data.setVersion(file.getVersion());
 				data.setIsActive(file.getIsActive());
-			}
+				data.setUpdatedBy("1");
+			}else {
 
-			begin();
+			data.setCreatedBy("1");
+			data.setIsActive(true);
+			}
 			data = fileDao.saveOrUpdate(data);
-			commit();
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
