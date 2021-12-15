@@ -20,35 +20,35 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
-import com.lawencon.glexy.model.Roles;
-import com.lawencon.glexy.service.RolesService;
+import com.lawencon.glexy.model.Employee;
+import com.lawencon.glexy.model.Permissions;
+import com.lawencon.glexy.service.EmployeeService;
 
 @RestController
-@RequestMapping("roles")
-public class RolesController {
+@RequestMapping("employees")
+public class EmployeeController {
 	
 	@Autowired
-	private RolesService rolesService;
+	private EmployeeService employeeService;
 	
 	@GetMapping
 	public ResponseEntity<?> getAll() throws Exception {
-		List<Roles> result = rolesService.findAll();
+		List<Employee> result = employeeService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		Roles result = rolesService.findById(id);
+		Employee result = employeeService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody RolesInsertReqDto data) throws Exception {
-		Roles roles = rolesService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestBody Employee data) throws Exception {
+		employeeService.saveOrUpdate(data);
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(roles.getId());
+		id.setId(data.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -57,10 +57,10 @@ public class RolesController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody RolesInsertReqDto data) throws Exception {
-		Roles roles = rolesService.saveOrUpdate(data); 
+	public ResponseEntity<?> update(@RequestBody Employee data) throws Exception {
+		data = employeeService.saveOrUpdate(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(roles.getVersion());
+		ver.setVersion(data.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
@@ -71,7 +71,7 @@ public class RolesController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean data = rolesService.deleteById(id);
+		boolean data = employeeService.deleteById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		
@@ -80,4 +80,6 @@ public class RolesController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
+
 }

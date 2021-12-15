@@ -5,11 +5,13 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.TrackAssetDao;
 import com.lawencon.glexy.model.TrackAsset;
 
+@Service
 public class TrackAssetServiceImpl extends BaseServiceImpl implements TrackAssetService {
 	
 	@Autowired

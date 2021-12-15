@@ -12,43 +12,46 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
-import com.lawencon.glexy.model.Roles;
-import com.lawencon.glexy.service.RolesService;
+import com.lawencon.glexy.model.Permissions;
+import com.lawencon.glexy.model.Users;
+import com.lawencon.glexy.service.UsersService;
 
 @RestController
-@RequestMapping("roles")
-public class RolesController {
+@RequestMapping("users")
+public class UsersController {
 	
 	@Autowired
-	private RolesService rolesService;
+	private UsersService usersService;
 	
 	@GetMapping
 	public ResponseEntity<?> getAll() throws Exception {
-		List<Roles> result = rolesService.findAll();
+		List<Users> result = usersService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		Roles result = rolesService.findById(id);
+		Users result = usersService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody RolesInsertReqDto data) throws Exception {
-		Roles roles = rolesService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Users user =   usersService.save(new ObjectMapper().readValue(data, Users.class), file);
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(roles.getId());
+		id.setId(user.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -57,10 +60,10 @@ public class RolesController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody RolesInsertReqDto data) throws Exception {
-		Roles roles = rolesService.saveOrUpdate(data); 
+	public ResponseEntity<?> update(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Users user = usersService.update(new ObjectMapper().readValue(data, Users.class), file);
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(roles.getVersion());
+		ver.setVersion(user.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
@@ -71,7 +74,7 @@ public class RolesController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean data = rolesService.deleteById(id);
+		boolean data = usersService.deleteById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		
@@ -80,4 +83,13 @@ public class RolesController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/email/{id}")
+	public ResponseEntity<?> getByEmail(@PathVariable("id") String id) throws Exception {
+		Users result = usersService.getEmail(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
+
 }

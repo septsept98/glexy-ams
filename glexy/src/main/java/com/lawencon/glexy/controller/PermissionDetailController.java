@@ -20,35 +20,35 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
-import com.lawencon.glexy.model.Roles;
-import com.lawencon.glexy.service.RolesService;
+import com.lawencon.glexy.model.PermissionDetail;
+import com.lawencon.glexy.model.Permissions;
+import com.lawencon.glexy.service.PermissionDetailService;
 
 @RestController
-@RequestMapping("roles")
-public class RolesController {
+@RequestMapping("permission-details")
+public class PermissionDetailController {
 	
 	@Autowired
-	private RolesService rolesService;
+	private PermissionDetailService permissionDetailService;
 	
 	@GetMapping
 	public ResponseEntity<?> getAll() throws Exception {
-		List<Roles> result = rolesService.findAll();
+		List<PermissionDetail> result = permissionDetailService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		Roles result = rolesService.findById(id);
+		PermissionDetail result = permissionDetailService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody RolesInsertReqDto data) throws Exception {
-		Roles roles = rolesService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestBody PermissionDetail data) throws Exception {
+		permissionDetailService.saveOrUpdate(data);
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(roles.getId());
+		id.setId(data.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -57,10 +57,10 @@ public class RolesController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody RolesInsertReqDto data) throws Exception {
-		Roles roles = rolesService.saveOrUpdate(data); 
+	public ResponseEntity<?> update(@RequestBody PermissionDetail data) throws Exception {
+		data = permissionDetailService.saveOrUpdate(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(roles.getVersion());
+		ver.setVersion(data.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
@@ -71,7 +71,7 @@ public class RolesController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
-		boolean data = rolesService.deleteById(id);
+		boolean data = permissionDetailService.deleteById(id);
 		
 		DeleteResDto result = new DeleteResDto();
 		
@@ -79,5 +79,12 @@ public class RolesController {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/role/{id}")
+	public ResponseEntity<?> getByRoleId(@PathVariable("id") String id) throws Exception {
+		List<PermissionDetail>result = permissionDetailService.findByRoleId(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
 	}
 }

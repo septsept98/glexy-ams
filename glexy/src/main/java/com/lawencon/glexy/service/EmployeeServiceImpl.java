@@ -47,9 +47,9 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeServ
 			Company company = companyService.findById(data.getCompanyId().getId());
 			data.setCompanyId(company);
 			
-			begin();
+			
 			data = employeeDao.saveOrUpdate(data);
-			commit();
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

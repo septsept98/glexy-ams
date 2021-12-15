@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDao;
 import com.lawencon.glexy.dto.transaction.InsertReqTransaction;
 import com.lawencon.glexy.model.Asset;
@@ -21,16 +22,16 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 	private TransactionDao transactionDao;
 	private TransactionDetailService transactionDetailService;
 	private TrackAssetService trackAssetService;
-	private AssetService assetService;
+	private AssetDao assetDao;
 	private StatusAssetService statusAssetService;
 
 	public TransactionServiceImpl(@Autowired TransactionDao transactionDao,
 			TransactionDetailService transactionDetailService, TrackAssetService trackAssetService,
-			AssetService assetService, StatusAssetService statusAssetService) {
+			AssetDao assetDao, StatusAssetService statusAssetService) {
 		this.transactionDao = transactionDao;
 		this.transactionDetailService = transactionDetailService;
 		this.trackAssetService = trackAssetService;
-		this.assetService = assetService;
+		this.assetDao = assetDao;
 		this.statusAssetService = statusAssetService;
 	}
 
@@ -68,11 +69,11 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 			transactionDetailService.saveOrUpdate(detailTr);
 			commit();
 			
-			Asset asset = assetService.findById(detailTr.getAssetId().getId());
+			Asset asset = assetDao.findById(detailTr.getAssetId().getId());
 			if (asset.getId() != null) {
 				asset.setStatusAssetId(statusAsset);
 				begin();
-				assetService.saveOrUpdate(asset);
+				assetDao.saveOrUpdate(asset);
 				commit();
 			}
 			
