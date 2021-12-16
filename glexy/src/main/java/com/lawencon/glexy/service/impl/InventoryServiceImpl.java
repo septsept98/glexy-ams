@@ -32,16 +32,9 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 				data.setVersion(inventory.getVersion());
 				data = inventoryDao.saveOrUpdate(data);
 			} else {
-				List<Inventory> invenList = inventoryDao.findAll();
-				int index = 0;
-				if(invenList != null) {
-					index = invenList.size();
-				} 
-				data.setCode(generateCode(index));
+				
 				data.setCreatedBy("3");
-				begin();
 				data = inventoryDao.saveOrUpdate(data);
-				commit();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,10 +54,21 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 		}
 		return result;
 	}
+	
 
 	@Override
 	public List<Inventory> findAll() throws Exception {
 		return inventoryDao.findAll();
+	}
+
+	@Override
+	public List<Inventory> findByName(String name) throws Exception {
+		return inventoryDao.findByName(name);
+	}
+	
+	@Override
+	public Inventory findByCode(String code) throws Exception {
+		return inventoryDao.findByCode(code);
 	}
 
 	@Override

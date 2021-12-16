@@ -23,6 +23,7 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 		try {
 			if(data.getId() != null) {
 				AssetType assetType = findById(data.getId());
+				data.setCode(assetType.getCode());
 				data.setCreatedAt(assetType.getCreatedAt());
 				data.setCreatedBy(assetType.getCreatedBy());
 				data.setUpdatedBy("1");

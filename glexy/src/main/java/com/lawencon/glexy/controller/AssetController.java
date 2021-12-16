@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.asset.InsertReqDataAsset;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.service.AssetService;
 
@@ -54,10 +52,22 @@ public class AssetController extends BaseController{
 
 	}
 	
+	@GetMapping("/brand/{id}")
+	public ResponseEntity<?> getByBrandId(@PathVariable("id") String id) throws Exception {
+		List<Asset> result = assetService.findByBrandId(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	@GetMapping("/company/{id}")
+	public ResponseEntity<?> getByCompanyId(@PathVariable("id") String id) throws Exception {
+		List<Asset> result = assetService.findByCompanyId(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
-		InsertReqDataAsset insertReqDataAsset = new ObjectMapper().readValue(data, InsertReqDataAsset.class);
-		Asset asset = assetService.save(insertReqDataAsset, invoiceImg, assetImg);
+		Asset asset = assetService.save(convertToModel(data, Asset.class), invoiceImg, assetImg);
 		
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(asset.getId());

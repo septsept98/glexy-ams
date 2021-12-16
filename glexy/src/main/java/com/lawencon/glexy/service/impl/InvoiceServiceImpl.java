@@ -28,10 +28,7 @@ public class InvoiceServiceImpl extends BaseServiceImpl implements InvoiceServic
 				data.setCreatedBy(invoice.getCreatedBy());
 				data.setVersion(invoice.getVersion());
 			}
-			
-			begin();
 			data = invoiceDao.saveOrUpdate(data);
-			commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();

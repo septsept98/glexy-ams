@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.glexy.constant.MessageEnum;
@@ -39,6 +40,13 @@ public class InventoryController {
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Inventory result = inventoryService.findById(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/")
+	public ResponseEntity<?> getByName(@RequestParam (required = true) String name) throws Exception {
+		List<Inventory> result = inventoryService.findByName(name);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}

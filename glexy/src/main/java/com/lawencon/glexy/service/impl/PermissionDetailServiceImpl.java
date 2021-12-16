@@ -12,16 +12,12 @@ import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.service.PermissionDetailService;
 import com.lawencon.glexy.service.PermissionsService;
-import com.lawencon.glexy.service.RolesService;
 
 @Service
 public class PermissionDetailServiceImpl extends BaseServiceImpl implements PermissionDetailService {
 
 	@Autowired
 	private PermissionDetailDao permissionDetailDao;
-
-	@Autowired
-	private RolesService rolesService;
 
 	@Autowired
 	private PermissionsService permissionsService;
@@ -49,7 +45,8 @@ public class PermissionDetailServiceImpl extends BaseServiceImpl implements Perm
 				data.setVersion(permissionDetail.getVersion());
 				data.setIsActive(permissionDetail.getIsActive());
 			}
-			Roles roles = rolesService.findById(data.getRolesId().getId());
+			Roles roles = new Roles();
+			roles.setId(data.getRolesId().getId());
 			data.setRolesId(roles);
 
 			Permissions permissions = permissionsService.findById(data.getPermissionsId().getId());

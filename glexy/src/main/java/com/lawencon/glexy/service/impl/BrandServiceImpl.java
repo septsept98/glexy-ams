@@ -26,6 +26,7 @@ public class BrandServiceImpl extends BaseServiceImpl implements BrandService {
 				data.setCode(brand.getCode());
 				data.setCreatedAt(brand.getCreatedAt());
 				data.setCreatedBy(brand.getCreatedBy());
+				data.setUpdatedBy("2");
 				data.setVersion(brand.getVersion());
 			} else {
 				data.setCreatedBy("3");
