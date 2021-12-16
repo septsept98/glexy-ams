@@ -13,7 +13,7 @@ import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.EmployeeService;
 
 @Service
-public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl extends  com.lawencon.glexy.service.impl.BaseServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeDao employeeDao;
@@ -39,10 +39,15 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements EmployeeServ
 			if (data.getId() != null) {
 				Employee employee = findById(data.getId());
 				data.setNip(employee.getNip()); 
+				data.setUpdatedBy("1");
 				data.setCreatedAt(employee.getCreatedAt());
 				data.setCreatedBy(employee.getCreatedBy());
 				data.setVersion(employee.getVersion());
 				data.setIsActive(employee.getIsActive());
+				
+			}else {
+				
+				data.setCreatedBy("1");
 				
 			}
 			

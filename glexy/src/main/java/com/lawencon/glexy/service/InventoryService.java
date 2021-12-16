@@ -12,6 +12,10 @@ public interface InventoryService {
 	
 	List<Inventory> findAll() throws Exception;
 	
+	List<Inventory> findByName(String name) throws Exception;
+	
+	Inventory findByCode(String code) throws Exception;
+
 	boolean removeById(String id) throws Exception;
 	
 	String generateCode(int index) throws Exception;
