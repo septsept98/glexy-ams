@@ -21,5 +21,7 @@ public interface UsersService {
 	Users getEmail(String email) throws Exception;
 	
 	String generatePassword() throws Exception;
+	
+	Users getByNip(String Nip) throws Exception;
 
 }

@@ -168,4 +168,10 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		return sb.toString();
 	}
 
+	@Override
+	public Users getByNip(String Nip) throws Exception {
+		
+		return usersDao.getByNip(Nip);
+	}
+
 }
