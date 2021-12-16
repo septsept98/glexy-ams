@@ -29,7 +29,7 @@ public class BaseController {
 		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ExceptionHandler(NonUniqueResultException.class)
 	public ResponseEntity<?> nonUniqueRes(NonUniqueResultException e){
 		Map<String, Object> mapError = new HashMap<String, Object>();
 		
@@ -38,7 +38,7 @@ public class BaseController {
 		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<?> constrainViolation(ConstraintViolationException e){
 		Map<String, Object> mapError = new HashMap<String, Object>();
 		
@@ -47,7 +47,7 @@ public class BaseController {
 		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ExceptionHandler(NoResultException.class)
 	public ResponseEntity<?> noResultException(NoResultException e){
 		Map<String, Object> mapError = new HashMap<String, Object>();
 		
