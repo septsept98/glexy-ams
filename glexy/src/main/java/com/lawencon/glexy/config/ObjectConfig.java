@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -36,6 +37,12 @@ public class ObjectConfig {
 		liquibase.setChangeLog("/db/init_data.sql");
 
 		return liquibase;
+	}
+	
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+
+		return new BCryptPasswordEncoder();
 	}
 
 }
