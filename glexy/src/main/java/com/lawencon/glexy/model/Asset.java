@@ -22,7 +22,7 @@ public class Asset extends BaseEntity{
 	@Column(length = 20, nullable = false)
 	private String code;
 	
-	@Column(name = "expired_date", nullable = false)
+	@Column(name = "expired_date")
 	private LocalDate expiredDate;
 	
 	@ManyToOne
