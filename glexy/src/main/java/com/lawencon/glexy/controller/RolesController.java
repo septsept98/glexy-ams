@@ -20,6 +20,7 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
 import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.service.RolesService;
 
@@ -44,10 +45,10 @@ public class RolesController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody Roles data) throws Exception {
-		rolesService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestBody RolesInsertReqDto data) throws Exception {
+		Roles roles = rolesService.saveOrUpdate(data);
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(data.getId());
+		id.setId(roles.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -56,10 +57,10 @@ public class RolesController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Roles data) throws Exception {
-		rolesService.saveOrUpdate(data);
+	public ResponseEntity<?> update(@RequestBody RolesInsertReqDto data) throws Exception {
+		Roles roles = rolesService.saveOrUpdate(data); 
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(data.getVersion());
+		ver.setVersion(roles.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);

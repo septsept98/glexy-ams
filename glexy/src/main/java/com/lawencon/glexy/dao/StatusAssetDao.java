@@ -9,6 +9,8 @@ public interface StatusAssetDao {
 	List<StatusAsset> findAll() throws Exception;
 
 	StatusAsset findById(String id) throws Exception;
+	
+	StatusAsset findByCode(String code) throws Exception;
 
 	StatusAsset saveOrUpdate(StatusAsset data) throws Exception;
 

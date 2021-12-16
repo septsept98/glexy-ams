@@ -28,7 +28,7 @@ public class Company extends BaseEntity{
 	
 	@ManyToOne
 	@JoinColumn(name = "company_img", columnDefinition = "varchar")
-	private File company_img;
+	private File companyImg;
 	
 	
 	public String getNames() {
@@ -55,12 +55,13 @@ public class Company extends BaseEntity{
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public File getCompany_img() {
-		return company_img;
+	public File getCompanyImg() {
+		return companyImg;
 	}
-	public void setCompany_img(File company_img) {
-		this.company_img = company_img;
+	public void setCompanyImg(File companyImg) {
+		this.companyImg = companyImg;
 	}
+	
 	
 	
 }

@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
@@ -44,11 +47,11 @@ public class CompanyController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody Company data) throws Exception {
-		data = companyService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Company company = companyService.save(new ObjectMapper().readValue(data, Company.class), file);
 		
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(data.getId());
+		id.setId(company.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -59,7 +62,7 @@ public class CompanyController {
 
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody Company data) throws Exception {
-		data = companyService.saveOrUpdate(data);
+		data = companyService.update(data);
 		
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(data.getVersion());

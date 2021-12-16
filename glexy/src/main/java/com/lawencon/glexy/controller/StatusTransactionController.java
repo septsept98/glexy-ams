@@ -23,7 +23,6 @@ import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.service.StatusTransactionService;
 
-
 @RestController
 @RequestMapping("status-transactions")
 public class StatusTransactionController extends BaseController {
