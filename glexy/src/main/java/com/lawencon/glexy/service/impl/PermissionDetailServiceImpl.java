@@ -21,9 +21,6 @@ public class PermissionDetailServiceImpl extends BaseServiceImpl implements Perm
 	private PermissionDetailDao permissionDetailDao;
 
 	@Autowired
-	private RolesService rolesService;
-
-	@Autowired
 	private PermissionsService permissionsService;
 
 	@Override
@@ -49,7 +46,8 @@ public class PermissionDetailServiceImpl extends BaseServiceImpl implements Perm
 				data.setVersion(permissionDetail.getVersion());
 				data.setIsActive(permissionDetail.getIsActive());
 			}
-			Roles roles = rolesService.findById(data.getRolesId().getId());
+			Roles roles = new Roles();
+			roles.setId(data.getRolesId().getId());
 			data.setRolesId(roles);
 
 			Permissions permissions = permissionsService.findById(data.getPermissionsId().getId());

@@ -93,7 +93,7 @@ public class UsersController {
 	}
 	
 	@GetMapping("/nip")
-	public ResponseEntity<?> getByNip(@RequestParam (required = false) String nip) throws Exception {
+	public ResponseEntity<?> getByNip(@RequestParam (required = false) String nip, String code) throws Exception {
 		Users result = usersService.getByNip(nip);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
