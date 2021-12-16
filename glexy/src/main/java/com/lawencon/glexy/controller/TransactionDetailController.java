@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.UpdateResDataDto;
+import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.TransactionDetailService;
 
@@ -44,7 +47,7 @@ public class TransactionDetailController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> saveOrUpdate(@RequestBody TransactionDetail data) throws Exception {
+	public ResponseEntity<?> insert(@RequestBody TransactionDetail data) throws Exception {
 		data = transactionDetailService.saveOrUpdate(data);
 		
 		InsertResDataDto id = new InsertResDataDto();
@@ -54,7 +57,21 @@ public class TransactionDetailController {
 		result.setData(id);
 		result.setMsg(MessageEnum.CREATED.getMsg());
 		
-		return new ResponseEntity<>(data, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody TransactionDetail data) throws Exception {
+		data = transactionDetailService.saveOrUpdate(data);
+		
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(data.getVersion());
+		
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 }
