@@ -47,7 +47,7 @@ public class AssetController extends BaseController{
 	
 	@GetMapping("/invent/{id}")
 	public ResponseEntity<?> getByInvent(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
+		List<Asset> result = assetService.findByInvent(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}

@@ -35,7 +35,34 @@ public class BaseController {
 		
 		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler(NonUniqueResultException.class)
+	public ResponseEntity<?> nonUniqueRes(NonUniqueResultException e){
+		Map<String, Object> mapError = new HashMap<String, Object>();
+		
+		mapError.put("msg", e.getMessage());
+		
+		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
+	}
 	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<?> constrainViolation(ConstraintViolationException e){
+		Map<String, Object> mapError = new HashMap<String, Object>();
+		
+		mapError.put("msg", e.getMessage());
+		
+		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(NoResultException.class)
+	public ResponseEntity<?> noResultException(NoResultException e){
+		Map<String, Object> mapError = new HashMap<String, Object>();
+		
+		mapError.put("msg", e.getMessage());
+		
+		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
+	}
+  
 	protected <T> T convertToModel(String src, Class<T> clazz ) throws Exception {
 		JavaTimeModule javaTimeModule = new JavaTimeModule();
 		return new ObjectMapper()
@@ -43,31 +70,4 @@ public class BaseController {
 				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 				.readValue(src, clazz);
 	}
-	
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//	public ResponseEntity<?> nonUniqueRes(NonUniqueResultException e){
-//		Map<String, Object> mapError = new HashMap<String, Object>();
-//		
-//		mapError.put("msg", e.getMessage());
-//		
-//		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
-//	}
-//	
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//	public ResponseEntity<?> constrainViolation(ConstraintViolationException e){
-//		Map<String, Object> mapError = new HashMap<String, Object>();
-//		
-//		mapError.put("msg", e.getMessage());
-//		
-//		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
-//	}
-//	
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//	public ResponseEntity<?> noResultException(NoResultException e){
-//		Map<String, Object> mapError = new HashMap<String, Object>();
-//		
-//		mapError.put("msg", e.getMessage());
-//		
-//		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
-//	}
 }

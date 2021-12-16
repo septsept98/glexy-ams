@@ -14,16 +14,11 @@ import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.Inventory;
-import com.lawencon.glexy.model.StatusAsset;
-import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
-import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.service.InventoryService;
-import com.lawencon.glexy.service.StatusTransactionService;
 import com.lawencon.glexy.service.TrackAssetService;
 import com.lawencon.glexy.service.TransactionDetailService;
-import com.lawencon.glexy.service.TransactionService;
 
 @Service
 public class TransactionDetailServiceImpl extends BaseServiceImpl implements TransactionDetailService {
@@ -33,20 +28,12 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Autowired
 	private AssetDao assetDao;
-  
-	private TransactionService transactionService;
-	private StatusTransactionService statusTransactionService;
-	private TrackAssetService trackAssetService;
-	private InventoryService inventoryService;
 	
-	public TransactionDetailServiceImpl(
-			InventoryService inventoryService,
-			StatusTransactionService statusTransactionService,
-			TrackAssetService trackAssetService) {
-		this.inventoryService = inventoryService;
-		this.statusTransactionService = statusTransactionService;
-		this.trackAssetService = trackAssetService;
-	}
+	@Autowired
+	private TrackAssetService trackAssetService;
+	
+	@Autowired
+	private InventoryService inventoryService;
 
 	@Override
 	public List<TransactionDetail> findAll() throws Exception {
@@ -74,42 +61,43 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				data.setCreatedAt(transactionDetail.getCreatedAt());
 				data.setUpdatedBy("1");
 				data.setVersion(transactionDetail.getVersion());
+				data.setTransactionId(transactionDetail.getTransactionId());
+				data.setDateCheckin(transactionDetail.getDateCheckin());
+				data.setDurationDate(transactionDetail.getDurationDate());
+				data.setStatusAssetCheckoutId(transactionDetail.getStatusAssetCheckoutId());
+				data.setDateCheckin(LocalDate.now());
+				data.setAssetId(transactionDetail.getAssetId());
+				data.setStatusTrCheckinId(data.getStatusTrCheckinId());
 				
-				StatusTransaction statusTransaction = statusTransactionService.findById(data.getStatusTrCheckinId().getId());
-				
-				StatusAsset statusAsset = new StatusAsset();
-				statusAsset.setId(statusTransaction.getStatusAssetId().getId());
-				
-				Asset asset = assetDao.findById(data.getAssetId().getId());
-				asset.setStatusAssetId(statusAsset);
-				asset.setUpdatedBy("22");
 				begin();
+				data = transactionDetailDao.saveOrUpdate(data);
+				
+				Asset asset = data.getAssetId();
+				asset.setStatusAssetId(data.getStatusTrCheckinId().getStatusAssetId());
+				asset.setUpdatedBy("1");
 				asset = assetDao.saveOrUpdate(asset);
 				
-				Inventory inventory = inventoryService.findById(asset.getInventoryId().getId());
-				if(asset.getStatusAssetId().getCodeStatusAsset() == StatusAssetEnum.DEPLOY.getCode()) {
+				Inventory inventory = asset.getInventoryId();
+				if(asset.getStatusAssetId().getCodeStatusAsset().equalsIgnoreCase(StatusAssetEnum.DEPLOY.getCode())) {
 					int stockInventory = inventory.getLatestStock();
-					int latestStock = stockInventory - 1;
+					int latestStock = stockInventory + 1;
 					
-					inventory.setUpdatedBy("22");
+					inventory.setUpdatedBy("1");
 					inventory.setLatestStock(latestStock);
 					
 					inventory = inventoryService.saveOrUpdate(inventory);
 				}
 				
-				Transactions transactions = transactionService.findById(data.getTransactionId().getId());
-				
 				TrackAsset trackAsset = new TrackAsset();
 				trackAsset.setCodeAsset(asset.getCode());
-				trackAsset.setNameActivity(statusTransaction.getNameStatusTr());
+				trackAsset.setNameActivity(data.getStatusTrCheckinId().getNameStatusTr());
 				trackAsset.setDateActivity(LocalDate.now());
 				trackAsset.setUserId("33");
-				trackAsset.setTransactionCode(transactions.getCodeTransaction());
+				trackAsset.setTransactionCode(data.getTransactionId().getCodeTransaction());
 				trackAsset.setCreatedBy(data.getCreatedBy());
 				trackAsset.setIsActive(data.getIsActive());
 				trackAssetService.saveOrUpdate(trackAsset);
 				
-				data = transactionDetailDao.saveOrUpdate(data);
 				commit();
 			} else {
 				data = transactionDetailDao.saveOrUpdate(data);

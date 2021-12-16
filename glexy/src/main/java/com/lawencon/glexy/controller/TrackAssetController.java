@@ -8,47 +8,51 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
-import com.lawencon.glexy.dto.UpdateResDataDto;
-import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.model.TransactionDetail;
-import com.lawencon.glexy.service.TransactionDetailService;
+import com.lawencon.glexy.model.TrackAsset;
+import com.lawencon.glexy.service.TrackAssetService;
 
 @RestController
-@RequestMapping("transaction-details")
-public class TransactionDetailController {
+@RequestMapping("track-assets")
+public class TrackAssetController {
 
 	@Autowired
-	private TransactionDetailService transactionDetailService;
+	private TrackAssetService trackAssetService;
 	
 	@GetMapping()
 	public ResponseEntity<?> getAll() throws Exception {
-		List<TransactionDetail> result = transactionDetailService.findAll();
+		List<TrackAsset> result = trackAssetService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
-		TransactionDetail result = transactionDetailService.findById(id);
+		TrackAsset result = trackAssetService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@GetMapping("/details/{id}")
-	public ResponseEntity<?> getByTr(@PathVariable("id") String id) throws Exception {
-		List<TransactionDetail> result = transactionDetailService.findByTr(id);
+	@GetMapping("/")
+	public ResponseEntity<?> getByAssetTr(@RequestParam(required = false) String assetCode, String trCode) throws Exception {
+		List<TrackAsset> result = trackAssetService.findByAssetTr(assetCode, trCode);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/assets/{assetCode}")
+	public ResponseEntity<?> getByAsset(@PathVariable("assetCode") String assetCode) throws Exception {
+		List<TrackAsset> result = trackAssetService.findByAsset(assetCode);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody TransactionDetail data) throws Exception {
-		data = transactionDetailService.saveOrUpdate(data);
+	public ResponseEntity<?> insert(@RequestBody TrackAsset data) throws Exception {
+		trackAssetService.saveOrUpdate(data);
 		
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(data.getId());
@@ -59,19 +63,4 @@ public class TransactionDetailController {
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
-	@PutMapping
-	public ResponseEntity<?> update(@RequestBody TransactionDetail data) throws Exception {
-		data = transactionDetailService.saveOrUpdate(data);
-		
-		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(data.getVersion());
-		
-		UpdateResDto result = new UpdateResDto();
-		result.setData(ver);
-		result.setMsg(MessageEnum.UPDATED.getMsg());
-		
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
 }
