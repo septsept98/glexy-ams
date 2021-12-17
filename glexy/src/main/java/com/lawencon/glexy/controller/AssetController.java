@@ -38,6 +38,18 @@ public class AssetController extends BaseController{
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	@GetMapping("/deploy-asset")
+	public ResponseEntity<?> getAllDeployAsset() throws Exception {
+		List<Asset> result = assetService.findAllDeployAsset();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/general-asset")
+	public ResponseEntity<?> getAllGeneralAsset() throws Exception {
+		List<Asset> result = assetService.findAllGeneralAsset();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Asset result = assetService.findById(id);
