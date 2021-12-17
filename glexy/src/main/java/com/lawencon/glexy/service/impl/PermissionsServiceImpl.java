@@ -11,7 +11,7 @@ import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.service.PermissionsService;
 
 @Service
-public class PermissionsServiceImpl extends BaseServiceImpl implements PermissionsService {
+public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements PermissionsService {
 	
 	@Autowired
 	private PermissionsDao permissionsDao;
@@ -37,10 +37,12 @@ public class PermissionsServiceImpl extends BaseServiceImpl implements Permissio
 				data.setCode(permissions.getCode()); 
 				data.setCreatedAt(permissions.getCreatedAt());
 				data.setCreatedBy(permissions.getCreatedBy());
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(permissions.getVersion());
 				data.setIsActive(permissions.getIsActive());
+			}else {
+				data.setUpdatedBy(getIdAuth());
 			}
-
 			begin();
 			data = permissionsDao.saveOrUpdate(data);
 			commit();

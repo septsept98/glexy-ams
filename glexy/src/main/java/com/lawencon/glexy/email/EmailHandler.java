@@ -32,7 +32,7 @@ public class EmailHandler {
 	}
 	
 	@Async
-	@Scheduled(fixedDelay = 1000)
+	@Scheduled(fixedDelay = 60000)
 	public void scheduleFixedDelayTask() {
 //	    System.out.println(
 //	      "Fixed delay task - " + System.currentTimeMillis() / 1000);

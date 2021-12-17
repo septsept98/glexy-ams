@@ -23,6 +23,10 @@ import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.service.StatusAssetService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("status-assets")
 public class StatusAssetController {
@@ -31,24 +35,28 @@ public class StatusAssetController {
 	private StatusAssetService statusAssetService;
 	
 	@GetMapping()
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StatusAsset.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<StatusAsset> result = statusAssetService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StatusAsset.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		StatusAsset result = statusAssetService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/code/{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StatusAsset.class)))
 	public ResponseEntity<?> getByCode(@PathVariable("id") String code) throws Exception {
 		StatusAsset result = statusAssetService.findByCode(code);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody StatusAsset data) throws Exception {
 		data = statusAssetService.saveOrUpdate(data);
 		
@@ -63,6 +71,7 @@ public class StatusAssetController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody StatusAsset data) throws Exception {
 		data = statusAssetService.saveOrUpdate(data);
 
@@ -77,6 +86,7 @@ public class StatusAssetController {
 	}
 
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> deleteById(@PathVariable("id") String id) throws Exception {
 		boolean data = statusAssetService.removeById(id);
 		

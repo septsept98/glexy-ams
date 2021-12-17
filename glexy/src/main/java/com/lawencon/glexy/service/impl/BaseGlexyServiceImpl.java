@@ -1,13 +1,11 @@
 package com.lawencon.glexy.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 
+import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.security.AuthPrincipal;
 
-public class BaseServiceImpl extends com.lawencon.base.BaseServiceImpl {
+public class BaseGlexyServiceImpl extends BaseServiceImpl {
 
 	@Autowired
 	protected AuthPrincipal authPrincipal;

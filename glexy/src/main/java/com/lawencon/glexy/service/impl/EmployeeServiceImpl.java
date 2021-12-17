@@ -13,23 +13,23 @@ import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.EmployeeService;
 
 @Service
-public class EmployeeServiceImpl extends  com.lawencon.glexy.service.impl.BaseServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeDao employeeDao;
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Override
 	public List<Employee> findAll() throws Exception {
-		
+
 		return employeeDao.findAll();
 	}
 
 	@Override
 	public Employee findById(String id) throws Exception {
-	
+
 		return employeeDao.findById(id);
 	}
 
@@ -38,26 +38,24 @@ public class EmployeeServiceImpl extends  com.lawencon.glexy.service.impl.BaseSe
 		try {
 			if (data.getId() != null) {
 				Employee employee = findById(data.getId());
-				data.setNip(employee.getNip()); 
-				data.setUpdatedBy("1");
+				data.setNip(employee.getNip());
+				data.setUpdatedBy(getIdAuth());
 				data.setCreatedAt(employee.getCreatedAt());
 				data.setCreatedBy(employee.getCreatedBy());
 				data.setVersion(employee.getVersion());
 				data.setIsActive(employee.getIsActive());
-				
-			}else {
-				
-				data.setCreatedBy("1");
-				
+
+			} else {
+
+				data.setCreatedBy(getIdAuth());
+
 			}
-			
+
 			Company company = companyService.findById(data.getCompanyId().getId());
 			data.setCompanyId(company);
-			
-			
+
 			data = employeeDao.saveOrUpdate(data);
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
@@ -80,6 +78,4 @@ public class EmployeeServiceImpl extends  com.lawencon.glexy.service.impl.BaseSe
 		return result;
 	}
 
-	
-	
 }

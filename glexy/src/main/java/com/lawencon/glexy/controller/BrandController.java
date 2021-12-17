@@ -20,8 +20,13 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.service.BrandService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("brands")
@@ -31,12 +36,14 @@ public class BrandController {
 	private BrandService brandService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Brand.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Brand> result = brandService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Brand.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Brand result = brandService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -44,6 +51,7 @@ public class BrandController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody Brand data) throws Exception {
 		data = brandService.saveOrUpdate(data);
 		
@@ -58,6 +66,7 @@ public class BrandController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Brand data) throws Exception {
 		data = brandService.saveOrUpdate(data);
 		
@@ -72,6 +81,7 @@ public class BrandController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = brandService.removeById(id);
 		

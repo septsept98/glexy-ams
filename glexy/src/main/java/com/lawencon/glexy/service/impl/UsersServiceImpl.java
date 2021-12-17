@@ -26,7 +26,7 @@ import com.lawencon.glexy.service.RolesService;
 import com.lawencon.glexy.service.UsersService;
 
 @Service
-public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServiceImpl implements UsersService {
+public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersService {
 
 	@Autowired
 	private UsersDao usersDao;
@@ -42,16 +42,16 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
 	private EmailHandler emailHandler;
 
 	@Override
 	public List<Users> findAll() throws Exception {
-
+		emailHandler.sendSimpleMessage("99.faridazhari@gmail.com", "Password ini rahsia", "HALO MY FRIEND");
 		return usersDao.findAll();
 	}
 
@@ -64,11 +64,11 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 	@Override
 	public Users save(Users data, MultipartFile file) throws Exception {
 		try {
-			
+
 			String pass = generatePassword();
 			System.out.println(pass);
 			data.setPass(bCryptPasswordEncoder.encode(pass));
-			data.setCreatedBy("1");
+			data.setCreatedBy(getIdAuth());
 			Roles roles = rolesService.findById(data.getRolesId().getId());
 			data.setRolesId(roles);
 			begin();
@@ -85,7 +85,7 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 			files.setExtension(ext);
 			files = fileService.saveOrUpdate(files);
 			files.setId(files.getId());
-			files.setCreatedBy("1");
+			files.setCreatedBy(data.getCreatedBy());
 			data.setUsersImg(files);
 
 			data.setEmployeeId(employee);
@@ -130,6 +130,8 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 		try {
 
 			Users users = usersDao.findById(data.getId());
+			users.setUpdatedBy(getIdAuth());
+			users.setVersion(data.getVersion());
 
 			Roles roles = rolesService.findById(data.getRolesId().getId());
 			users.setRolesId(roles);
@@ -144,13 +146,11 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 				files.setFiles(file.getBytes());
 				String ext = file.getOriginalFilename();
 				ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
-
 				files.setExtension(ext);
-
 				files.setId(users.getUsersImg().getId());
+				files.setUpdatedBy(getIdAuth());
 
 				files = fileService.saveOrUpdate(files);
-
 				users.setUsersImg(files);
 
 			}
@@ -169,23 +169,19 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 
 	@Override
 	public String generatePassword() throws Exception {
-		String alphabet = "ABCDEFGHIJKLMOPQRSTUVWYZ";
 		String number = "123456789";
 		StringBuilder sb = new StringBuilder();
 		Random random = new Random();
 		for (int i = 0; i < 5; i++) {
-			int indAlphabhet = random.nextInt(alphabet.length());
 			int indNumber = random.nextInt(number.length());
-			sb.append(alphabet.charAt(indAlphabhet));
 			sb.append(number.charAt(indNumber));
-
 		}
 		return sb.toString();
 	}
 
 	@Override
 	public Users getByNip(String Nip) throws Exception {
-		
+
 		return usersDao.getByNip(Nip);
 	}
 
@@ -199,6 +195,26 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 		}
 		return new org.springframework.security.core.userdetails.User(users.getEmail(), users.getPass(),
 				new ArrayList<>());
+	}
+
+	@Override
+	public Users updatePassword(Users data) throws Exception {
+
+		try {
+			Users users = usersDao.findById(data.getId());
+			users.setPass(bCryptPasswordEncoder.encode(data.getPass()));
+			users.setUpdatedBy(getIdAuth());
+			users.setVersion(data.getVersion());
+			begin();
+			Users user = usersDao.saveOrUpdate(users);
+			commit();
+			return user;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+			throw new Exception(e);
+		}
 	}
 
 }
