@@ -23,6 +23,10 @@ import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.service.PermissionsService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("permissions")
 public class PermissionsController {
@@ -31,12 +35,14 @@ public class PermissionsController {
 	private PermissionsService permissionsService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Permissions.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Permissions> result = permissionsService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Permissions.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Permissions result = permissionsService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -44,6 +50,7 @@ public class PermissionsController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody Permissions data) throws Exception {
 		permissionsService.saveOrUpdate(data);
 		InsertResDataDto id = new InsertResDataDto();
@@ -56,6 +63,7 @@ public class PermissionsController {
 	}
 	
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Permissions data) throws Exception {
 		data = permissionsService.saveOrUpdate(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
@@ -69,6 +77,7 @@ public class PermissionsController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = permissionsService.deleteById(id);
 		

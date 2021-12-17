@@ -93,4 +93,11 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 		return result;
 	}
 
+	@Override
+	public Company findByCode(String Code) throws Exception {
+		return companyDao.findByCode(Code);
+	}
+	
+	
+
 }

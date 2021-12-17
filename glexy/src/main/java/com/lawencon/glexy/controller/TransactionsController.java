@@ -18,8 +18,13 @@ import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.transaction.InsertReqDataAssetTransactionDto;
 import com.lawencon.glexy.dto.transaction.InsertReqTransactionDto;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.service.TransactionService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("transactions")
@@ -29,24 +34,28 @@ public class TransactionsController {
 	private TransactionService transactionService;
 	
 	@GetMapping()
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Transactions.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Transactions> result = transactionService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Transactions.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Transactions result = transactionService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/asset-details")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Transactions.class)))
 	public ResponseEntity<?> getAsset(@RequestBody InsertReqDataAssetTransactionDto data) throws Exception {
 		List<Asset> result = transactionService.findAssetDetail(data);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody InsertReqTransactionDto data) throws Exception {
 		transactionService.saveOrUpdate(data);
 		

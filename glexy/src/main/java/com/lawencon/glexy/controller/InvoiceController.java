@@ -20,8 +20,13 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.Invoice;
 import com.lawencon.glexy.service.InvoiceService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("invoices")
@@ -31,12 +36,14 @@ public class InvoiceController {
 	private InvoiceService invoiceService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Invoice.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Invoice> result = invoiceService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Invoice.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Invoice result = invoiceService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -44,6 +51,7 @@ public class InvoiceController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> insert(@RequestBody Invoice data) throws Exception {
 		data = invoiceService.saveOrUpdate(data);
 		
@@ -58,6 +66,7 @@ public class InvoiceController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Invoice data) throws Exception {
 		data = invoiceService.saveOrUpdate(data);
 		
@@ -72,6 +81,7 @@ public class InvoiceController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = invoiceService.removeById(id);
 		

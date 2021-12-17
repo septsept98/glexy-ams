@@ -9,6 +9,8 @@ public interface BrandService {
 	Brand saveOrUpdate(Brand data) throws Exception;
 
 	Brand findById(String id) throws Exception;
+	
+	Brand findByCode(String code) throws Exception;
 
 	List<Brand> findAll() throws Exception;
 	
