@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.UsersDao;
 import com.lawencon.glexy.email.EmailHandler;
 import com.lawencon.glexy.model.Company;
@@ -72,7 +71,7 @@ public class UsersServiceImpl extends com.lawencon.glexy.service.impl.BaseServic
 			Roles roles = rolesService.findById(data.getRolesId().getId());
 			data.setRolesId(roles);
 			begin();
-			Employee employeeSet = new Employee();
+//			Employee employeeSet = new Employee();
 			Employee employee = employeeService.saveOrUpdate(data.getEmployeeId());
 
 			Company company = companyService.findById(data.getEmployeeId().getCompanyId().getId());

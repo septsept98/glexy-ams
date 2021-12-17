@@ -14,7 +14,9 @@ import com.lawencon.glexy.dao.TransactionDao;
 import com.lawencon.glexy.dto.transaction.InsertReqDataAssetTransactionDto;
 import com.lawencon.glexy.dto.transaction.InsertReqTransactionDto;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.Inventory;
+import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
@@ -36,11 +38,8 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 	private InventoryService inventoryService;
 
 	public TransactionServiceImpl(@Autowired TransactionDao transactionDao,
-			TransactionDetailService transactionDetailService, 
-			TrackAssetService trackAssetService,
-			AssetDao assetDao, 
-			StatusAssetService statusAssetService,
-			InventoryService inventoryService) {
+			TransactionDetailService transactionDetailService, TrackAssetService trackAssetService, AssetDao assetDao,
+			StatusAssetService statusAssetService, InventoryService inventoryService) {
 		this.transactionDao = transactionDao;
 		this.transactionDetailService = transactionDetailService;
 		this.trackAssetService = trackAssetService;
@@ -58,7 +57,7 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 	public Transactions findById(String id) throws Exception {
 		return transactionDao.findById(id);
 	}
-	
+
 	@Override
 	public List<Asset> findAssetDetail(InsertReqDataAssetTransactionDto data) throws Exception {
 		int qtyTr = data.getQty();
@@ -66,96 +65,118 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 		boolean sameAsset = false;
 		int indexInven = 0;
 		List<Inventory> listInventory = inventoryService.findAll();
-		
-		for(int i = 0; i < listInventory.size(); i++) {
-			if(nameAsset.equalsIgnoreCase(listInventory.get(i).getNameAsset())) {
+
+		for (int i = 0; i < listInventory.size(); i++) {
+			if (nameAsset.equalsIgnoreCase(listInventory.get(i).getNameAsset())) {
 				sameAsset = true;
 				indexInven = i;
 			}
 		}
-		
+
 		List<Asset> listAssetTr = new ArrayList<>();
 		Inventory inventory = new Inventory();
-		if(sameAsset) {
+		if (sameAsset) {
 			inventory = listInventory.get(indexInven);
 			List<Asset> listAssetInvent = assetDao.findByInvent(inventory.getId());
-			
-			if(listAssetInvent.size() >= qtyTr) {
-				for(int i = 0; i < qtyTr; i++) {
+
+			if (listAssetInvent.size() >= qtyTr) {
+				for (int i = 0; i < qtyTr; i++) {
 					listAssetTr.add(listAssetInvent.get(i));
 				}
 			}
 		}
-		
+
 		return listAssetTr;
 	}
 
 	@Override
 	public InsertReqTransactionDto saveOrUpdate(InsertReqTransactionDto data) throws Exception {
-		InsertReqTransactionDto result = new InsertReqTransactionDto();
 
-		Transactions dataTransaction = data.getDataTransaction();
-		dataTransaction.setCodeTransaction("TR3");
-		dataTransaction.setCreatedBy("3");
-		dataTransaction.setCheckOutDate(LocalDate.now());
-		begin();
-		dataTransaction = transactionDao.saveOrUpdate(dataTransaction);
+		if (data.getDataTransaction().getEmployeeId() == null && data.getDataTransaction().getLocationId() == null
+				&& data.getDataTransaction().getAssetGeneralId() == null) {
+			throw new Exception();
+		} else if (data.getDataTransaction().getEmployeeId() != null
+				&& data.getDataTransaction().getLocationId() != null
+				&& data.getDataTransaction().getAssetGeneralId() == null) {
+			throw new Exception();
+		} else if (data.getDataTransaction().getEmployeeId() == null
+				&& data.getDataTransaction().getLocationId() != null
+				&& data.getDataTransaction().getAssetGeneralId() != null) {
+			throw new Exception();
+		} else if (data.getDataTransaction().getEmployeeId() != null
+				&& data.getDataTransaction().getLocationId() == null
+				&& data.getDataTransaction().getAssetGeneralId() != null) {
+			throw new Exception();
+		} else if (data.getDataTransaction().getEmployeeId() != null
+				&& data.getDataTransaction().getLocationId() != null
+				&& data.getDataTransaction().getAssetGeneralId() != null) {
+			throw new Exception();
+		} else {
+			InsertReqTransactionDto result = new InsertReqTransactionDto();
 
-		List<TransactionDetail> listDataDetailTransaction = data.getDataDetailTransaction();
+			Transactions dataTransaction = data.getDataTransaction();
+			dataTransaction.setCodeTransaction("TR3");
+			dataTransaction.setCreatedBy("3");
+			dataTransaction.setCheckOutDate(LocalDate.now());
+			begin();
+			dataTransaction = transactionDao.saveOrUpdate(dataTransaction);
 
-		for (int i = 0; i < listDataDetailTransaction.size(); i++) {
-			TransactionDetail detailTr = listDataDetailTransaction.get(i);
-			detailTr.setTransactionId(dataTransaction);
-			Asset asset = assetDao.findById(detailTr.getAssetId().getId());
-			detailTr.setAssetId(asset);
-			detailTr.setCreatedBy(dataTransaction.getCreatedBy());
-			detailTr.setIsActive(dataTransaction.getIsActive());
+			List<TransactionDetail> listDataDetailTransaction = data.getDataDetailTransaction();
 
-			StatusAsset statusCheckOut = statusAssetService.findByCode(StatusAssetEnum.DEPLOY.getCode());
-			detailTr.setStatusAssetCheckoutId(statusCheckOut);
-			
-			transactionDetailService.saveOrUpdate(detailTr);
-			
-			StatusAsset statusAsset = statusAssetService.findByCode(StatusAssetEnum.ASSIGN.getCode());
-			System.out.println(asset.getExpiredDate() + " - " + asset.getNames());
-			if (asset.getId() != null) {
-				asset.setStatusAssetId(statusAsset);
-				asset.setUpdatedBy("22");
-				
-				assetDao.saveOrUpdate(asset);
-			}
+			for (int i = 0; i < listDataDetailTransaction.size(); i++) {
+				TransactionDetail detailTr = listDataDetailTransaction.get(i);
+				detailTr.setTransactionId(dataTransaction);
+				Asset asset = assetDao.findById(detailTr.getAssetId().getId());
+				detailTr.setAssetId(asset);
+				detailTr.setCreatedBy(dataTransaction.getCreatedBy());
+				detailTr.setIsActive(dataTransaction.getIsActive());
 
-			boolean sameInvent = false;
-			int indexInvent = 0;
-			List<Inventory> listInventory = inventoryService.findAll();
-			for(int j = 0; j<listInventory.size(); j++) {
-				if(listInventory.get(j).getNameAsset().equalsIgnoreCase(asset.getNames())) {
-					sameInvent = true;
-					indexInvent = j;
+				StatusAsset statusCheckOut = statusAssetService.findByCode(StatusAssetEnum.DEPLOY.getCode());
+				detailTr.setStatusAssetCheckoutId(statusCheckOut);
+
+				transactionDetailService.saveOrUpdate(detailTr);
+
+				StatusAsset statusAsset = statusAssetService.findByCode(StatusAssetEnum.ASSIGN.getCode());
+				System.out.println(asset.getExpiredDate() + " - " + asset.getNames());
+				if (asset.getId() != null) {
+					asset.setStatusAssetId(statusAsset);
+					asset.setUpdatedBy("22");
+
+					assetDao.saveOrUpdate(asset);
 				}
+
+				boolean sameInvent = false;
+				int indexInvent = 0;
+				List<Inventory> listInventory = inventoryService.findAll();
+				for (int j = 0; j < listInventory.size(); j++) {
+					if (listInventory.get(j).getNameAsset().equalsIgnoreCase(asset.getNames())) {
+						sameInvent = true;
+						indexInvent = j;
+					}
+				}
+
+				if (sameInvent) {
+					int stock = listInventory.get(indexInvent).getLatestStock() - 1;
+					listInventory.get(indexInvent).setLatestStock(stock);
+					inventoryService.saveOrUpdate(listInventory.get(indexInvent));
+				}
+
+				TrackAsset trackAsset = new TrackAsset();
+				trackAsset.setCodeAsset(asset.getCode());
+				trackAsset.setNameActivity(statusAsset.getNameStatusAsset());
+				trackAsset.setDateActivity(LocalDate.now());
+				trackAsset.setUserId("33");
+				trackAsset.setTransactionCode(dataTransaction.getCodeTransaction());
+				trackAsset.setCreatedBy(dataTransaction.getCreatedBy());
+				trackAsset.setIsActive(dataTransaction.getIsActive());
+
+				trackAssetService.saveOrUpdate(trackAsset);
+
 			}
-			
-			if(sameInvent) {
-				int stock = listInventory.get(indexInvent).getLatestStock() - 1;
-				listInventory.get(indexInvent).setLatestStock(stock);
-				inventoryService.saveOrUpdate(listInventory.get(indexInvent));
-			}
+			commit();
 
-			TrackAsset trackAsset = new TrackAsset();
-			trackAsset.setCodeAsset(asset.getCode());
-			trackAsset.setNameActivity(statusAsset.getNameStatusAsset());
-			trackAsset.setDateActivity(LocalDate.now());
-			trackAsset.setUserId("33");
-			trackAsset.setTransactionCode(dataTransaction.getCodeTransaction());
-			trackAsset.setCreatedBy(dataTransaction.getCreatedBy());
-			trackAsset.setIsActive(dataTransaction.getIsActive());
-
-			trackAssetService.saveOrUpdate(trackAsset);
-
+			return result;
 		}
-		commit();
-		
-		return result;
 	}
 
 }

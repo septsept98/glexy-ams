@@ -230,4 +230,14 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	public String generateCode(String invenCode, int stock, int index) throws Exception {
 		return invenCode + "" + (stock + index + 1);
 	}
+
+	@Override
+	public List<Asset> findAllDeployAsset() throws Exception {
+		return assetDao.findAllDeployAsset();
+	}
+
+	@Override
+	public List<Asset> findAllGeneralAsset() throws Exception {
+		return assetDao.findAllGeneralAsset();
+	}
 }
