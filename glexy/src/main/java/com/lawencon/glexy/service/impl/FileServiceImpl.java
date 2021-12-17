@@ -5,13 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.FileDao;
 import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.service.FileService;
 
 @Service
-public class FileServiceImpl extends BaseServiceImpl implements FileService {
+public class FileServiceImpl extends BaseGlexyServiceImpl implements FileService {
 	
 	@Autowired
 	private FileDao fileDao;
@@ -38,7 +37,7 @@ public class FileServiceImpl extends BaseServiceImpl implements FileService {
 				data.setCreatedBy(file.getCreatedBy());
 				data.setVersion(file.getVersion());
 				data.setIsActive(file.getIsActive());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 			}else {
 
 			data.setCreatedBy("1");

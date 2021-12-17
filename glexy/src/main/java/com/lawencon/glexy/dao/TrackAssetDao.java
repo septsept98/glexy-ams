@@ -11,5 +11,9 @@ public interface TrackAssetDao {
 
 	TrackAsset findById(String id) throws Exception;
 
+	List<TrackAsset> findByAsset(String assetCode) throws Exception;
+	
+	List<TrackAsset> findByAssetTr(String assetCode, String trCode) throws Exception;
+
 	TrackAsset saveOrUpdate(TrackAsset data) throws Exception;
 }

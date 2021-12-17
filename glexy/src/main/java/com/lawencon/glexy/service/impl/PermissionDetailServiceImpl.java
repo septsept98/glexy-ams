@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.PermissionDetailDao;
 import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Permissions;
@@ -14,7 +13,7 @@ import com.lawencon.glexy.service.PermissionDetailService;
 import com.lawencon.glexy.service.PermissionsService;
 
 @Service
-public class PermissionDetailServiceImpl extends BaseServiceImpl implements PermissionDetailService {
+public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements PermissionDetailService {
 
 	@Autowired
 	private PermissionDetailDao permissionDetailDao;
@@ -40,10 +39,13 @@ public class PermissionDetailServiceImpl extends BaseServiceImpl implements Perm
 		try {
 			if (data.getId() != null) {
 				PermissionDetail permissionDetail = findById(data.getId());
+				data.setUpdatedBy(getIdAuth());
 				data.setCreatedAt(permissionDetail.getCreatedAt());
 				data.setCreatedBy(permissionDetail.getCreatedBy());
 				data.setVersion(permissionDetail.getVersion());
 				data.setIsActive(permissionDetail.getIsActive());
+			} else {
+				data.setCreatedBy(getIdAuth());
 			}
 			Roles roles = new Roles();
 			roles.setId(data.getRolesId().getId());
@@ -52,9 +54,7 @@ public class PermissionDetailServiceImpl extends BaseServiceImpl implements Perm
 			Permissions permissions = permissionsService.findById(data.getPermissionsId().getId());
 			data.setPermissionsId(permissions);
 
-			
 			data = permissionDetailDao.saveOrUpdate(data);
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -26,6 +26,10 @@ import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.service.AssetService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("assets")
 public class AssetController extends BaseController {
@@ -34,12 +38,14 @@ public class AssetController extends BaseController {
 	private AssetService assetService;
 
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Asset> result = assetService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Asset result = assetService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -47,13 +53,15 @@ public class AssetController extends BaseController {
 	}
 
 	@GetMapping("/invent/{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getByInvent(@PathVariable("id") String id) throws Exception {
-		Asset result = assetService.findById(id);
+		List<Asset> result = assetService.findByInvent(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 
 	@GetMapping("/brand/{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getByBrandId(@PathVariable("id") String id) throws Exception {
 		List<Asset> result = assetService.findByBrandId(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -61,6 +69,7 @@ public class AssetController extends BaseController {
 	}
 
 	@GetMapping("/company/{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getByCompanyId(@PathVariable("id") String id) throws Exception {
 		List<Asset> result = assetService.findByCompanyId(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -68,8 +77,9 @@ public class AssetController extends BaseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg,
-			@RequestPart MultipartFile assetImg) throws Exception {
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
+	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
+
 		Asset asset = assetService.save(convertToModel(data, Asset.class), invoiceImg, assetImg);
 
 		InsertResDataDto id = new InsertResDataDto();
@@ -89,6 +99,7 @@ public class AssetController extends BaseController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
 		Asset asset = assetService.update(data);
 
@@ -103,6 +114,7 @@ public class AssetController extends BaseController {
 	}
 
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = assetService.removeById(id);
 

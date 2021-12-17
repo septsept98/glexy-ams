@@ -20,8 +20,13 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.service.LocationService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("locations")
@@ -31,12 +36,14 @@ public class LocationController {
 	private LocationService locationService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Location.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Location> result = locationService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Location.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Location result = locationService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -44,6 +51,7 @@ public class LocationController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> insert(@RequestBody Location data) throws Exception {
 		data = locationService.saveOrUpdate(data);
 		
@@ -58,6 +66,7 @@ public class LocationController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Location data) throws Exception {
 		data = locationService.saveOrUpdate(data);
 		
@@ -72,6 +81,7 @@ public class LocationController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = locationService.removeById(id);
 		

@@ -42,9 +42,29 @@ public class UsersDaoImpl extends BaseDaoImpl<Users> implements UsersDao {
 	public Users getEmail(String email) throws Exception {
 		Users users = null;
 		try {
-
+			
 			users = createQuery("SELECT u FROM Users u WHERE u.email = :email", Users.class)
 					.setParameter("email", email).getSingleResult();
+
+		} catch (NoResultException e) {
+			e.printStackTrace();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+		}
+
+		return users;
+	}
+
+	@Override
+	public Users getByNip(String nip) throws Exception {
+		Users users = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT u FROM Users u ");
+			sql.append("INNER JOIN FETCH u.employeeId AS e ");
+			sql.append("WHERE e.nip = :nip");
+			users = createQuery(sql.toString(), Users.class)
+					.setParameter("nip", nip).getSingleResult();
 
 		} catch (NoResultException e) {
 			e.printStackTrace();

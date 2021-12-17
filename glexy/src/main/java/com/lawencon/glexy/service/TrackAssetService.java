@@ -11,4 +11,8 @@ public interface TrackAssetService {
 	TrackAsset findById(String id) throws Exception;
 
 	TrackAsset saveOrUpdate(TrackAsset data) throws Exception;
+
+	List<TrackAsset> findByAsset(String assetCode) throws Exception;
+
+	List<TrackAsset> findByAssetTr(String assetCode, String trCode) throws Exception;
 }

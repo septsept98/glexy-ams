@@ -23,6 +23,10 @@ import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.service.StatusTransactionService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("status-transactions")
 public class StatusTransactionController extends BaseController {
@@ -31,18 +35,21 @@ public class StatusTransactionController extends BaseController {
 	private StatusTransactionService statusTransactionService;
 	
 	@GetMapping()
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StatusTransaction.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<StatusTransaction> result = statusTransactionService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StatusTransaction.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		StatusTransaction result = statusTransactionService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody StatusTransaction data) throws Exception {
 		data = statusTransactionService.saveOrUpdate(data);
 		
@@ -57,6 +64,7 @@ public class StatusTransactionController extends BaseController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody StatusTransaction data) throws Exception {
 		data = statusTransactionService.saveOrUpdate(data);
 
@@ -71,6 +79,7 @@ public class StatusTransactionController extends BaseController {
 	}
 
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> deleteById(@PathVariable("id") String id) throws Exception {
 		boolean data = statusTransactionService.removeById(id);
 		
