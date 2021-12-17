@@ -13,6 +13,8 @@ public interface CompanyService {
 	Company update(Company data) throws Exception;
 
 	Company findById(String id) throws Exception;
+	
+	Company findByCode(String Code) throws Exception;
 
 	List<Company> findAll() throws Exception;
 	

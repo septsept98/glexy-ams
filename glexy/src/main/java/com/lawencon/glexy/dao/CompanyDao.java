@@ -10,6 +10,8 @@ public interface CompanyDao {
 
 	Company findById(String id) throws Exception;
 	
+	Company findByCode(String code) throws Exception;
+	
 	List<Company> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;

@@ -1,9 +1,12 @@
 package com.lawencon.glexy.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.asset.InsertReqDataHelperAssetDto;
 import com.lawencon.glexy.model.Asset;
 
 public interface AssetService {
@@ -24,5 +27,9 @@ public interface AssetService {
 	
 	boolean removeById(String id) throws Exception;
 	
-	String generateCode(String invenCode, int stock, int index) throws Exception;
+	String generateCode(String invenCode, String codeCompany, int stock, int index) throws Exception;
+	
+	boolean hasExcelFormat(MultipartFile file) throws Exception;
+	
+	InsertResDto saveExcel(MultipartFile file) throws Exception;
 }

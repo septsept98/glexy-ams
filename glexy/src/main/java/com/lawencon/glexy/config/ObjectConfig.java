@@ -8,6 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+import com.lawencon.util.ExcelUtil;
+
 import liquibase.integration.spring.SpringLiquibase;
 
 @Configuration
@@ -36,6 +38,11 @@ public class ObjectConfig {
 		liquibase.setChangeLog("/db/init_data.sql");
 
 		return liquibase;
+	}
+	
+	@Bean
+	public ExcelUtil excelUtil() {
+		return new ExcelUtil();
 	}
 
 }
