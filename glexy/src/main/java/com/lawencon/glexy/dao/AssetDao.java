@@ -19,5 +19,9 @@ public interface AssetDao {
 	List<Asset> findByBrandId(String brandId) throws Exception;
 	
 	List<Asset> findByCompanyId(String companyId) throws Exception;
+	
+	List<Asset> findAllDeployAsset() throws Exception;
+	
+	List<Asset> findAllGeneralAsset() throws Exception;
 
 }
