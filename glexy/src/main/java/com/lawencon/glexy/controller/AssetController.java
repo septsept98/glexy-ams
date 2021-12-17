@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,18 +32,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("assets")
-public class AssetController extends BaseController{
-	
+public class AssetController extends BaseController {
+
 	@Autowired
 	private AssetService assetService;
-	
+
 	@GetMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Asset> result = assetService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
@@ -50,7 +51,7 @@ public class AssetController extends BaseController{
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-	
+
 	@GetMapping("/invent/{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getByInvent(@PathVariable("id") String id) throws Exception {
@@ -58,7 +59,7 @@ public class AssetController extends BaseController{
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-	
+
 	@GetMapping("/brand/{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getByBrandId(@PathVariable("id") String id) throws Exception {
@@ -66,6 +67,7 @@ public class AssetController extends BaseController{
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
+
 	@GetMapping("/company/{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
 	public ResponseEntity<?> getByCompanyId(@PathVariable("id") String id) throws Exception {
@@ -73,19 +75,26 @@ public class AssetController extends BaseController{
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-	
+
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile invoiceImg, @RequestPart MultipartFile assetImg) throws Exception {
+
 		Asset asset = assetService.save(convertToModel(data, Asset.class), invoiceImg, assetImg);
-		
+
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(asset.getId());
-		
+
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
 		result.setMsg(MessageEnum.CREATED.getMsg());
-		
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/upload")
+	public ResponseEntity<?> uploadFile(@RequestPart MultipartFile file) throws Exception {
+		InsertResDto result = assetService.saveExcel(file);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -93,30 +102,29 @@ public class AssetController extends BaseController{
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
 		Asset asset = assetService.update(data);
-		
+
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(asset.getVersion());
-		
+
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
 		result.setMsg(MessageEnum.UPDATED.getMsg());
-		
+
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = assetService.removeById(id);
-		
+
 		DeleteResDto result = new DeleteResDto();
-		
-		if(data) {
+
+		if (data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
 		}
-		
+
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
 
 }

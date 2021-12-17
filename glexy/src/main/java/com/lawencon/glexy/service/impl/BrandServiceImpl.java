@@ -72,6 +72,13 @@ public class BrandServiceImpl extends BaseServiceImpl implements BrandService {
 		}
 		return result;
 	}
+
+	@Override
+	public Brand findByCode(String code) throws Exception {
+		return brandDao.findByCode(code);
+	}
+	
+	
 	
 	
 	

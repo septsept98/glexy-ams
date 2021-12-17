@@ -21,9 +21,9 @@ INSERT INTO permission_role (roles_id,permissions_id,"version",created_by,create
 	('2','4',0,'1',now(),true,'7');
 
 
-INSERT INTO companies(names, code, address, description, "version", created_by, created_at, is_active, id) VALUES 
-	('Lawencon', 'LWN', 'jl. mana nih', 'perusahaan a', 0, 1, now(), true,'1'),
-	('Linov', 'LNV', 'jl. ajah', 'perusahaan b', 0, 1, now(), true,'2');
+INSERT INTO companies(names, code, address, description, email, website, phone_number, fax, "version", created_by, created_at, is_active, id) VALUES 
+	('Lawencon', 'LWN', 'jl. mana nih', 'perusahaan a', 'a@gmail.com', 'www.lawencon.com', '021545677', '0214543', 0, 1, now(), true,'1'),
+	('Linov', 'LNV', 'jl. ajah', 'perusahaan b', 'b@gmail.com', 'www.linov.com', '021545444', '0214444', 0, 1, now(), true,'2');
 
 
 INSERT INTO employees(name_employee, nip, phone_number, gender,company_id, "version", created_by, created_at, is_active,id) VALUES 

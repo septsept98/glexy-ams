@@ -30,6 +30,17 @@ public class Company extends BaseEntity{
 	@JoinColumn(name = "company_img", columnDefinition = "varchar")
 	private File companyImg;
 	
+	@Column(length = 30, nullable = false)
+	private String email;
+	
+	@Column(length = 30, nullable = false)
+	private String website;
+	
+	@Column(name = "phone_number", length = 20, nullable = false)
+	private String phoneNumber;
+	
+	@Column(length = 20, nullable = false)
+	private String fax;
 	
 	public String getNames() {
 		return names;
@@ -60,6 +71,30 @@ public class Company extends BaseEntity{
 	}
 	public void setCompanyImg(File companyImg) {
 		this.companyImg = companyImg;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getWebsite() {
+		return website;
+	}
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public String getFax() {
+		return fax;
+	}
+	public void setFax(String fax) {
+		this.fax = fax;
 	}
 	
 	
