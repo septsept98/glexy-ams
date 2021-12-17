@@ -23,6 +23,10 @@ import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.service.PermissionDetailService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("permission-details")
 public class PermissionDetailController {
@@ -31,12 +35,14 @@ public class PermissionDetailController {
 	private PermissionDetailService permissionDetailService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PermissionDetail.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<PermissionDetail> result = permissionDetailService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PermissionDetail.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		PermissionDetail result = permissionDetailService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -44,6 +50,7 @@ public class PermissionDetailController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody PermissionDetail data) throws Exception {
 		permissionDetailService.saveOrUpdate(data);
 		InsertResDataDto id = new InsertResDataDto();
@@ -56,6 +63,7 @@ public class PermissionDetailController {
 	}
 	
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody PermissionDetail data) throws Exception {
 		data = permissionDetailService.saveOrUpdate(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
@@ -69,6 +77,7 @@ public class PermissionDetailController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = permissionDetailService.deleteById(id);
 		
@@ -81,6 +90,7 @@ public class PermissionDetailController {
 	}
 	
 	@GetMapping("/role/{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PermissionDetail.class)))
 	public ResponseEntity<?> getByRoleId(@PathVariable("id") String id) throws Exception {
 		List<PermissionDetail>result = permissionDetailService.findByRoleId(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);

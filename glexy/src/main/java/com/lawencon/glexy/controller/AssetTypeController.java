@@ -20,8 +20,13 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.service.AssetTypeService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("asset-types")
@@ -31,12 +36,14 @@ public class AssetTypeController {
 	private AssetTypeService assetTypeService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = AssetType.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<AssetType> result = assetTypeService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = AssetType.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		AssetType result = assetTypeService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -44,6 +51,7 @@ public class AssetTypeController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody AssetType data) throws Exception {
 		data = assetTypeService.saveOrUpdate(data);
 		
@@ -58,6 +66,7 @@ public class AssetTypeController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody AssetType data) throws Exception {
 		data = assetTypeService.saveOrUpdate(data);
 		
@@ -72,6 +81,7 @@ public class AssetTypeController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = assetTypeService.removeById(id);
 		
