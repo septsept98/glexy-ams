@@ -1,9 +1,7 @@
 package com.lawencon.glexy.security;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -22,10 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.dto.users.LoginReqDto;
 import com.lawencon.glexy.dto.users.LoginResDto;
-import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.security.jwt.JwtComponent;
-import com.lawencon.glexy.service.PermissionDetailService;
 import com.lawencon.glexy.service.UsersService;
 
 public class AuntificationFilter extends UsernamePasswordAuthenticationFilter {
