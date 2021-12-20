@@ -50,7 +50,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public List<Users> findAll() throws Exception {
-		emailHandler.sendSimpleMessage("99.faridazhari@gmail.com", "Password ini rahsia", "HALO MY FRIEND");
+		emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia","Password", "haha");
 		return usersDao.findAll();
 	}
 
@@ -90,7 +90,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			data.setEmployeeId(employee);
 			Users user = usersDao.saveOrUpdate(data);
 			commit();
-			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahsia", pass);
+			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia","Password", pass);
 			return user;
 
 		} catch (Exception e) {
