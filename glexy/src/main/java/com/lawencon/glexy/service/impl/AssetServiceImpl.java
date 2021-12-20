@@ -1,5 +1,6 @@
 package com.lawencon.glexy.service.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.File;
@@ -21,6 +23,7 @@ import com.lawencon.glexy.model.Invoice;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.service.AssetService;
+import com.lawencon.glexy.service.AssetTypeService;
 import com.lawencon.glexy.service.BrandService;
 import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.FileService;
@@ -51,6 +54,8 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	private BrandService brandService;
 	@Autowired
 	private StatusAssetService statusAssetService;
+	@Autowired
+	private AssetTypeService assetTypeService;
 
 	private String type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
@@ -83,7 +88,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			Inventory inventory = inventoryService.findByCode(inven.getCode());
 			if (inventory != null) {
 				stock = inventory.getStock() + stockInven;
-				int latest = inventory.getLatestStock() + inven.getStock();
+				int latest = inventory.getLatestStock() + stockInven;
 				inven.setId(inventory.getId());
 				inven.setNameAsset(inventory.getNameAsset());
 				inven.setCode(inventory.getCode());
@@ -117,11 +122,11 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			Brand brand = brandService.findByCode(asset.getBrandId().getCode());
 			Company company = companyService.findByCode(asset.getCompanyId().getCode());
 			StatusAsset statusAsset = statusAssetService.findByCode(asset.getStatusAssetId().getCodeStatusAsset());
-
+			AssetType assetType = assetTypeService.findByCode(asset.getAssetTypeId().getCode());
 			for (int i = 0; i < stockInven; i++) {
 				Asset assetInsert = new Asset();
 				String codeAsset = generateCode(inven.getCode(), company.getCode(),invenStock, i);
-				assetInsert.setAssetTypeId(asset.getAssetTypeId());
+				assetInsert.setAssetTypeId(assetType);
 				
 				assetInsert.setBrandId(brand);
 				assetInsert.setCompanyId(company);
@@ -249,16 +254,71 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			Invoice invoice = new Invoice();
 			int stock = 0;
 			excelUtil.init("Assets", file.getInputStream());
+			begin();
 			for (int i = 1; i < excelUtil.getRowCountInSheet(); i++) {
-				Inventory inventory = inventoryService.findByCode(excelUtil.getCellData(i, 2));
+				Inventory inventory = new Inventory();
+				inventory = inventoryService.findByCode(excelUtil.getCellData(i, 2));
+				stock = Integer.valueOf(excelUtil.getCellData(i, 1));
 				if(inventory == null) {
 					inventory.setNameAsset(excelUtil.getCellData(i, 0));
-					inventory.setStock(Integer.valueOf(excelUtil.getCellData(i, 1)));
-					stock = inventory.getStock();
+					inventory.setStock(stock);
 					inventory.setLatestStock(stock);
 					inventory.setCode(excelUtil.getCellData(i, 2));
+					inventory.setCreatedBy("2");
+					inventory.setIsActive(true);
+				} else {
+					stock = inventory.getStock() + stock;
+					int latest = inventory.getLatestStock() + stock;
+					inventory.setLatestStock(latest);
+					inventory.setUpdatedBy("2");
 				}
+				
+				inventoryService.saveOrUpdate(inventory);
+				
+				invoice.setCode(excelUtil.getCellData(i, 3));
+				BigDecimal bigDecimal = new BigDecimal(excelUtil.getCellData(i, 4));
+				invoice.setTotalPrice(bigDecimal);
+				invoice.setCreatedBy("2");
+				invoice.setIsActive(true);
+				
+				invoiceService.saveOrUpdate(invoice);
+				
+				Brand brand = brandService.findByCode(excelUtil.getCellData(i, 5));
+				AssetType assetType = assetTypeService.findByCode(excelUtil.getCellData(i, 6));
+				StatusAsset statusAsset = statusAssetService.findByCode(excelUtil.getCellData(i, 8));
+				Company company = companyService.findByCode(excelUtil.getCellData(i, 9));
+				
+				for (int j = 0; j < stock; j++) {
+					Asset assetInsert = new Asset();
+					String codeAsset = generateCode(inventory.getCode(), company.getCode(),stock, j);
+					assetInsert.setAssetTypeId(assetType);
+					
+					assetInsert.setBrandId(brand);
+					assetInsert.setCompanyId(company);
+					assetInsert.setExpiredDate(LocalDate.parse(excelUtil.getCellData(i, 7)));
+					assetInsert.setStatusAssetId(statusAsset);
+					assetInsert.setNames(inventory.getNameAsset());
+					assetInsert.setCode(codeAsset);
+					assetInsert.setCreatedBy("4");
+					assetInsert.setInvoiceId(invoice);
+					assetInsert.setInventoryId(inventory);
+
+					assetDao.saveOrUpdate(assetInsert);
+
+					TrackAsset trackAsset = new TrackAsset();
+					trackAsset.setCodeAsset(assetInsert.getCode());
+					trackAsset.setNameActivity("New");
+					trackAsset.setDateActivity(LocalDate.now());
+					trackAsset.setUserId("2");
+					trackAsset.setTransactionCode("BBA");
+					trackAsset.setCreatedBy("2");
+					trackAsset.setIsActive(true);
+
+					trackAssetService.saveOrUpdate(trackAsset);
+				}
+				
 			}
+			commit();
 			return null;
 		} catch (Exception e) {
 			throw new RuntimeException("fail to store excel data: " + e.getMessage());

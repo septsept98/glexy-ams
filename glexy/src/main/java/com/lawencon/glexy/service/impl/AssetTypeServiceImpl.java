@@ -72,6 +72,12 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 		}
 		return result;
 	}
+
+	@Override
+	public AssetType findByCode(String code) throws Exception {
+		return assetTypeDao.findByCode(code);
+	}
+	
 	
 	
 	

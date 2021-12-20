@@ -10,6 +10,8 @@ public interface AssetTypeDao {
 
 	AssetType findById(String id) throws Exception;
 	
+	AssetType findByCode(String code) throws Exception;
+	
 	List<AssetType> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
