@@ -14,4 +14,6 @@ public interface AssetTypeService {
 	
 	boolean removeById(String id) throws Exception;
 	
+	AssetType findByCode(String code) throws Exception;
+	
 }
