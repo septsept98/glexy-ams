@@ -15,4 +15,6 @@ public interface StatusAssetService {
 	StatusAsset findByCode(String code) throws Exception;
 	
 	List<StatusAsset> findAll() throws Exception;
+	
+	String generateCodeSA() throws Exception;
 }

@@ -224,6 +224,7 @@ CREATE TABLE transactions(
 	employee_id varchar(36),
 	location_id varchar(36),
 	asset_general_id varchar(36),
+	users_id varchar(36),
 	version integer,
 	created_by text,
 	created_at timestamp without time zone,
@@ -507,13 +508,16 @@ ALTER TABLE transactions
 	ADD CONSTRAINT locations_fk FOREIGN KEY(location_id)
 	REFERENCES locations(id),
 	ADD CONSTRAINT assets_fk FOREIGN KEY(asset_general_id)
-	REFERENCES assets(id);
+	REFERENCES assets(id),
+	ADD CONSTRAINT users_fk FOREIGN KEY(users_id)
+	REFERENCES users(id);
 
 ALTER TABLE transactions 
 	ALTER COLUMN id SET NOT NULL,
 	ALTER COLUMN code_transaction SET NOT NULL,
 	ALTER COLUMN checkout_date SET NOT NULL,
 	ALTER COLUMN quantity SET NOT NULL,
+	ALTER COLUMN users_id SET NOT NULL,
 	ALTER COLUMN version SET NOT NULL,
 	ALTER COLUMN created_by SET NOT NULL,
 	ALTER COLUMN created_at SET NOT NULL,

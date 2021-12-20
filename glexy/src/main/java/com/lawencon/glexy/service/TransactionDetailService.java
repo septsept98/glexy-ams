@@ -13,4 +13,6 @@ public interface TransactionDetailService {
 	List<TransactionDetail> findByTr(String id) throws Exception;
 
 	TransactionDetail saveOrUpdate(TransactionDetail data) throws Exception;
+	
+	List<TransactionDetail> expDurationAssign() throws Exception;
 }

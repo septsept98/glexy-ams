@@ -12,7 +12,7 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "employees")
 public class Employee extends BaseEntity {
 
-	private static final long serialVersionUID = 6110511663064325419L;
+	private static final long serialVersionUID = -4424003479945494654L;
 
 	@Column(name ="name_employee",length = 30, nullable = false)
 	private String nameEmployee;
@@ -47,6 +47,14 @@ public class Employee extends BaseEntity {
 
 	public void setNip(String nip) {
 		this.nip = nip;
+	}
+
+	public String getEmailEmployee() {
+		return emailEmployee;
+	}
+
+	public void setEmailEmployee(String emailEmployee) {
+		this.emailEmployee = emailEmployee;
 	}
 
 	public String getPhoneNumber() {

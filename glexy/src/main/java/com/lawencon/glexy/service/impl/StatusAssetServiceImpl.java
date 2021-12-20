@@ -30,6 +30,7 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 				data.setVersion(statusAsset.getVersion());
 			} else {
 				data.setCreatedBy("3");
+				data.setCodeStatusAsset(generateCodeSA());
 			}
 
 			begin();
@@ -71,6 +72,25 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 	@Override
 	public StatusAsset findByCode(String code) throws Exception {
 		return statusAssetDao.findByCode(code);
+	}
+
+	@Override
+	public String generateCodeSA() throws Exception {
+		String code = "SA";
+		List<StatusAsset> listStatusAsset = findAll();
+		int index = 1;
+		if(listStatusAsset != null) {
+			index = listStatusAsset.size();
+		}
+		String codeSA = code + index;
+		for(int i = 0; i<listStatusAsset.size();i++) {
+			if(listStatusAsset.get(i).getCodeStatusAsset().equals(codeSA)) {
+				index++;
+			}
+			codeSA = code + index;
+		}
+		
+		return codeSA ;
 	}
 
 }
