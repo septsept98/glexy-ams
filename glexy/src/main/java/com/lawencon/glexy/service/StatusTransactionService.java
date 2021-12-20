@@ -13,4 +13,6 @@ public interface StatusTransactionService {
 	StatusTransaction findById(String id) throws Exception;
 	
 	List<StatusTransaction> findAll() throws Exception;
+	
+	String generateCodeSTR() throws Exception;
 }
