@@ -20,6 +20,9 @@ public class Employee extends BaseEntity {
 	@Column(length = 20, nullable = false)
 	private String nip;
 	
+	@Column(name ="email_employee",length = 30)
+	private String emailEmployee;
+	
 	@Column(name ="phone_number",length = 20, nullable = false)
 	private String phoneNumber;
 	
