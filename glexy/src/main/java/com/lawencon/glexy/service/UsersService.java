@@ -24,5 +24,7 @@ public interface UsersService extends UserDetailsService {
 	String generatePassword() throws Exception;
 	
 	Users getByNip(String Nip) throws Exception;
+	
+	Users updatePassword(Users users) throws Exception;
 
 }

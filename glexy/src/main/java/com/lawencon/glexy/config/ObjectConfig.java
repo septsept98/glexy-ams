@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.lawencon.util.ExcelUtil;
+
 import liquibase.integration.spring.SpringLiquibase;
 
 @Configuration
@@ -40,9 +42,14 @@ public class ObjectConfig {
 	}
 	
 	@Bean
+	public ExcelUtil excelUtil() {
+		return new ExcelUtil();
+  }
+  @Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
 		return new BCryptPasswordEncoder();
+
 	}
 
 }

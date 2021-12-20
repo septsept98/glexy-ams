@@ -21,8 +21,13 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.service.InventoryService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("inventories")
@@ -32,12 +37,14 @@ public class InventoryController {
 	private InventoryService inventoryService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Inventory> result = inventoryService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Inventory result = inventoryService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -45,6 +52,7 @@ public class InventoryController {
 	}
 	
 	@GetMapping("/")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> getByName(@RequestParam (required = true) String name) throws Exception {
 		List<Inventory> result = inventoryService.findByName(name);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -52,6 +60,7 @@ public class InventoryController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody Inventory data) throws Exception {
 		data = inventoryService.saveOrUpdate(data);
 		
@@ -66,6 +75,7 @@ public class InventoryController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Inventory data) throws Exception {
 		data = inventoryService.saveOrUpdate(data);
 		
@@ -80,6 +90,7 @@ public class InventoryController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = inventoryService.removeById(id);
 		
