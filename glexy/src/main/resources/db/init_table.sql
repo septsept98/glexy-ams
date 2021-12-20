@@ -53,6 +53,7 @@ CREATE TABLE employees(
 	id varchar(36) DEFAULT uuid_generate_v4(),
 	name_employee varchar(30),
 	nip varchar(20),
+	email_employee varchar(30),
 	phone_number varchar(20),
 	gender varchar(10),
 	company_id varchar(36),
