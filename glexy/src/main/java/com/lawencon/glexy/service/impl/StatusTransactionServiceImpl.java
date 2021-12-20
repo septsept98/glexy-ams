@@ -40,6 +40,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 				data.setVersion(statusTr.getVersion());
 			} else {
 				data.setCreatedBy("3");
+				data.setCodeStatusTr(generateCodeSTR());
 			}
 
 			StatusAsset statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
@@ -83,6 +84,27 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 			e.printStackTrace();
 			throw new NoResultException("Status Transaction not found");
 		}
+	}
+
+	@Override
+	public String generateCodeSTR() throws Exception {
+		String code = "STR";
+		List<StatusTransaction> listStatusTransactions = findAll();
+		int index = 1;
+		if(listStatusTransactions != null) {
+			index = listStatusTransactions.size();
+		}
+		String codeSTR = code + index;
+		System.out.println(codeSTR);
+		for(int i = 0; i<listStatusTransactions.size();i++) {
+			System.out.println(listStatusTransactions.get(i).getCodeStatusTr());
+			if(listStatusTransactions.get(i).getCodeStatusTr().equals(codeSTR)) {
+				index++;
+			}
+			codeSTR = code + index;
+		}
+		
+		return codeSTR ;
 	}
 
 }

@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.lawencon.glexy.helper.EmailHelper;
+
 @Component
 public class EmailHandler {
 	
@@ -17,7 +19,7 @@ public class EmailHandler {
 	protected JavaMailSender mailSender;
 	
 	@Async
-	public void sendSimpleMessage(String to, String subject, String header ,String text) throws Exception{
+	public void sendSimpleMessage(String to, String subject, String header ,EmailHelper data) throws Exception{
 
 		
 		MimeMessage message = mailSender.createMimeMessage();
@@ -50,7 +52,7 @@ public class EmailHandler {
 	    		+ "            margin-top:  10%;"
 	    		+ "        }"
 	    		+ "        .body__email h1 {"
-	    		+ "            margin-top: 10%;"
+	    		+ "            margin-top: 5%;"
 	    		+ "          text-align: center;"
 	    		+ "        }"
 	    		+ "        .body__email h2 {"
@@ -62,7 +64,9 @@ public class EmailHandler {
 	    		+ "    <div class=\"body\">"
 	    		+ "        <div class=\"body__email\">"
 	    		+ "            <h1>"+header+"</h1>"
-	    		+ "            <h2>"+text+"</h2>"
+	    		+ "            <h2>"+data.getEmployeeName()+"</h2>"
+	    		+ "            <h2>"+data.getValueName()+"</h2>"
+	    		+ "            <h2>"+data.getExpiredDate()+"</h2>"
 	    		+ "        </div>"
 	    		+ "    </div>"
 	    		+ "</body>"
@@ -70,11 +74,11 @@ public class EmailHandler {
 	    mailSender.send(message);
 	}
 	
-	@Async
-	@Scheduled(fixedDelay = 60000)
-	public void scheduleFixedDelayTask() {
-//	    System.out.println(
-//	      "Fixed delay task - " + System.currentTimeMillis() / 1000);
-	}
+//	@Async
+//	@Scheduled(fixedDelay = 60000)
+//	public void scheduleFixedDelayTask() {
+////	    System.out.println(
+////	      "Fixed delay task - " + System.currentTimeMillis() / 1000);
+//	}
 
 }

@@ -26,15 +26,15 @@ INSERT INTO companies(names, code, address, description, email, website, phone_n
 	('Linov', 'LNV', 'jl. ajah', 'perusahaan b', 'b@gmail.com', 'www.linov.com', '021545444', '0214444', 0, 1, now(), true,'2');
 
 
-INSERT INTO employees(name_employee, nip, phone_number, gender,company_id, "version", created_by, created_at, is_active,id) VALUES 
-	('fidha', 'k227', '0894300', 'male','1', 0, 1, now(), true,'1'),
-	('bondan', 'k228', '0895673', 'male','1', 0, 1, now(), true,'2'),
-	('bahrul', 'k229', '08397466', 'male','2', 0, 1, now(), true,'3');
+INSERT INTO employees(name_employee, nip, email_employee, phone_number, gender,company_id, "version", created_by, created_at, is_active,id) VALUES 
+	('septian', 'k227', 'septianardi053@gmail.com', '0894300', 'male','1', 0, 1, now(), true,'1'),
+	('glenn', 'k228', 'glenn9808@gmail.com', '0895673', 'male','1', 0, 1, now(), true,'2'),
+	('febri', 'k229', 'febri.ufairahasan20@gmail.com', '08397466', 'male','2', 0, 1, now(), true,'3');
 
 
 INSERT INTO users(email, pass, roles_id,employee_id, "version", created_by, created_at, is_active,id) VALUES
-	('bondan@gmail.com', '1234', '1', '1', 0, 1, now(), true,'1'),
-	('fidha@gmail.com', '1234', '2', '2', 0, 1, now(), true,'2');
+	('septianardi053@gmail.com', '1234', '1', '1', 0, 1, now(), true,'1'),
+	('glenn9808@gmail.com', '1234', '2', '2', 0, 1, now(), true,'2');
 
 
 INSERT INTO status_assets(code_status_asset,name_status_asset,"version",created_by,created_at,is_active, id) VALUES
@@ -95,9 +95,9 @@ INSERT INTO assets(names, code, status_asset_id,brand_id, invoice_id, company_id
 	('Spidol', 'SPL1', '2','2', '2','2', '4', '2', 0, 1, now(), true, '11');
 
 
-INSERT INTO transactions(code_transaction,checkout_date,quantity,location_id,"version",created_by,created_at,is_active, id) VALUES 
-	('TR1',now(),5,'1', 0, 1, now(), true, '1'),
-	('TR2',now(),5,'2', 0, 1, now(), true, '2');
+INSERT INTO transactions(code_transaction,checkout_date,quantity,location_id, users_id,"version",created_by,created_at,is_active, id) VALUES 
+	('TR1',now(),5,'1', '1', 0, 1, now(), true, '1'),
+	('TR2',now(),5,'2', '1',0, 1, now(), true, '2');
 
 
 INSERT INTO transaction_details(transaction_id,duration_date,asset_id,status_asset_checkout_id,"version",created_by,created_at,is_active,id) VALUES

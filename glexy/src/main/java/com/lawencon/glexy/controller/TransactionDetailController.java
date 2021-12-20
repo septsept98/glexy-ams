@@ -38,6 +38,13 @@ public class TransactionDetailController {
 		List<TransactionDetail> result = transactionDetailService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/exp-duration")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
+	public ResponseEntity<?> getAllExpDurationAssign() throws Exception {
+		List<TransactionDetail> result = transactionDetailService.expDurationAssign();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	@GetMapping("{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))

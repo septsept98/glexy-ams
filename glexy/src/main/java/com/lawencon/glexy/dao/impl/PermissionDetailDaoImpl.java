@@ -40,13 +40,14 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 	}
 
 	@Override
-	public List<PermissionDetail> findByRoleId(String id) throws Exception {
+	public List<PermissionDetail> findByRoleId(String code) throws Exception {
 		
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT pe.name_permission, pr.id FROM permission_role AS pr ");
 		sql.append("INNER JOIN permissions AS pe ON pr.permissions_id = pe.id ");
-		sql.append("WHERE roles_id = :id");
-		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id)
+		sql.append("INNER JOIN roles AS r ON pr.roles_id = r.id ");
+		sql.append("WHERE r.code = :code");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("code", code)
 				.getResultList();
 		
 		List<PermissionDetail> resultPermissionDetail = new ArrayList<>();

@@ -55,5 +55,25 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		});
 		return listResult;
 	}
+
+	@Override
+	public List<TransactionDetail> expDurationAssign() throws Exception {
+		List<TransactionDetail> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id ");
+		sql.append("FROM transaction_details ");
+		sql.append("WHERE (date_part('day', duration_date) - date_part('day', now())) <= 7 AND status_email = false");
+		List<?> result = createNativeQuery(sql.toString())
+				.getResultList();
+		
+		result.forEach(res -> {
+			TransactionDetail transactionDetail = new TransactionDetail();
+			transactionDetail.setId(res.toString());
+			transactionDetail = getById(transactionDetail.getId());
+			
+			listResult.add(transactionDetail);
+		});
+		return listResult;
+	}
 	
 }
