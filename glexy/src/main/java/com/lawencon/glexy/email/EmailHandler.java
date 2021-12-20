@@ -74,11 +74,11 @@ public class EmailHandler {
 	    mailSender.send(message);
 	}
 	
-	@Async
-	@Scheduled(fixedDelay = 60000)
-	public void scheduleFixedDelayTask() {
-//	    System.out.println(
-//	      "Fixed delay task - " + System.currentTimeMillis() / 1000);
-	}
+//	@Async
+//	@Scheduled(fixedDelay = 60000)
+//	public void scheduleFixedDelayTask() {
+////	    System.out.println(
+////	      "Fixed delay task - " + System.currentTimeMillis() / 1000);
+//	}
 
 }
