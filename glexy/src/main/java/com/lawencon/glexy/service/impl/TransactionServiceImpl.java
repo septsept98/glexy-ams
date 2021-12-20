@@ -21,6 +21,7 @@ import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.Transactions;
+import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.InventoryService;
 import com.lawencon.glexy.service.StatusAssetService;
 import com.lawencon.glexy.service.TrackAssetService;
@@ -117,6 +118,9 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 			Transactions dataTransaction = data.getDataTransaction();
 			dataTransaction.setCodeTransaction("TR3");
 			dataTransaction.setCreatedBy("3");
+			Users users = new Users();
+			users.setId("1");
+			dataTransaction.setUserId(users);
 			dataTransaction.setCheckOutDate(LocalDate.now());
 			begin();
 			dataTransaction = transactionDao.saveOrUpdate(dataTransaction);

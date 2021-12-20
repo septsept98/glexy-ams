@@ -1,6 +1,7 @@
 package com.lawencon.glexy.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -28,10 +29,10 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Autowired
 	private AssetDao assetDao;
-	
+
 	@Autowired
 	private TrackAssetService trackAssetService;
-	
+
 	@Autowired
 	private InventoryService inventoryService;
 
@@ -55,7 +56,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 	@Override
 	public TransactionDetail saveOrUpdate(TransactionDetail data) throws Exception {
 		try {
-			if(data.getId() != null) {
+			if (data.getId() != null) {
 				TransactionDetail transactionDetail = transactionDetailDao.findById(data.getId());
 				data.setCreatedBy(transactionDetail.getCreatedBy());
 				data.setCreatedAt(transactionDetail.getCreatedAt());
@@ -68,26 +69,26 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				data.setDateCheckin(LocalDate.now());
 				data.setAssetId(transactionDetail.getAssetId());
 				data.setStatusTrCheckinId(data.getStatusTrCheckinId());
-				
+
 				begin();
 				data = transactionDetailDao.saveOrUpdate(data);
-				
+
 				Asset asset = data.getAssetId();
 				asset.setStatusAssetId(data.getStatusTrCheckinId().getStatusAssetId());
 				asset.setUpdatedBy("1");
 				asset = assetDao.saveOrUpdate(asset);
-				
+
 				Inventory inventory = asset.getInventoryId();
-				if(asset.getStatusAssetId().getCodeStatusAsset().equalsIgnoreCase(StatusAssetEnum.DEPLOY.getCode())) {
+				if (asset.getStatusAssetId().getCodeStatusAsset().equalsIgnoreCase(StatusAssetEnum.DEPLOY.getCode())) {
 					int stockInventory = inventory.getLatestStock();
 					int latestStock = stockInventory + 1;
-					
+
 					inventory.setUpdatedBy("1");
 					inventory.setLatestStock(latestStock);
-					
+
 					inventory = inventoryService.saveOrUpdate(inventory);
 				}
-				
+
 				TrackAsset trackAsset = new TrackAsset();
 				trackAsset.setCodeAsset(asset.getCode());
 				trackAsset.setNameActivity(data.getStatusTrCheckinId().getNameStatusTr());
@@ -97,9 +98,10 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				trackAsset.setCreatedBy(data.getCreatedBy());
 				trackAsset.setIsActive(data.getIsActive());
 				trackAssetService.saveOrUpdate(trackAsset);
-				
+
 				commit();
 			} else {
+				data.setStatusEmail(false);
 				data = transactionDetailDao.saveOrUpdate(data);
 			}
 		} catch (Exception e) {
@@ -114,6 +116,34 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 	public List<TransactionDetail> findByTr(String id) throws Exception {
 		return transactionDetailDao.findByTr(id);
 	}
-	
-	
+
+	@Override
+	public List<TransactionDetail> expDurationAssign() throws Exception {
+		List<TransactionDetail> listResult = transactionDetailDao.expDurationAssign();
+
+		if (listResult != null) {
+			for (int i = 0; i < listResult.size(); i++) {
+				if (listResult.get(i).getTransactionId().getEmployeeId() != null) {
+					System.out.println("Email : " + listResult.get(i).getTransactionId().getEmployeeId().getEmailEmployee());
+					System.out.println("Email Assign : " + listResult.get(i).getTransactionId().getUserId().getEmail());
+					System.out.println("Nama : " + listResult.get(i).getTransactionId().getEmployeeId().getNameEmployee());
+					System.out.println("Nama Asset : " + listResult.get(i).getAssetId().getNames());
+					System.out.println("Date Exp : " + listResult.get(i).getDurationDate());
+					
+					// 
+
+					TransactionDetail transactionDetail = listResult.get(i);
+					transactionDetail.setUpdatedBy("1");
+					transactionDetail.setStatusEmail(true);
+					
+					begin();
+					transactionDetailDao.saveOrUpdate(transactionDetail);
+					commit();
+				}
+			}
+		}
+
+		return null;
+	}
+
 }

@@ -18,7 +18,6 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.TransactionDetailService;
 
@@ -37,6 +36,13 @@ public class TransactionDetailController {
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<TransactionDetail> result = transactionDetailService.findAll();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/exp-duration")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
+	public ResponseEntity<?> getAllExpDurationAssign() throws Exception {
+		List<TransactionDetail> result = transactionDetailService.expDurationAssign();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

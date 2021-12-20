@@ -14,7 +14,7 @@ import com.lawencon.base.BaseEntity;
 @Table
 public class Transactions extends BaseEntity{
 
-	private static final long serialVersionUID = 3620722082804737286L;
+	private static final long serialVersionUID = 8439264959061000619L;
 
 	@Column(name = "code_transaction", length = 20, nullable = false)
 	private String codeTransaction;
@@ -37,6 +37,10 @@ public class Transactions extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name = "asset_general_id", columnDefinition = "varchar")
 	private Asset assetGeneralId;
+	
+	@ManyToOne
+	@JoinColumn(name = "users_id", columnDefinition = "varchar")
+	private Users userId;
 
 	public String getCodeTransaction() {
 		return codeTransaction;
@@ -92,6 +96,14 @@ public class Transactions extends BaseEntity{
 
 	public void setAssetGeneralId(Asset assetGeneralId) {
 		this.assetGeneralId = assetGeneralId;
+	}
+
+	public Users getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Users userId) {
+		this.userId = userId;
 	}
 	
 }

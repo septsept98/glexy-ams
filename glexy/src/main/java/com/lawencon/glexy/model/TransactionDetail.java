@@ -13,8 +13,8 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name = "transaction_details")
 public class TransactionDetail extends BaseEntity {
-
-	private static final long serialVersionUID = -1764075380875113839L;
+	
+	private static final long serialVersionUID = 280099300793821086L;
 
 	@ManyToOne
 	@JoinColumn(name = "transaction_id", columnDefinition = "varchar")
@@ -33,6 +33,9 @@ public class TransactionDetail extends BaseEntity {
 
 	@Column(name = "date_checkin")
 	private LocalDate dateCheckin;
+
+	@Column(name = "status_email")
+	private Boolean statusEmail;
 
 	@ManyToOne
 	@JoinColumn(name = "status_tr_checkin_id", columnDefinition = "varchar")
@@ -78,6 +81,14 @@ public class TransactionDetail extends BaseEntity {
 		this.dateCheckin = dateCheckin;
 	}
 
+	public Boolean getStatusEmail() {
+		return statusEmail;
+	}
+
+	public void setStatusEmail(Boolean statusEmail) {
+		this.statusEmail = statusEmail;
+	}
+
 	public StatusTransaction getStatusTrCheckinId() {
 		return statusTrCheckinId;
 	}
@@ -85,4 +96,5 @@ public class TransactionDetail extends BaseEntity {
 	public void setStatusTrCheckinId(StatusTransaction statusTrCheckinId) {
 		this.statusTrCheckinId = statusTrCheckinId;
 	}
+	
 }
