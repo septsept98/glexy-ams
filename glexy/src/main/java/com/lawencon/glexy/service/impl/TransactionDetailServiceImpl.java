@@ -130,7 +130,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 					System.out.println("Nama Asset : " + listResult.get(i).getAssetId().getNames());
 					System.out.println("Date Exp : " + listResult.get(i).getDurationDate());
 					
-					// 
+					// do something
 
 					TransactionDetail transactionDetail = listResult.get(i);
 					transactionDetail.setUpdatedBy("1");
