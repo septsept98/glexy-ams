@@ -60,13 +60,7 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 
 	@Override
 	public StatusAsset findById(String id) throws Exception {
-		StatusAsset result = new StatusAsset();
-		try {
-			result = statusAssetDao.findById(id);
-			return result;
-		} catch (NoResultException e) {
-			throw new NoResultException("Status Asset not found");
-		}
+		return statusAssetDao.findById(id);
 	}
 
 	@Override

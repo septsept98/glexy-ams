@@ -26,6 +26,10 @@ import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.service.CompanyService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("companies")
 public class CompanyController {
@@ -34,12 +38,14 @@ public class CompanyController {
 	private CompanyService companyService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Company.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Company> result = companyService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Company.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Company result = companyService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -47,6 +53,7 @@ public class CompanyController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
 		Company company = companyService.save(new ObjectMapper().readValue(data, Company.class), file);
 		
@@ -61,6 +68,7 @@ public class CompanyController {
 	}
 
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Company data) throws Exception {
 		data = companyService.update(data);
 		
@@ -75,6 +83,7 @@ public class CompanyController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = companyService.removeById(id);
 		

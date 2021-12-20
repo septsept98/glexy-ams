@@ -36,7 +36,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 	public List<Asset> findByInvent(String idInvent) throws Exception {
 		List<Asset> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
-		sql.append("Select id ");
+		sql.append("SELECT id ");
 		sql.append("FROM assets ");
 		sql.append("WHERE inventory_id=:idInvent");
 		List<?> result = createNativeQuery(sql.toString())
@@ -95,6 +95,50 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 				.getResultList();
 
 		return resultList;
+	}
+
+	@Override
+	public List<Asset> findAllDeployAsset() throws Exception {
+		List<Asset> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT a.id ");
+		sql.append("FROM assets a ");
+		sql.append("INNER JOIN status_assets sa ON a.status_asset_id = sa.id ");
+		sql.append("WHERE sa.code_status_asset='SA1' ");
+		sql.append("ORDER BY a.code");
+		List<?> result = createNativeQuery(sql.toString())
+				.getResultList();
+
+		result.forEach(rs -> {
+			Asset asset = new Asset();
+			asset.setId(rs.toString());
+			asset = getById(asset.getId());
+			
+			listResult.add(asset);
+		});
+		return listResult;
+	}
+
+	@Override
+	public List<Asset> findAllGeneralAsset() throws Exception {
+		List<Asset> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT a.id ");
+		sql.append("FROM assets a ");
+		sql.append("INNER JOIN asset_types at ON a.asset_type_id = at.id ");
+		sql.append("WHERE at.code='GNR' ");
+		sql.append("ORDER BY a.code");
+		List<?> result = createNativeQuery(sql.toString())
+				.getResultList();
+
+		result.forEach(rs -> {
+			Asset asset = new Asset();
+			asset.setId(rs.toString());
+			asset = getById(asset.getId());
+			
+			listResult.add(asset);
+		});
+		return listResult;
 	}
 
 }

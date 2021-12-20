@@ -27,9 +27,16 @@ public interface AssetService {
 	
 	boolean removeById(String id) throws Exception;
 	
+	String generateCode(String invenCode, int stock, int index) throws Exception;
+	
+	List<Asset> findAllDeployAsset() throws Exception;
+	
+	List<Asset> findAllGeneralAsset() throws Exception;
+
 	String generateCode(String invenCode, String codeCompany, int stock, int index) throws Exception;
 	
 	boolean hasExcelFormat(MultipartFile file) throws Exception;
 	
 	InsertResDto saveExcel(MultipartFile file) throws Exception;
+
 }

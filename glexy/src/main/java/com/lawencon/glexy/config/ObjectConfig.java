@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.lawencon.util.ExcelUtil;
 
@@ -43,6 +44,12 @@ public class ObjectConfig {
 	@Bean
 	public ExcelUtil excelUtil() {
 		return new ExcelUtil();
+  }
+  @Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+
+		return new BCryptPasswordEncoder();
+
 	}
 
 }

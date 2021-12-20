@@ -240,6 +240,15 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	}
 
 	@Override
+	public List<Asset> findAllDeployAsset() throws Exception {
+		return assetDao.findAllDeployAsset();
+	}
+
+	@Override
+	public List<Asset> findAllGeneralAsset() throws Exception {
+		return assetDao.findAllGeneralAsset();
+	}
+
 	public boolean hasExcelFormat(MultipartFile file) throws Exception {
 		if (!type.equals(file.getContentType())) {
 			return false;
@@ -326,4 +335,9 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 
 	}
 
+	@Override
+	public String generateCode(String invenCode, int stock, int index) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

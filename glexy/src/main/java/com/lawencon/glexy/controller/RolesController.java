@@ -21,8 +21,13 @@ import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
+import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.service.RolesService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("roles")
@@ -32,12 +37,14 @@ public class RolesController {
 	private RolesService rolesService;
 	
 	@GetMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Roles.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Roles> result = rolesService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Roles.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
 		Roles result = rolesService.findById(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -45,6 +52,7 @@ public class RolesController {
 	}
 	
 	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody RolesInsertReqDto data) throws Exception {
 		Roles roles = rolesService.saveOrUpdate(data);
 		InsertResDataDto id = new InsertResDataDto();
@@ -57,6 +65,7 @@ public class RolesController {
 	}
 	
 	@PutMapping
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody RolesInsertReqDto data) throws Exception {
 		Roles roles = rolesService.saveOrUpdate(data); 
 		UpdateResDataDto ver = new UpdateResDataDto();
@@ -70,6 +79,7 @@ public class RolesController {
 	}
 	
 	@DeleteMapping("{id}")
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = rolesService.deleteById(id);
 		
