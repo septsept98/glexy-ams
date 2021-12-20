@@ -1,12 +1,10 @@
 package com.lawencon.glexy.service;
 
-import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.glexy.dto.InsertResDto;
-import com.lawencon.glexy.dto.asset.InsertReqDataHelperAssetDto;
 import com.lawencon.glexy.model.Asset;
 
 public interface AssetService {

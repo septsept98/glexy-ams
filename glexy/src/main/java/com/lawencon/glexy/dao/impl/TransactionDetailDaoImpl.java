@@ -62,7 +62,7 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id ");
 		sql.append("FROM transaction_details ");
-		sql.append("WHERE (date_part('day', duration_date) - date_part('day', now())) <= 7");
+		sql.append("WHERE (date_part('day', duration_date) - date_part('day', now())) <= 7 AND status_email = false");
 		List<?> result = createNativeQuery(sql.toString())
 				.getResultList();
 		
