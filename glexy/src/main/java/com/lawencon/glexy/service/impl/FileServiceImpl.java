@@ -68,4 +68,11 @@ public class FileServiceImpl extends BaseGlexyServiceImpl implements FileService
 		return result;
 	}
 
+	@Override
+	public File findByByte(byte[] img, String ext) throws Exception {
+		return fileDao.findByByte(img, ext);
+	}
+	
+	
+
 }

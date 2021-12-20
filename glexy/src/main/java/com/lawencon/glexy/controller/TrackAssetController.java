@@ -19,16 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
-import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.service.TrackAssetService;
 import com.lawencon.util.JasperUtil;
 
-import net.sf.jasperreports.engine.JRException;
-
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import net.sf.jasperreports.engine.JRException;
 
 @RestController
 @RequestMapping("track-assets")

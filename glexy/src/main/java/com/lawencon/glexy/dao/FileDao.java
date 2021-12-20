@@ -13,5 +13,7 @@ public interface FileDao {
 	File saveOrUpdate(File file) throws Exception;
 	
 	boolean deleteById(String id) throws Exception;
+	
+	File findByByte(byte[] img, String ext) throws Exception;
 
 }

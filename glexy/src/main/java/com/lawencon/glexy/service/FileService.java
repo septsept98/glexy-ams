@@ -13,5 +13,7 @@ public interface FileService {
 	File saveOrUpdate(File data) throws Exception;
 	
 	boolean deleteById(String id) throws Exception;
+	
+	File findByByte(byte[] img, String ext) throws Exception;
 
 }

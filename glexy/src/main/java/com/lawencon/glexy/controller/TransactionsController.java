@@ -18,7 +18,6 @@ import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.transaction.InsertReqDataAssetTransactionDto;
 import com.lawencon.glexy.dto.transaction.InsertReqTransactionDto;
 import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.service.TransactionService;
 

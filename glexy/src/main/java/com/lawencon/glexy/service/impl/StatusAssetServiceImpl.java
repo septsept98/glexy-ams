@@ -2,8 +2,6 @@ package com.lawencon.glexy.service.impl;
 
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

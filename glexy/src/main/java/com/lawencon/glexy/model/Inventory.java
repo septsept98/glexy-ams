@@ -9,8 +9,8 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name = "inventories")
 public class Inventory extends BaseEntity{
-
-	private static final long serialVersionUID = 5393625517737723312L;
+	
+	private static final long serialVersionUID = -6744583972264191520L;
 
 	@Column(name = "name_asset", length = 30, nullable = false)
 	private String nameAsset;
@@ -19,10 +19,10 @@ public class Inventory extends BaseEntity{
 	private String code;
 	
 	@Column(nullable = false)
-	private int stock;
+	private Integer stock;
 	
 	@Column(name = "latest_stock", nullable = false)
-	private int latestStock;
+	private Integer latestStock;
 	
 	public String getNameAsset() {
 		return nameAsset;
@@ -36,18 +36,19 @@ public class Inventory extends BaseEntity{
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public int getStock() {
+	public Integer getStock() {
 		return stock;
 	}
-	public void setStock(int stock) {
+	public void setStock(Integer stock) {
 		this.stock = stock;
 	}
-	public int getLatestStock() {
+	public Integer getLatestStock() {
 		return latestStock;
 	}
-	public void setLatestStock(int latestStock) {
+	public void setLatestStock(Integer latestStock) {
 		this.latestStock = latestStock;
 	}
+	
 	
 	
 }
