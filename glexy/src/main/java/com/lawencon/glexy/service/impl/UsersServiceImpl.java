@@ -1,5 +1,6 @@
 package com.lawencon.glexy.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.glexy.dao.UsersDao;
 import com.lawencon.glexy.email.EmailHandler;
+import com.lawencon.glexy.helper.EmailHelper;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.File;
@@ -50,7 +52,11 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public List<Users> findAll() throws Exception {
-		emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia","Password", "haha");
+		EmailHelper data = new EmailHelper();
+		data.setEmployeeName("septian");
+		data.setValueName("lenovo");
+		data.setExpiredDate(LocalDate.now());
+		emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Expired Asset Reminder","Close To Expired", data);
 		return usersDao.findAll();
 	}
 
@@ -90,7 +96,9 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			data.setEmployeeId(employee);
 			Users user = usersDao.saveOrUpdate(data);
 			commit();
-			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia","Password", pass);
+			EmailHelper email = new EmailHelper();
+			email.setValueName(pass);
+			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia","Password", email);
 			return user;
 
 		} catch (Exception e) {
