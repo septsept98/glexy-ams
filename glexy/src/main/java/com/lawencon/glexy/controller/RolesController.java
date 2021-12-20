@@ -21,7 +21,6 @@ import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
-import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.service.RolesService;
 

@@ -41,16 +41,15 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
 		sql.append("FROM inventories ");
-		sql.append("WHERE name_asset ILIKE '"+name+"%'");
-		
-		List<?> result = createNativeQuery(sql.toString())
-				.getResultList();
+		sql.append("WHERE name_asset ILIKE '" + name + "%'");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
 
 		result.forEach(rs -> {
 			Inventory inventory = new Inventory();
 			inventory.setId(rs.toString());
 			inventory = getById(inventory.getId());
-			
+
 			listResult.add(inventory);
 		});
 		return listResult;
@@ -63,29 +62,22 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 			StringBuilder sql = new StringBuilder();
 			sql.append("Select id ");
 			sql.append("FROM inventories ");
-			sql.append("WHERE code ILIKE '"+code+"%'");
-			
-			Object result = createNativeQuery(sql.toString())
-					.getSingleResult();
+			sql.append("WHERE code = :code");
 
-			if(result != null) {
+			Object result = createNativeQuery(sql.toString()).setParameter("code", code).getSingleResult();
+
+			if (result != null) {
 				inventory.setId(result.toString());
 				inventory = getById(inventory.getId());
 			}
 		} catch (NoResultException e) {
-			e.printStackTrace();
+			return null;
 		} catch (NonUniqueResultException e) {
 			e.printStackTrace();
 		}
-		
+
 		return inventory;
-	
+
 	}
-	
-	
-	
-	
-	
-	
 
 }

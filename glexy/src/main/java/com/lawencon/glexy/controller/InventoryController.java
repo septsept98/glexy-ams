@@ -21,7 +21,6 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.service.InventoryService;
 
@@ -55,6 +54,14 @@ public class InventoryController {
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> getByName(@RequestParam (required = true) String name) throws Exception {
 		List<Inventory> result = inventoryService.findByName(name);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/code/{code}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
+	public ResponseEntity<?> getByCode(@PathVariable("code") String code) throws Exception {
+		Inventory result = inventoryService.findByCode(code);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}

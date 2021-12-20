@@ -40,8 +40,8 @@ public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("Select id ");
-			sql.append("FROM status_assets ");
-			sql.append("WHERE code_status_asset=:code");
+			sql.append("FROM companies ");
+			sql.append("WHERE code=:code");
 			
 			Object result = createNativeQuery(sql.toString())
 					.setParameter("code", code)

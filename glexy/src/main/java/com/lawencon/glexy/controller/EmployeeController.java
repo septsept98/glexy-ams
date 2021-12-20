@@ -20,7 +20,6 @@ import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.service.EmployeeService;
 
