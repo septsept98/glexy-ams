@@ -83,6 +83,11 @@ public class TrackAssetController {
 	@GetMapping("/pdf")
 	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
 		HashMap<String, Object> map = new HashMap<>();
+		map.put("company", "PT. Lawencon");
+		map.put("address", "Jl. Pahlawan No. 28");
+		map.put("website", "Lawencon.co.id");
+		map.put("telp", "0245995");
+		map.put("fax", "0247717");
 		
 		byte[] data = JasperUtil.responseToByteArray(trackAssetService.findAll(), "track-asset", map);
 		
