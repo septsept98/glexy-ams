@@ -126,7 +126,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Override
 	@Async
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 000)
 	public List<TransactionDetail> expDurationAssign() throws Exception {
 		List<TransactionDetail> listResult = transactionDetailDao.expDurationAssign();
 
