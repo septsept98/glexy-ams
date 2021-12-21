@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.AssetType;
+import com.lawencon.glexy.model.Company;
+import com.lawencon.glexy.model.Employee;
 
 @Repository
 public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
@@ -139,6 +142,28 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 			listResult.add(asset);
 		});
 		return listResult;
+	}
+
+	@Override
+	public List<Asset> findByAssetTypeId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT asset_type_id FROM assets ");
+		sql.append("WHERE asset_type_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<Asset> resultAsset = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			Asset data = new Asset();
+
+			AssetType assetType = new AssetType();
+			assetType.setId(rs.toString());
+			data.setAssetTypeId(assetType);
+			resultAsset.add(data);
+		});
+
+		return resultAsset;
 	}
 
 }

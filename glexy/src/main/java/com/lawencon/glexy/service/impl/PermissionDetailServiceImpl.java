@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.glexy.dao.PermissionDetailDao;
+import com.lawencon.glexy.dao.RolesDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
@@ -20,6 +22,9 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 
 	@Autowired
 	private PermissionsService permissionsService;
+
+	@Autowired
+	private RolesDao rolesDao;
 
 	@Override
 	public List<PermissionDetail> findAll() throws Exception {
@@ -47,11 +52,17 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 			} else {
 				data.setCreatedBy(getIdAuth());
 			}
-			Roles roles = new Roles();
-			roles.setId(data.getRolesId().getId());
-			data.setRolesId(roles);
+			Roles roles = rolesDao.findById(data.getRolesId().getId());
 
+			if (roles == null) {
+				throw new ValidationGlexyException("Roles Not Found");
+			}
+			data.setRolesId(roles);
+			
 			Permissions permissions = permissionsService.findById(data.getPermissionsId().getId());
+			if (permissions == null) {
+				throw new ValidationGlexyException("Permission Not Found");
+			}
 			data.setPermissionsId(permissions);
 
 			data = permissionDetailDao.saveOrUpdate(data);
@@ -83,6 +94,18 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 	public List<PermissionDetail> findByRoleId(String id) throws Exception {
 
 		return permissionDetailDao.findByRoleId(id);
+	}
+
+	@Override
+	public List<PermissionDetail> findByRoleCode(String code) throws Exception {
+
+		return permissionDetailDao.findByRoleCode(code);
+	}
+
+	@Override
+	public List<PermissionDetail> findByPermissionsId(String id) throws Exception {
+
+		return permissionDetailDao.findByPermissionsId(id);
 	}
 
 }

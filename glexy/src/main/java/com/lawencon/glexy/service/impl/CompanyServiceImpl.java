@@ -10,8 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.CompanyDao;
+import com.lawencon.glexy.dao.EmployeeDao;
+import com.lawencon.glexy.dao.UsersDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Company;
+import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.File;
+import com.lawencon.glexy.model.Transactions;
+import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.FileService;
 
@@ -20,8 +26,12 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 
 	@Autowired
 	private CompanyDao companyDao;
+	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private EmployeeDao employeeDao;
 
 	@Override
 	public Company save(Company data, MultipartFile files) throws Exception {
@@ -83,6 +93,7 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = companyDao.removeById(id);
 			commit();
@@ -96,6 +107,17 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	@Override
 	public Company findByCode(String Code) throws Exception {
 		return companyDao.findByCode(Code);
+	}
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		
+		List<Employee> dataEmployee = employeeDao.findByCompanyId(id);
+		if (dataEmployee != null) {
+
+			throw new ValidationGlexyException("Company in Use");
+		}
+		
 	}
 	
 	

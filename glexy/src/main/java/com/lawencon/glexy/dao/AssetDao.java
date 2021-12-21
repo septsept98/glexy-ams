@@ -23,5 +23,6 @@ public interface AssetDao {
 	List<Asset> findAllDeployAsset() throws Exception;
 	
 	List<Asset> findAllGeneralAsset() throws Exception;
-
+	
+	List<Asset> findByAssetTypeId(String Id) throws Exception;
 }

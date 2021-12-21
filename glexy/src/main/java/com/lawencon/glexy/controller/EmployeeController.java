@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("employees")
-public class EmployeeController {
+public class EmployeeController extends BaseController {
 	
 	@Autowired
 	private EmployeeService employeeService;

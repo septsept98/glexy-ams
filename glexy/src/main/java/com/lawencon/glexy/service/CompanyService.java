@@ -19,5 +19,7 @@ public interface CompanyService {
 	List<Company> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
+	
+	void validationFk(String id) throws Exception;
 
 }

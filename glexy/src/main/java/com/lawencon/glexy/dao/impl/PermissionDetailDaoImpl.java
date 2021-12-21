@@ -9,6 +9,7 @@ import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.PermissionDetailDao;
 import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Permissions;
+import com.lawencon.glexy.model.Roles;
 
 @Repository
 public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> implements PermissionDetailDao {
@@ -40,7 +41,7 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 	}
 
 	@Override
-	public List<PermissionDetail> findByRoleId(String code) throws Exception {
+	public List<PermissionDetail> findByRoleCode(String code) throws Exception {
 		
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT pe.name_permission, pr.id FROM permission_role AS pr ");
@@ -61,6 +62,55 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 			permissions.setNamePermission(objArr[0].toString());
 			data.setPermissionsId(permissions);
 			data.setId(objArr[1].toString());
+			resultPermissionDetail.add(data);
+		});
+		
+		return resultPermissionDetail;
+	}
+
+	@Override
+	public List<PermissionDetail> findByRoleId(String id) throws Exception {
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT roles_id FROM permission_role ");
+		sql.append("WHERE roles_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id)
+				.getResultList();
+		
+		List<PermissionDetail> resultPermissionDetail = new ArrayList<>();
+		
+		result.forEach(rs -> {
+			
+			
+			PermissionDetail data = new PermissionDetail();
+			
+			Roles roles = new Roles();
+			roles.setId(rs.toString());
+			data.setRolesId(roles);
+			resultPermissionDetail.add(data);
+		});
+		
+		return resultPermissionDetail;
+	}
+
+	@Override
+	public List<PermissionDetail> findByPermissionsId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT permissions_id FROM permission_role ");
+		sql.append("WHERE permissions_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id)
+				.getResultList();
+		
+		List<PermissionDetail> resultPermissionDetail = new ArrayList<>();
+		
+		result.forEach(rs -> {
+			
+			
+			PermissionDetail data = new PermissionDetail();
+			
+			Permissions permissions = new Permissions();
+			permissions.setId(rs.toString());
+			data.setPermissionsId(permissions);
 			resultPermissionDetail.add(data);
 		});
 		

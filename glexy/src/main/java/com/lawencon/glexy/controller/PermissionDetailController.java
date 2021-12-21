@@ -92,7 +92,7 @@ public class PermissionDetailController {
 	@GetMapping("/role/{code}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PermissionDetail.class)))
 	public ResponseEntity<?> getByRoleCode(@PathVariable("code") String code) throws Exception {
-		List<PermissionDetail>result = permissionDetailService.findByRoleId(code);
+		List<PermissionDetail>result = permissionDetailService.findByRoleCode(code);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}

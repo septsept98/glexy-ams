@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.TransactionDetailDao;
+import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.TransactionDetail;
+import com.lawencon.glexy.model.Transactions;
 
 @Repository
 public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> implements TransactionDetailDao {
@@ -74,6 +77,28 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 			listResult.add(transactionDetail);
 		});
 		return listResult;
+	}
+
+	@Override
+	public List<TransactionDetail> findByAssetId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT asset_id FROM transaction_details ");
+		sql.append("WHERE asset_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<TransactionDetail> resultTransactionDetail = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			TransactionDetail data = new TransactionDetail();
+
+			Asset asset = new Asset();
+			asset.setId(rs.toString());
+			data.setAssetId(asset);
+			resultTransactionDetail.add(data);
+		});
+
+		return resultTransactionDetail;
 	}
 	
 }

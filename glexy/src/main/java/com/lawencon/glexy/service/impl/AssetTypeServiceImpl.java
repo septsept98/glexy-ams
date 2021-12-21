@@ -8,8 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.AssetTypeDao;
+import com.lawencon.glexy.dao.TransactionDetailDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
+import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.AssetType;
+import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.AssetTypeService;
 
 @Service
@@ -18,10 +23,13 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 	@Autowired
 	private AssetTypeDao assetTypeDao;
 	
+	@Autowired
+	private AssetDao assetDao; 
+
 	@Override
 	public AssetType saveOrUpdate(AssetType data) throws Exception {
 		try {
-			if(data.getId() != null) {
+			if (data.getId() != null) {
 				AssetType assetType = findById(data.getId());
 				data.setCode(assetType.getCode());
 				data.setCreatedAt(assetType.getCreatedAt());
@@ -31,7 +39,7 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 			} else {
 				data.setCreatedBy("3");
 			}
-			
+
 			begin();
 			data = assetTypeDao.saveOrUpdate(data);
 			commit();
@@ -63,6 +71,7 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = assetTypeDao.removeById(id);
 			commit();
@@ -77,9 +86,15 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 	public AssetType findByCode(String code) throws Exception {
 		return assetTypeDao.findByCode(code);
 	}
-	
-	
-	
-	
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		List<Asset> dataEmployee = assetDao.findByAssetTypeId(id);
+		if (dataEmployee != null) {
+
+			throw new ValidationGlexyException("Asset Type in Use");
+		}
+
+	}
 
 }
