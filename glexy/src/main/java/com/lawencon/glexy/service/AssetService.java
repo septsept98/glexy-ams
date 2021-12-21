@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+
+import com.lawencon.glexy.dto.InsertResDto;
+
 import com.lawencon.glexy.model.Asset;
 
 public interface AssetService {
