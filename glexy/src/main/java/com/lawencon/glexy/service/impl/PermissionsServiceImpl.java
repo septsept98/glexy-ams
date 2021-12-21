@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.PermissionsDao;
 import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.service.PermissionsService;

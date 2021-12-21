@@ -25,7 +25,6 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 				Inventory inventory = findById(data.getId());
 				data.setNameAsset(inventory.getNameAsset());
 				data.setCode(inventory.getCode());
-				data.setStock(inventory.getStock());
 				data.setCreatedAt(inventory.getCreatedAt());
 				data.setCreatedBy(inventory.getCreatedBy());
 				data.setUpdatedBy("1");

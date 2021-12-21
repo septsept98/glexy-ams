@@ -104,8 +104,17 @@ public class AssetController extends BaseController {
 	}
 
 	@PostMapping("/upload")
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> uploadFile(@RequestPart MultipartFile file) throws Exception {
-		InsertResDto result = assetService.saveExcel(file);
+		Asset asset = assetService.saveExcel(file);
+		
+		InsertResDataDto id = new InsertResDataDto();
+		id.setId(asset.getId());
+
+		InsertResDto result = new InsertResDto();
+		result.setData(id);
+		result.setMsg(MessageEnum.CREATED.getMsg());
+		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -113,6 +122,21 @@ public class AssetController extends BaseController {
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Asset data) throws Exception {
 		Asset asset = assetService.update(data);
+
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(asset.getVersion());
+
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PutMapping("/image")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
+	public ResponseEntity<?> addImage(@RequestPart String data, MultipartFile file) throws Exception {
+		Asset asset = assetService.updateImage(data, file);
 
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(asset.getVersion());

@@ -126,21 +126,16 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Override
 	@Async
-	@Scheduled(fixedDelay = 000)
+	@Scheduled(fixedDelay = 60000)
 	public List<TransactionDetail> expDurationAssign() throws Exception {
 		List<TransactionDetail> listResult = transactionDetailDao.expDurationAssign();
 
 		if (listResult != null) {
 			for (int i = 0; i < listResult.size(); i++) {
 				if (listResult.get(i).getTransactionId().getEmployeeId() != null) {
-					System.out.println("Email : " + listResult.get(i).getTransactionId().getEmployeeId().getEmailEmployee());
-					System.out.println("Email Assign : " + listResult.get(i).getTransactionId().getUserId().getEmail());
-					System.out.println("Nama : " + listResult.get(i).getTransactionId().getEmployeeId().getNameEmployee());
-					System.out.println("Nama Asset : " + listResult.get(i).getAssetId().getNames());
-					System.out.println("Date Exp : " + listResult.get(i).getDurationDate());
 					String emailEmployee = listResult.get(i).getTransactionId().getEmployeeId().getEmailEmployee();
 					String emailAssign = listResult.get(i).getTransactionId().getUserId().getEmail();
-					// do something
+
 					EmailHelper email = new EmailHelper();
 					email.setEmployeeName(listResult.get(i).getTransactionId().getEmployeeId().getNameEmployee());
 					email.setValueName(listResult.get(i).getAssetId().getNames());

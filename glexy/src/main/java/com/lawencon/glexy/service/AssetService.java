@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.lawencon.glexy.dto.InsertResDto;
+
 import com.lawencon.glexy.model.Asset;
 
 public interface AssetService {
@@ -25,8 +27,6 @@ public interface AssetService {
 	
 	boolean removeById(String id) throws Exception;
 	
-	String generateCode(String invenCode, int stock, int index) throws Exception;
-	
 	List<Asset> findAllDeployAsset() throws Exception;
 	
 	List<Asset> findAllGeneralAsset() throws Exception;
@@ -35,6 +35,8 @@ public interface AssetService {
 	
 	boolean hasExcelFormat(MultipartFile file) throws Exception;
 	
-	InsertResDto saveExcel(MultipartFile file) throws Exception;
+	Asset saveExcel(MultipartFile file) throws Exception;
+	
+	Asset updateImage(String id, MultipartFile assetImg) throws Exception;
 
 }

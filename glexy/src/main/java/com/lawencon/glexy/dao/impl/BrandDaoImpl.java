@@ -41,7 +41,7 @@ public class BrandDaoImpl extends BaseDaoImpl<Brand> implements BrandDao{
 			StringBuilder sql = new StringBuilder();
 			sql.append("Select id ");
 			sql.append("FROM brands ");
-			sql.append("WHERE code_brand=:code");
+			sql.append("WHERE code=:code");
 			
 			Object result = createNativeQuery(sql.toString())
 					.setParameter("code", code)

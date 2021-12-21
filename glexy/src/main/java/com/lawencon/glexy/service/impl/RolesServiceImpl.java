@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.RolesDao;
 import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
 import com.lawencon.glexy.model.Roles;
