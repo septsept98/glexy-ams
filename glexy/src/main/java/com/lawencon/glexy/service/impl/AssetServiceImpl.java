@@ -13,15 +13,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
+import com.lawencon.glexy.dao.TransactionDao;
+import com.lawencon.glexy.dao.TransactionDetailDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.model.Company;
+import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.Invoice;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.TrackAsset;
+import com.lawencon.glexy.model.TransactionDetail;
+import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.service.AssetService;
 import com.lawencon.glexy.service.AssetTypeService;
 import com.lawencon.glexy.service.BrandService;
@@ -56,6 +62,8 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	private StatusAssetService statusAssetService;
 	@Autowired
 	private AssetTypeService assetTypeService;
+	@Autowired
+	private TransactionDetailDao transactionDetailDao;
 
 	private String type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
@@ -87,6 +95,9 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			int index = 0;
 
 			Inventory inventory = inventoryService.findByCode(inven.getCode());
+			if (inventory == null) {
+				throw new ValidationGlexyException("Inventory Not Found");
+			}
 			if (inventory != null) {
 				stock = inventory.getStock() + stockInven;
 				System.out.println("Stock Inventory : "+stock);
@@ -123,9 +134,21 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 
 			asset.setAssetImg(imgAsset);
 			Brand brand = brandService.findByCode(asset.getBrandId().getCode());
+			if (brand == null) {
+				throw new ValidationGlexyException("Brand Not Found");
+			}
 			Company company = companyService.findByCode(asset.getCompanyId().getCode());
+			if (company == null) {
+				throw new ValidationGlexyException("Company Not Found");
+			}
 			StatusAsset statusAsset = statusAssetService.findByCode(asset.getStatusAssetId().getCodeStatusAsset());
+			if (statusAsset == null) {
+				throw new ValidationGlexyException("Status Asset Not Found");
+			}
 			AssetType assetType = assetTypeService.findByCode(asset.getAssetTypeId().getCode());
+			if (assetType == null) {
+				throw new ValidationGlexyException("Asset Type Not Found");
+			}
 			for (int i = index; i < invenStock; i++) {
 				Asset assetInsert = new Asset();
 				String codeAsset = generateCode(inven.getCode(), company.getCode(),invenStock, i);
@@ -169,7 +192,16 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	@Override
 	public Asset update(Asset data) throws Exception {
 		Asset asset = findById(data.getId());
+		if (asset == null) {
+			throw new ValidationGlexyException("Asset Not Found");
+		}
 		StatusAsset statusAsset = new StatusAsset();
+		
+		statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
+		if (statusAsset == null) {
+			throw new ValidationGlexyException("Status Asset Not Found");
+		}
+		
 		statusAsset.setId(data.getStatusAssetId().getId());
 		asset.setStatusAssetId(statusAsset);
 		asset.setUpdatedBy("1");
@@ -213,6 +245,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = assetDao.removeById(id);
 			commit();
@@ -378,6 +411,16 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 		commit();
 		
 		return asset;
+	}
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		
+		List<TransactionDetail> dataEmployee = transactionDetailDao.findByAssetId(id);
+		if (dataEmployee != null) {
+
+			throw new ValidationGlexyException("Asset in Use");
+		}
 	}
 	
 }

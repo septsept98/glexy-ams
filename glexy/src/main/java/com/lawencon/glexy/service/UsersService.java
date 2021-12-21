@@ -26,5 +26,8 @@ public interface UsersService extends UserDetailsService {
 	Users getByNip(String Nip) throws Exception;
 	
 	Users updatePassword(Users users) throws Exception;
-
+	
+	List<Users> findByRolesId(String id) throws Exception;
+	
+	void validationFk(String id) throws Exception;
 }

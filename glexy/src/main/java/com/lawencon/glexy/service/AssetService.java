@@ -38,5 +38,7 @@ public interface AssetService {
 	Asset saveExcel(MultipartFile file) throws Exception;
 	
 	Asset updateImage(String id, MultipartFile assetImg) throws Exception;
+	
+	void validationFk(String id)throws Exception;
 
 }

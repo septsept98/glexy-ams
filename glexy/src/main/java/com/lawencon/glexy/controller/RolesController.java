@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("roles")
-public class RolesController {
+public class RolesController extends BaseController {
 	
 	@Autowired
 	private RolesService rolesService;

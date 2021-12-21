@@ -6,8 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.glexy.dao.EmployeeDao;
+import com.lawencon.glexy.dao.TransactionDao;
+import com.lawencon.glexy.dao.UsersDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
+import com.lawencon.glexy.model.PermissionDetail;
+import com.lawencon.glexy.model.Transactions;
+import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.EmployeeService;
 
@@ -19,6 +25,12 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 
 	@Autowired
 	private CompanyService companyService;
+
+	@Autowired
+	private UsersDao usersDao;
+
+	@Autowired
+	private TransactionDao transactionDao;
 
 	@Override
 	public List<Employee> findAll() throws Exception {
@@ -51,6 +63,9 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 			}
 
 			Company company = companyService.findById(data.getCompanyId().getId());
+			if (company == null) {
+				throw new ValidationGlexyException("Company Not Found");
+			}
 			data.setCompanyId(company);
 
 			data = employeeDao.saveOrUpdate(data);
@@ -66,6 +81,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 	public boolean deleteById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = employeeDao.deleteById(id);
 			commit();
@@ -75,6 +91,17 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 			throw new Exception(e);
 		}
 		return result;
+	}
+
+	@Override
+	public void validationFk(String id) throws Exception {
+
+		List<Users> dataUsers = usersDao.findByEmployeeId(id);
+		List<Transactions> dataTransactions = transactionDao.findByEmployeeId(id);
+		if (dataUsers != null || dataTransactions != null) {
+
+			throw new ValidationGlexyException("Employee in Use");
+		}
 	}
 
 }

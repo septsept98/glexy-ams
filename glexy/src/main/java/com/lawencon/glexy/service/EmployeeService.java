@@ -14,4 +14,6 @@ public interface EmployeeService {
 	
 	boolean deleteById(String id) throws Exception;
 	
+	void validationFk(String id) throws Exception;
+	
 }

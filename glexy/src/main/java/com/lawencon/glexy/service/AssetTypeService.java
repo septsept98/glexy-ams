@@ -16,4 +16,6 @@ public interface AssetTypeService {
 	
 	AssetType findByCode(String code) throws Exception;
 	
+	void validationFk(String id)throws Exception;
+	
 }
