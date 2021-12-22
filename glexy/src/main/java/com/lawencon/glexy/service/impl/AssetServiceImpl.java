@@ -8,10 +8,10 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
@@ -40,7 +40,7 @@ import com.lawencon.glexy.service.TrackAssetService;
 import com.lawencon.util.ExcelUtil;
 
 @Service
-public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
+public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetService {
 
 	@Autowired
 	private AssetDao assetDao;
@@ -87,9 +87,8 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			imgInvoice = fileService.saveOrUpdate(imgInvoice);
 
 			invoice.setInvoiceImg(imgInvoice);
-			invoice.setCreatedBy("3");
 			invoice.setPurchaseDate(LocalDate.now());
-			invoice = invoiceService.saveOrUpdate(invoice);
+			invoice = invoiceService.save(invoice);
 
 			int stock = 0;
 			int stockInven = inven.getStock();
@@ -110,21 +109,16 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				inven.setLatestStock(latest);
 				inven.setCreatedBy(inventory.getCreatedBy());
 				inven.setCreatedAt(inventory.getCreatedAt());
-				inven.setUpdatedBy("4");
 				inven.setVersion(inventory.getVersion());
 				inven.setIsActive(inventory.getIsActive());
 				index = inventory.getStock();
 			} else {
 				inven.setLatestStock(stockInven);
 				stock = stockInven;
-				inven.setCreatedBy("2");
 				inven.setIsActive(true);
 			}
 			int invenStock = stock;
 			inven = inventoryService.saveOrUpdate(inven);
-
-			imgAsset.setCreatedBy("3");
-			imgAsset.setIsActive(true);
 
 			imgAsset.setFiles(assetImg.getBytes());
 			String extAs = assetImg.getOriginalFilename();
@@ -134,6 +128,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			imgAsset = fileService.saveOrUpdate(imgAsset);
 
 			asset.setAssetImg(imgAsset);
+
 			Brand brand = brandService.findByCode(asset.getBrandId().getCode());
 			if (brand == null) {
 				throw new ValidationGlexyException("Brand Not Found");
@@ -147,9 +142,11 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				throw new ValidationGlexyException("Status Asset Not Found");
 			}
 			AssetType assetType = assetTypeService.findByCode(asset.getAssetTypeId().getCode());
+
 			if (assetType == null) {
 				throw new ValidationGlexyException("Asset Type Not Found");
 			}
+
 			for (int i = index; i < invenStock; i++) {
 				Asset assetInsert = new Asset();
 				String codeAsset = generateCode(inven.getCode(), company.getCode(), invenStock, i);
@@ -162,7 +159,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				assetInsert.setNames(inven.getNameAsset());
 				assetInsert.setAssetImg(asset.getAssetImg());
 				assetInsert.setCode(codeAsset);
-				assetInsert.setCreatedBy("4");
+				assetInsert.setCreatedBy(getIdAuth());
 				assetInsert.setInvoiceId(invoice);
 				assetInsert.setInventoryId(inven);
 
@@ -172,9 +169,9 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				trackAsset.setCodeAsset(assetInsert.getCode());
 				trackAsset.setNameActivity("New");
 				trackAsset.setDateActivity(LocalDate.now());
-				trackAsset.setUserId("2");
+				trackAsset.setUserId(getIdAuth());
 				trackAsset.setTransactionCode("BBA");
-				trackAsset.setCreatedBy("2");
+				trackAsset.setCreatedBy(getIdAuth());
 				trackAsset.setIsActive(true);
 
 				trackAssetService.saveOrUpdate(trackAsset);
@@ -205,7 +202,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 
 		statusAsset.setId(data.getStatusAssetId().getId());
 		asset.setStatusAssetId(statusAsset);
-		asset.setUpdatedBy("1");
+		asset.setUpdatedBy(getIdAuth());
 
 		begin();
 		asset = assetDao.saveOrUpdate(asset);
@@ -214,9 +211,9 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 		trackAsset.setCodeAsset(asset.getCode());
 		trackAsset.setNameActivity("Update Status Asset");
 		trackAsset.setDateActivity(LocalDate.now());
-		trackAsset.setUserId("2");
+		trackAsset.setUserId(getIdAuth());
 		trackAsset.setTransactionCode("BBA");
-		trackAsset.setCreatedBy("2");
+		trackAsset.setCreatedBy(getIdAuth());
 		trackAsset.setIsActive(true);
 
 		trackAssetService.saveOrUpdate(trackAsset);
@@ -296,12 +293,12 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	}
 
 	@Override
-	public Asset saveExcel(MultipartFile file) throws Exception {
+	@Async
+	public void saveExcel(MultipartFile file) throws Exception {
 		try {
 			Integer stock = 0;
 			int index = 0;
 			excelUtil.init("Assets", file.getInputStream());
-			Asset asset = new Asset();
 			begin();
 			for (int i = 1; i < excelUtil.getRowCountInSheet(); i++) {
 				Inventory inventory = new Inventory();
@@ -315,15 +312,12 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 					inven.setNameAsset(excelUtil.getCellData(i, 0));
 					inven.setLatestStock(stock);
 					inven.setCode(codeInsert);
-					inven.setCreatedBy("2");
-					inven.setIsActive(true);
 					inventory = inven;
 					index = 0;
 				} else {
 					stock = inventory.getStock() + stock;
 					int latest = inventory.getLatestStock() + stock;
 					inventory.setLatestStock(latest);
-					inventory.setUpdatedBy("2");
 					index = inventory.getStock();
 
 				}
@@ -335,10 +329,8 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				BigDecimal bigDecimal = new BigDecimal(excelUtil.getCellData(i, 4));
 				invoice.setTotalPrice(bigDecimal);
 				invoice.setPurchaseDate(LocalDate.now());
-				invoice.setCreatedBy("2");
-				invoice.setIsActive(true);
 
-				invoiceService.saveOrUpdate(invoice);
+				invoiceService.save(invoice);
 
 				Brand brand = brandService.findByCode(excelUtil.getCellData(i, 5));
 				AssetType assetType = assetTypeService.findByCode(excelUtil.getCellData(i, 6));
@@ -352,15 +344,17 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 
 					assetInsert.setBrandId(brand);
 					assetInsert.setCompanyId(company);
+          
 					if (excelUtil.getCellData(i, 7) != null) {
 						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
 						assetInsert.setExpiredDate(date);
 					}
+
 					assetInsert.setStatusAssetId(statusAsset);
 					assetInsert.setNames(inventory.getNameAsset());
 					assetInsert.setCode(codeAsset);
-					assetInsert.setCreatedBy("4");
+					assetInsert.setCreatedBy(getIdAuth());
 					assetInsert.setInvoiceId(invoice);
 					assetInsert.setInventoryId(inventory);
 
@@ -370,19 +364,18 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 					trackAsset.setCodeAsset(assetInsert.getCode());
 					trackAsset.setNameActivity("New");
 					trackAsset.setDateActivity(LocalDate.now());
-					trackAsset.setUserId("2");
+					trackAsset.setUserId(getIdAuth());
 					trackAsset.setTransactionCode("BBA");
-					trackAsset.setCreatedBy("2");
+					trackAsset.setCreatedBy(getIdAuth());
 					trackAsset.setIsActive(true);
 
 					trackAssetService.saveOrUpdate(trackAsset);
-					asset = assetInsert;
 				}
 
 			}
 			commit();
 
-			return asset;
+
 		} catch (Exception e) {
 			throw new RuntimeException("fail to store excel data: " + e.getMessage());
 		}
@@ -405,14 +398,15 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 		} else {
 			asset.setAssetImg(imgAsset);
 		}
+		asset.setUpdatedBy(getIdAuth());
 
-		asset.setUpdatedBy("2");
 		begin();
 		asset = assetDao.saveOrUpdate(asset);
 		commit();
 
 		return asset;
 	}
+
 
 	@Override
 	public void validationFk(String id) throws Exception {

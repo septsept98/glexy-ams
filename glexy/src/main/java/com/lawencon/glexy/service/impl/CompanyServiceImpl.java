@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.base.BaseServiceImpl;
-import com.lawencon.glexy.dao.AssetDao;
+
 import com.lawencon.glexy.dao.CompanyDao;
 import com.lawencon.glexy.dao.EmployeeDao;
 import com.lawencon.glexy.dao.LocationDao;
@@ -27,7 +26,7 @@ import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.FileService;
 
 @Service
-public class CompanyServiceImpl extends BaseServiceImpl implements CompanyService {
+public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyService {
 
 	@Autowired
 	private CompanyDao companyDao;
@@ -47,23 +46,30 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	@Override
 	public Company save(Company data, MultipartFile files) throws Exception {
 		try {
+
 			validationSave(data);
 			Company company = data;
 			company.setCreatedBy("3");
 			company.setVersion(data.getVersion());
+
 			
+			data.setCreatedBy(getIdAuth());
+
 			File file = new File();
 			file.setFiles(files.getBytes());
 			String ext = files.getOriginalFilename();
-			ext = ext.substring(ext.lastIndexOf(".")+1, ext.length());
+			ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
 			file.setExtension(ext);
 			begin();
+
 			file = fileService.saveOrUpdate(file);
-			
+
 			data.setCompanyImg(file);
-			
+
 			data = companyDao.saveOrUpdate(data);
+
 			commit();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
@@ -75,13 +81,16 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	public Company update(Company data) throws Exception {
 		validationUpdate(data);
 		Company company = findById(data.getId());
-		company.setNames(data.getNames());
-		company.setUpdatedBy("1");
-		
+		data.setNames(company.getNames());
+		data.setCreatedBy(company.getCreatedBy());
+		data.setCreatedAt(company.getCreatedAt());
+		data.setUpdatedBy(getIdAuth());
+		data.setVersion(data.getVersion());
+
 		begin();
-		company = companyDao.saveOrUpdate(company);
+		data = companyDao.saveOrUpdate(data);
 		commit();
-		return company;
+		return data;
 	}
 
 	@Override
@@ -120,6 +129,7 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	public Company findByCode(String Code) throws Exception {
 		return companyDao.findByCode(Code);
 	}
+
 
 	@Override
 	public void validationFk(String id) throws Exception {
@@ -160,7 +170,6 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 		}
 		
 	}
-	
-	
+
 
 }

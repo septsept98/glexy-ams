@@ -7,8 +7,6 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
-import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.BrandDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Asset;
@@ -17,7 +15,7 @@ import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.service.BrandService;
 
 @Service
-public class BrandServiceImpl extends BaseServiceImpl implements BrandService {
+public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandService {
 
 	@Autowired
 	private BrandDao brandDao;
@@ -34,11 +32,13 @@ public class BrandServiceImpl extends BaseServiceImpl implements BrandService {
 				data.setCode(brand.getCode());
 				data.setCreatedAt(brand.getCreatedAt());
 				data.setCreatedBy(brand.getCreatedBy());
-				data.setUpdatedBy("2");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(brand.getVersion());
 			} else {
+				data.setCreatedBy(getIdAuth());
+
 				validationSave(data);
-				data.setCreatedBy("3");
+
 			}
 
 			begin();

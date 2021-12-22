@@ -13,4 +13,6 @@ public interface InvoiceDao {
 	List<Invoice> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
+	
+	Invoice findByCode(String code) throws Exception;
 }
