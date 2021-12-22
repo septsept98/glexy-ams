@@ -5,6 +5,7 @@ import java.util.List;
 import com.lawencon.glexy.dto.transaction.InsertReqDataAssetTransactionDto;
 import com.lawencon.glexy.dto.transaction.InsertReqTransactionDto;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.Transactions;
 
 public interface TransactionService {
@@ -16,5 +17,7 @@ public interface TransactionService {
 	List<Asset> findAssetDetail(InsertReqDataAssetTransactionDto data) throws Exception;
 
 	InsertReqTransactionDto saveOrUpdate(InsertReqTransactionDto data) throws Exception;
+	
+	void validationSave(Transactions data) throws Exception;
 
 }

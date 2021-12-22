@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+
+import com.lawencon.glexy.dto.InsertResDto;
+
 import com.lawencon.glexy.model.Asset;
 
 public interface AssetService {
@@ -35,5 +38,10 @@ public interface AssetService {
 	void saveExcel(MultipartFile file) throws Exception;
 	
 	Asset updateImage(String id, MultipartFile assetImg) throws Exception;
-
+	
+	void validationFk(String id)throws Exception;
+	
+	void validationSave(Asset data) throws Exception;
+	
+	void validationUpdate(Asset data) throws Exception;
 }

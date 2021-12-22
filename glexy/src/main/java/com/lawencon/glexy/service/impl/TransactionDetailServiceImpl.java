@@ -15,9 +15,11 @@ import com.lawencon.glexy.constant.StatusAssetEnum;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.email.EmailHandler;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.helper.EmailHelper;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.Inventory;
+import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.InventoryService;
@@ -125,7 +127,6 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Override
 	@Async
-	@Scheduled(fixedDelay = 60000)
 	public List<TransactionDetail> expDurationAssign() throws Exception {
 		List<TransactionDetail> listResult = transactionDetailDao.expDurationAssign();
 
@@ -140,8 +141,8 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 					email.setValueName(listResult.get(i).getAssetId().getNames());
 					email.setExpiredDate(listResult.get(i).getDurationDate());
 					
-					emailHandler.sendSimpleMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);
-					emailHandler.sendSimpleMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);
+					emailHandler.sendExpiredMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);  
+					emailHandler.sendExpiredMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);;
 					TransactionDetail transactionDetail = listResult.get(i);
 					transactionDetail.setUpdatedBy("1");
 					transactionDetail.setStatusEmail(true);
@@ -155,5 +156,15 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 		return null;
 	}
+
+	@Override
+	public void validationSave(TransactionDetail data) throws Exception {
+		if(data.getAssetId() == null || data.getIsActive() == null || data.getStatusAssetCheckoutId() == null || data.getStatusTrCheckinId() == null || data.getTransactionId() == null ) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	
 
 }

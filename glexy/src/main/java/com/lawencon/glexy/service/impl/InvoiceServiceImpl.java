@@ -8,8 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.glexy.dao.InvoiceDao;
 import com.lawencon.glexy.model.File;
+import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.glexy.dao.AssetDao;
+import com.lawencon.glexy.dao.InvoiceDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
+import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.Inventory;
+
 import com.lawencon.glexy.model.Invoice;
 import com.lawencon.glexy.service.FileService;
 import com.lawencon.glexy.service.InvoiceService;
@@ -24,16 +30,21 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 	
 	@Override
 	public Invoice save(Invoice data) throws Exception {
-		
+
 		try {
-			if(data.getId() != null) {
+			if (data.getId() != null) {
+				validationUpdate(data);
 				Invoice invoice = findById(data.getId());
 				data.setCreatedAt(invoice.getCreatedAt());
 				data.setCreatedBy(invoice.getCreatedBy());
 				data.setVersion(invoice.getVersion());
 			} else {
+
 				data.setCreatedBy(getIdAuth());		
 				data.setIsActive(true);
+
+				validationSave(data);
+
 			}
 			data = invoiceDao.saveOrUpdate(data);
 		} catch (Exception e) {
@@ -41,7 +52,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 			rollback();
 		}
 		return data;
-		
+
 	}
 	
 	@Override
@@ -94,6 +105,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = invoiceDao.removeById(id);
 			commit();
@@ -103,7 +115,40 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 		}
 		return result;
 	}
-	
-	
+
+	@Override
+	public void validationFk(String id) throws Exception {
+
+		List<Asset> dataAsset = assetDao.findByInventoryId(id);
+		if (dataAsset != null) {
+
+			throw new ValidationGlexyException("Invoice in Use");
+		}
+
+	}
+
+	@Override
+	public void validationSave(Invoice data) throws Exception {
+		if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+
+	}
+
+	@Override
+	public void validationUpdate(Invoice data) throws Exception {
+		if (data.getId() != null) {
+			Invoice invoice = findById(data.getId());
+			if (invoice == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}
+		if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+
+	}
 
 }

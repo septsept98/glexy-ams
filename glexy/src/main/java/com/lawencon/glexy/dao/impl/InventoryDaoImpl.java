@@ -80,4 +80,6 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 
 	}
 
+	
+
 }

@@ -18,4 +18,6 @@ public interface InventoryDao {
 	
 	boolean removeById(String id) throws Exception;
 	
+	
+	
 }

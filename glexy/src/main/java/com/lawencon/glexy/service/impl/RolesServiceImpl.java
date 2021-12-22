@@ -5,11 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dao.RolesDao;
+import com.lawencon.glexy.dao.UsersDao;
+import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
+import com.lawencon.glexy.exception.ValidationGlexyException;
+import com.lawencon.glexy.model.PermissionDetail;
+import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
+import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.PermissionDetailService;
 import com.lawencon.glexy.service.RolesService;
+import com.lawencon.glexy.service.UsersService;
 
 @Service
 public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesService {
@@ -19,6 +27,9 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 	@Autowired
 	private PermissionDetailService permissionDetailService;
+	
+	@Autowired
+	private UsersDao usersDao;
 
 	@Override
 	public List<Roles> findAll() throws Exception {
@@ -37,12 +48,14 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 		try {
 			if (data.getRoles().getId() != null) {
+				validationUpdate(null);
 				Roles roles = findById(data.getRoles().getId());
 				roles.setNameRole(data.getRoles().getNameRole());
 				roles.setUpdatedBy(getIdAuth());
 				data.setRoles(roles);
 
 			} else {
+				validationSave(null);
 				Roles roles = new Roles();
 				roles.setNameRole(data.getRoles().getNameRole());
 				roles.setCode(data.getRoles().getCode());
@@ -73,9 +86,12 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 	public boolean deleteById(String id) throws Exception {
 		boolean result = false;
 		try {
+
+			validationFk(id);
 			begin();
 			result = rolesDao.deleteById(id);
 			commit();
+
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,6 +99,45 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 			throw new Exception(e);
 		}
 
+	}
+
+	@Override
+	public void validationFk(String id) throws Exception {
+
+		List<PermissionDetail> dataPermissionDetail = permissionDetailService.findByRoleId(id);
+		List<Users> dataUsers  = usersDao.findByRolesId(id);
+		if (dataPermissionDetail != null || dataUsers != null) {
+
+			throw new ValidationGlexyException("Roles in Use");
+		}
+
+	}
+
+	@Override
+	public void validationSave(Roles data) throws Exception {
+		if(data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+			
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Roles data) throws Exception {
+		if (data.getId() != null) {
+			Roles role = findById(data.getId());
+			if (role == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+			
+		}
+		
 	}
 
 }

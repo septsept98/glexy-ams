@@ -16,5 +16,11 @@ public interface TransactionDetailDao {
 	TransactionDetail saveOrUpdate(TransactionDetail data) throws Exception;
 	
 	List<TransactionDetail> expDurationAssign() throws Exception;
+	
+	List<TransactionDetail> findByAssetId(String id) throws Exception;
+	
+	List<TransactionDetail> findByStatusAssetId(String id) throws Exception;
+	
+	List<TransactionDetail> findByStatusTransactionId(String id) throws Exception;
 
 }

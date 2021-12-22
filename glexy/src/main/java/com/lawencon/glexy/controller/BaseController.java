@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 
 public class BaseController {
 	
@@ -66,5 +68,23 @@ public class BaseController {
 				.registerModule(javaTimeModule)
 				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 				.readValue(src, clazz);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> exception(Exception e){
+		Map<String, Object> mapError = new HashMap<String, Object>();
+		
+		mapError.put("msg", NestedExceptionUtils.getRootCause(e).getMessage());
+		
+		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(ValidationGlexyException.class)
+	public ResponseEntity<?> exception(ValidationGlexyException e){
+		Map<String, Object> mapError = new HashMap<String, Object>();
+		
+		mapError.put("msg", NestedExceptionUtils.getRootCause(e).getMessage());
+		
+		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}
 }

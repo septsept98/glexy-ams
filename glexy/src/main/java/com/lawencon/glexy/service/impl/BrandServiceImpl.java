@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.glexy.dao.BrandDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
+import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.service.BrandService;
 
@@ -17,10 +20,14 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 	@Autowired
 	private BrandDao brandDao;
 	
+	@Autowired
+	private AssetDao assetDao;
+
 	@Override
 	public Brand saveOrUpdate(Brand data) throws Exception {
 		try {
-			if(data.getId() != null) {
+			if (data.getId() != null) {
+				validationUpdate(data);
 				Brand brand = findById(data.getId());
 				data.setCode(brand.getCode());
 				data.setCreatedAt(brand.getCreatedAt());
@@ -29,8 +36,11 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 				data.setVersion(brand.getVersion());
 			} else {
 				data.setCreatedBy(getIdAuth());
+
+				validationSave(data);
+
 			}
-			
+
 			begin();
 			data = brandDao.saveOrUpdate(data);
 			commit();
@@ -62,6 +72,7 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = brandDao.removeById(id);
 			commit();
@@ -76,10 +87,42 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 	public Brand findByCode(String code) throws Exception {
 		return brandDao.findByCode(code);
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		
+		List<Asset> dataAsset = assetDao.findByBrandId(id);
+		
+		if (dataAsset != null) {
+
+			throw new ValidationGlexyException("Brand Type in Use");
+		}
+
+	}
+
+	@Override
+	public void validationSave(Brand data) throws Exception {
+		if(data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Brand data) throws Exception {
+		if (data.getId() != null) {
+			Brand brand = findById(data.getId());
+			if (brand == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
 
 }

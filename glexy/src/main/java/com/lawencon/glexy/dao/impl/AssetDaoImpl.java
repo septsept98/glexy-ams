@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.AssetType;
+import com.lawencon.glexy.model.Company;
+import com.lawencon.glexy.model.Employee;
+import com.lawencon.glexy.model.StatusAsset;
 
 @Repository
 public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
@@ -139,6 +143,94 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 			listResult.add(asset);
 		});
 		return listResult;
+	}
+
+	@Override
+	public List<Asset> findByAssetTypeId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT asset_type_id FROM assets ");
+		sql.append("WHERE asset_type_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<Asset> resultAsset = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			Asset data = new Asset();
+
+			AssetType assetType = new AssetType();
+			assetType.setId(rs.toString());
+			data.setAssetTypeId(assetType);
+			resultAsset.add(data);
+		});
+
+		return resultAsset;
+	}
+
+	@Override
+	public List<Asset> findByInventoryId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT asset_type_id FROM assets ");
+		sql.append("WHERE inventory_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<Asset> resultAsset = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			Asset data = new Asset();
+
+			AssetType assetType = new AssetType();
+			assetType.setId(rs.toString());
+			data.setAssetTypeId(assetType);
+			resultAsset.add(data);
+		});
+
+		return resultAsset;
+	}
+
+	@Override
+	public List<Asset> findByInvoiceId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT asset_type_id FROM assets ");
+		sql.append("WHERE invoice_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<Asset> resultAsset = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			Asset data = new Asset();
+
+			AssetType assetType = new AssetType();
+			assetType.setId(rs.toString());
+			data.setAssetTypeId(assetType);
+			resultAsset.add(data);
+		});
+
+		return resultAsset;
+	}
+
+	@Override
+	public List<Asset> findByStatusAssetId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT status_asset_id FROM assets ");
+		sql.append("WHERE status_asset_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<Asset> resultAsset = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			Asset data = new Asset();
+
+			StatusAsset statusAsset = new StatusAsset();
+			statusAsset.setId(rs.toString());
+			data.setStatusAssetId(statusAsset);
+			resultAsset.add(data);
+		});
+
+		return resultAsset;
 	}
 
 }

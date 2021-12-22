@@ -16,4 +16,6 @@ public interface EmployeeDao {
 	
 	boolean deleteById(String id) throws Exception;
 	
+	List<Employee> findByCompanyId(String id) throws Exception;
+	
 }

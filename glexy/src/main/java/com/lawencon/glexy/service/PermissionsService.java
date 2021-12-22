@@ -2,6 +2,7 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Permissions;
 
 public interface PermissionsService {
@@ -13,5 +14,10 @@ public interface PermissionsService {
 	Permissions saveOrUpdate(Permissions data) throws Exception;
 	
 	boolean deleteById(String id) throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Permissions data) throws Exception;
 
+	void validationUpdate(Permissions data) throws Exception;
 }

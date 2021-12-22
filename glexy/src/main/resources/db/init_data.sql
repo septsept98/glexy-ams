@@ -101,8 +101,8 @@ INSERT INTO transactions(code_transaction,checkout_date,quantity,location_id, us
 
 
 INSERT INTO transaction_details(transaction_id,duration_date,asset_id,status_asset_checkout_id,"version",created_by,created_at,is_active,id) VALUES
-	('1',now(),'1','1',0, 1, now(), true,'1'),
-	('1',now(),'1','1',0, 1, now(), true,'2');
+	('1','2021-12-23','1','1',0, 1, now(), true,'1'),
+	('1','2021-12-28','1','1',0, 1, now(), true,'2');
 
 
 INSERT INTO track_assets (code_asset,name_activity,date_activity,user_id,transaction_code,"version",created_by,created_at,is_active,id) VALUES
