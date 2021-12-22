@@ -15,4 +15,10 @@ public interface StatusTransactionService {
 	List<StatusTransaction> findAll() throws Exception;
 	
 	String generateCodeSTR() throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(StatusTransaction data) throws Exception;
+
+	void validationUpdate(StatusTransaction data) throws Exception;
 }

@@ -15,5 +15,8 @@ public interface PermissionsService {
 	boolean deleteById(String id) throws Exception;
 	
 	void validationFk(String id) throws Exception;
+	
+	void validationSave(Permissions data) throws Exception;
 
+	void validationUpdate(Permissions data) throws Exception;
 }

@@ -58,6 +58,8 @@ public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {
 		}
 		return company;
 	}
+
+	
 	
 	
 	

@@ -30,4 +30,8 @@ public interface UsersService extends UserDetailsService {
 	List<Users> findByRolesId(String id) throws Exception;
 	
 	void validationFk(String id) throws Exception;
+	
+	void validationSave(Users data) throws Exception;
+
+	void validationUpdate(Users data) throws Exception;
 }

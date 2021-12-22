@@ -21,5 +21,9 @@ public interface CompanyService {
 	boolean removeById(String id) throws Exception;
 	
 	void validationFk(String id) throws Exception;
+	
+	void validationSave(Company data) throws Exception;
+
+	void validationUpdate(Company data) throws Exception;
 
 }

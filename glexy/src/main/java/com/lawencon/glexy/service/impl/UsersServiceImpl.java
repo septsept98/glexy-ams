@@ -75,11 +75,11 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	@Override
 	public Users save(Users data, MultipartFile file) throws Exception {
 		try {
-
+			validationSave(data);
 			String pass = generatePassword();
 			System.out.println(pass);
 			data.setPass(bCryptPasswordEncoder.encode(pass));
-			data.setCreatedBy(getIdAuth());
+			data.setCreatedBy("1");
 			Roles roles = rolesService.findById(data.getRolesId().getId());
 			data.setRolesId(roles);
 			begin();
@@ -148,7 +148,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	public Users update(Users data, MultipartFile file) throws Exception {
 
 		try {
-
+			validationUpdate(data);
 			Users users = usersDao.findById(data.getId());
 			users.setUpdatedBy(getIdAuth());
 			users.setVersion(data.getVersion());
@@ -158,7 +158,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			begin();
 			Employee employee = employeeService.saveOrUpdate(data.getEmployeeId());
 			if (employee == null) {
-				throw new ValidationGlexyException("Company Not Found");
+				throw new ValidationGlexyException("Employee Not Found");
 			}
 			Company company = companyService.findById(data.getEmployeeId().getCompanyId().getId());
 			if (company == null) {
@@ -256,6 +256,29 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			throw new ValidationGlexyException("User in Use");
 		}
 
+	}
+
+	@Override
+	public void validationSave(Users data) throws Exception {
+		if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive()) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Users data) throws Exception {
+		if (data.getId() != null) {
+			Users user = findById(data.getId());
+			if (user == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive()) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
 	}
 
 }

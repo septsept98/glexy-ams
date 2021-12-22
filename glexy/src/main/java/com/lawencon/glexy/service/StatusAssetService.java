@@ -17,4 +17,10 @@ public interface StatusAssetService {
 	List<StatusAsset> findAll() throws Exception;
 	
 	String generateCodeSA() throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(StatusAsset data) throws Exception;
+
+	void validationUpdate(StatusAsset data) throws Exception;
 }

@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.StatusTransactionDao;
+import com.lawencon.glexy.dao.TransactionDetailDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.StatusTransaction;
+import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.StatusAssetService;
 import com.lawencon.glexy.service.StatusTransactionService;
 
@@ -22,6 +25,9 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 
 	@Autowired
 	private StatusAssetService statusAssetService;
+	
+	@Autowired
+	private TransactionDetailDao transactionDetailDao;
 
 	@Override
 	public List<StatusTransaction> findAll() throws Exception {
@@ -32,6 +38,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 	public StatusTransaction saveOrUpdate(StatusTransaction data) throws Exception {
 		try {
 			if (data.getId() != null) {
+				validationUpdate(data);
 				StatusTransaction statusTr = findById(data.getId());
 				data.setCodeStatusTr(statusTr.getCodeStatusTr());
 				data.setCreatedAt(statusTr.getCreatedAt());
@@ -39,6 +46,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 				data.setUpdatedBy("1");
 				data.setVersion(statusTr.getVersion());
 			} else {
+				validationSave(data);
 				data.setCreatedBy("3");
 				data.setCodeStatusTr(generateCodeSTR());
 			}
@@ -63,6 +71,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = statusTransactionDao.removeById(id);
 			commit();
@@ -105,6 +114,41 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 		}
 		
 		return codeSTR ;
+	}
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		
+		List<TransactionDetail> dataTranscation = transactionDetailDao.findByStatusTransactionId(id);
+
+		if (dataTranscation != null) {
+
+			throw new ValidationGlexyException("Status Transaction in Use");
+		}
+		
+	}
+
+	@Override
+	public void validationSave(StatusTransaction data) throws Exception {
+		if(data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(StatusTransaction data) throws Exception {
+		if (data.getId() != null) {
+			StatusTransaction statusTransaction = findById(data.getId());
+			if (statusTransaction == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
 	}
 
 }

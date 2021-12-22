@@ -16,4 +16,10 @@ public interface BrandService {
 	
 	boolean removeById(String id) throws Exception;
 	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Brand data) throws Exception;
+
+	void validationUpdate(Brand data) throws Exception;
+	
 }

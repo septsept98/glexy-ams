@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.StatusAsset;
+import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TransactionDetail;
 
 @Repository
@@ -118,6 +120,49 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 			listResult.add(transactionDetail);
 		});
 		return listResult;
+	}
+	
+	public List<TransactionDetail> findByStatusAssetId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT status_asset_checkout_id FROM transaction_details ");
+		sql.append("WHERE status_asset_checkout_id= :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<TransactionDetail> resultTransactionDetail = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			TransactionDetail data = new TransactionDetail();
+
+			StatusAsset statusAsset = new StatusAsset();
+			statusAsset.setId(rs.toString());
+			data.setStatusAssetCheckoutId(statusAsset);
+			resultTransactionDetail.add(data);
+		});
+
+		return resultTransactionDetail;
+	}
+
+	@Override
+	public List<TransactionDetail> findByStatusTransactionId(String id) throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT status_tr_checkin_id FROM transaction_details ");
+		sql.append("WHERE status_tr_checkin_id = :id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		List<TransactionDetail> resultTransactionDetail = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			TransactionDetail data = new TransactionDetail();
+
+			StatusTransaction statusTransaction = new StatusTransaction();
+			statusTransaction.setId(rs.toString());
+			data.setStatusTrCheckinId(statusTransaction);
+			resultTransactionDetail.add(data);
+		});
+
+		return resultTransactionDetail;
 	}
 	
 }

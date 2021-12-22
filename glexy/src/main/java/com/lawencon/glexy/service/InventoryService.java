@@ -20,4 +20,10 @@ public interface InventoryService {
 	
 	String generateCode(int index) throws Exception;
 	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Inventory data) throws Exception;
+
+	void validationUpdate(Inventory data) throws Exception;
+	
 }

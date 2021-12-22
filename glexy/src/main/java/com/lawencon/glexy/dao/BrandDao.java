@@ -16,5 +16,4 @@ public interface BrandDao {
 	
 	boolean removeById(String id) throws Exception;
 	
-
 }

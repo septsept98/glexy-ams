@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.UsersDao;
-import com.lawencon.glexy.model.PermissionDetail;
-import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.model.Users;
 

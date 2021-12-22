@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
@@ -26,11 +28,12 @@ import com.lawencon.glexy.service.InvoiceService;
 
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("invoices")
-public class InvoiceController {
+public class InvoiceController extends BaseController{
 	
 	@Autowired
 	private InvoiceService invoiceService;
@@ -53,10 +56,10 @@ public class InvoiceController {
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> insert(@RequestBody Invoice data) throws Exception {
-		data = invoiceService.saveOrUpdate(data);
+		Invoice invoice = invoiceService.save(data);
 		
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(data.getId());
+		id.setId(invoice.getId());
 		
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
@@ -67,11 +70,11 @@ public class InvoiceController {
 
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
-	public ResponseEntity<?> update(@RequestBody Invoice data) throws Exception {
-		data = invoiceService.saveOrUpdate(data);
+	public ResponseEntity<?> update(@RequestPart String code, @RequestPart MultipartFile file) throws Exception {
+		Invoice invoice = invoiceService.update(new ObjectMapper().readValue(code, Invoice.class), file);
 		
 		UpdateResDataDto ver = new UpdateResDataDto();
-		ver.setVersion(data.getVersion());
+		ver.setVersion(invoice.getVersion());
 		
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);

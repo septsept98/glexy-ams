@@ -1,7 +1,6 @@
 package com.lawencon.glexy.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.security.jwt.JwtComponent;
 import com.lawencon.glexy.service.UsersService;
 
-@Profile("test")
 @EnableWebSecurity
 public class AppSecurity extends WebSecurityConfigurerAdapter {
 	
@@ -46,7 +44,7 @@ public class AppSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.POST ,"/users" )
+		web.ignoring()
 		.antMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**");
 	}
 	

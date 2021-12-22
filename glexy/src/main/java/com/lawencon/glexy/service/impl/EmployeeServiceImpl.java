@@ -11,7 +11,6 @@ import com.lawencon.glexy.dao.UsersDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
-import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;
@@ -48,6 +47,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 	public Employee saveOrUpdate(Employee data) throws Exception {
 		try {
 			if (data.getId() != null) {
+				validationUpdate(data);
 				Employee employee = findById(data.getId());
 				data.setNip(employee.getNip());
 				data.setUpdatedBy(getIdAuth());
@@ -57,7 +57,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 				data.setIsActive(employee.getIsActive());
 
 			} else {
-
+				validationSave(data);
 				data.setCreatedBy(getIdAuth());
 
 			}
@@ -102,6 +102,29 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 
 			throw new ValidationGlexyException("Employee in Use");
 		}
+	}
+
+	@Override
+	public void validationSave(Employee data) throws Exception {
+		if(data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null || data.getPhoneNumber() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Employee data) throws Exception {
+		if (data.getId() != null) {
+			Employee employee = findById(data.getId());
+			if (employee == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null || data.getPhoneNumber() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
 	}
 
 }

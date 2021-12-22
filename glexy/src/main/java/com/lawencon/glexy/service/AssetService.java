@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-
-import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.helper.ReportDataExpiredAsset;
 import com.lawencon.glexy.model.Asset;
@@ -36,7 +34,7 @@ public interface AssetService {
 	
 	boolean hasExcelFormat(MultipartFile file) throws Exception;
 	
-	Asset saveExcel(MultipartFile file) throws Exception;
+	void saveExcel(MultipartFile file) throws Exception;
 	
 	Asset updateImage(String id, MultipartFile assetImg) throws Exception;
 	
@@ -47,5 +45,9 @@ public interface AssetService {
 	byte[] pdfAssetExpired() throws Exception;
 	
 	ResDto sendEmailAssetExpiredReport() throws Exception;
+
+	void validationSave(Asset data) throws Exception;
+	
+	void validationUpdate(Asset data) throws Exception;
 
 }

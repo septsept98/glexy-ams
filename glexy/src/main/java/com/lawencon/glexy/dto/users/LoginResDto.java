@@ -1,9 +1,5 @@
 package com.lawencon.glexy.dto.users;
 
-import java.util.List;
-
-import com.lawencon.glexy.model.PermissionDetail;
-
 public class LoginResDto {
 
 	private String rolesCode;
