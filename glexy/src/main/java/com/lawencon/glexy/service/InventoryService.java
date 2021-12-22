@@ -2,6 +2,7 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.Inventory;
 
 public interface InventoryService {
@@ -19,5 +20,11 @@ public interface InventoryService {
 	boolean removeById(String id) throws Exception;
 	
 	String generateCode(int index) throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Inventory data) throws Exception;
+
+	void validationUpdate(Inventory data) throws Exception;
 	
 }

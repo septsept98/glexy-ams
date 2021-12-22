@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.AssetTypeDao;
@@ -18,26 +19,31 @@ import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.AssetTypeService;
 
 @Service
-public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeService {
+public class AssetTypeServiceImpl extends BaseGlexyServiceImpl implements AssetTypeService {
 
 	@Autowired
 	private AssetTypeDao assetTypeDao;
-	
+
 	@Autowired
-	private AssetDao assetDao; 
+	private AssetDao assetDao;
 
 	@Override
 	public AssetType saveOrUpdate(AssetType data) throws Exception {
 		try {
 			if (data.getId() != null) {
+				validationUpdate(data);
 				AssetType assetType = findById(data.getId());
 				data.setCode(assetType.getCode());
 				data.setCreatedAt(assetType.getCreatedAt());
 				data.setCreatedBy(assetType.getCreatedBy());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(assetType.getVersion());
 			} else {
-				data.setCreatedBy("3");
+
+				data.setCreatedBy(getIdAuth());
+
+				validationSave(data);
+
 			}
 
 			begin();
@@ -93,6 +99,34 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 		if (dataEmployee != null) {
 
 			throw new ValidationGlexyException("Asset Type in Use");
+		}
+
+	}
+
+	@Override
+	public void validationSave(AssetType data) throws Exception {
+		if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+
+			throw new ValidationGlexyException("Data not Complete");
+
+		}
+
+	}
+
+	@Override
+	public void validationUpdate(AssetType data) throws Exception {
+		if (data.getId() != null) {
+			AssetType assetType = findById(data.getId());
+			if (assetType == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}
+		if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+
+			throw new ValidationGlexyException("Data not Complete");
+
 		}
 
 	}

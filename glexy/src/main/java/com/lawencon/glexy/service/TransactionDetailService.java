@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.helper.ReportDataTransactionOutDate;
+import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TransactionDetail;
 
 public interface TransactionDetailService {
@@ -26,4 +27,6 @@ public interface TransactionDetailService {
 	
 	ResDto sendEmailTrxExpiredReport() throws Exception;
 	
+	void validationSave(TransactionDetail data) throws Exception;
+
 }

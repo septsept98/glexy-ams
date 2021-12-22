@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
@@ -33,7 +32,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("companies")
-public class CompanyController {
+public class CompanyController extends BaseController{
 	
 	@Autowired
 	private CompanyService companyService;
@@ -56,7 +55,7 @@ public class CompanyController {
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
-		Company company = companyService.save(new ObjectMapper().readValue(data, Company.class), file);
+		Company company = companyService.save(convertToModel(data, Company.class), file);
 		
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(company.getId());

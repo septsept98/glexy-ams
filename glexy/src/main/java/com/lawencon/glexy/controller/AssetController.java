@@ -109,10 +109,9 @@ public class AssetController extends BaseController {
 	@PostMapping("/upload")
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> uploadFile(@RequestPart MultipartFile file) throws Exception {
-		Asset asset = assetService.saveExcel(file);
+		assetService.saveExcel(file);
 		
 		InsertResDataDto id = new InsertResDataDto();
-		id.setId(asset.getId());
 
 		InsertResDto result = new InsertResDto();
 		result.setData(id);

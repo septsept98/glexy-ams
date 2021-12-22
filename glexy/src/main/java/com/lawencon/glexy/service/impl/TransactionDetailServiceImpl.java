@@ -17,11 +17,13 @@ import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.email.EmailHandler;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.helper.EmailHelper;
 import com.lawencon.glexy.helper.ReportDataTransactionOutDate;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Inventory;
+import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.Users;
@@ -135,7 +137,6 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Override
 	@Async
-
 	public List<TransactionDetail> expDurationAssign() throws Exception {
 		List<TransactionDetail> listResult = transactionDetailDao.expDurationAssign();
 
@@ -149,9 +150,10 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 					email.setEmployeeName(listResult.get(i).getTransactionId().getEmployeeId().getNameEmployee());
 					email.setValueName(listResult.get(i).getAssetId().getNames());
 					email.setExpiredDate(listResult.get(i).getDurationDate());
+					
+					emailHandler.sendExpiredMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);  
+					emailHandler.sendExpiredMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);;
 
-					emailHandler.sendSimpleMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);
-					emailHandler.sendSimpleMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);
 					TransactionDetail transactionDetail = listResult.get(i);
 					transactionDetail.setUpdatedBy("1");
 					transactionDetail.setStatusEmail(true);
@@ -228,6 +230,13 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 		resDto.setMsg("Send to Email");
 		
 		return resDto;
+	}
+  
+	public void validationSave(TransactionDetail data) throws Exception {
+		if(data.getAssetId() == null || data.getIsActive() == null || data.getStatusAssetCheckoutId() == null || data.getStatusTrCheckinId() == null || data.getTransactionId() == null ) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
 	}
 
 }

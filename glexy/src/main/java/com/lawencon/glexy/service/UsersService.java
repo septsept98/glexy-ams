@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.Users;
 
 public interface UsersService extends UserDetailsService {
@@ -30,4 +31,8 @@ public interface UsersService extends UserDetailsService {
 	List<Users> findByRolesId(String id) throws Exception;
 	
 	void validationFk(String id) throws Exception;
+	
+	void validationSave(Users data) throws Exception;
+
+	void validationUpdate(Users data) throws Exception;
 }

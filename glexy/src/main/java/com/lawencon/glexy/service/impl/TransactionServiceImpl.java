@@ -13,9 +13,11 @@ import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDao;
 import com.lawencon.glexy.dto.transaction.InsertReqDataAssetTransactionDto;
 import com.lawencon.glexy.dto.transaction.InsertReqTransactionDto;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.StatusAsset;
+import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.Transactions;
@@ -180,5 +182,15 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 			return result;
 		}
 	}
+
+	@Override
+	public void validationSave(Transactions data) throws Exception {
+		if(data.getIsActive() == null || data.getQuantity() == null || data.getUserId() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	
 
 }
