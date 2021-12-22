@@ -152,7 +152,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 					emailHandler.sendExpiredMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);  
 					emailHandler.sendExpiredMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);
-					
+          
 					TransactionDetail transactionDetail = listResult.get(i);
 					transactionDetail.setUpdatedBy("1");
 					transactionDetail.setStatusEmail(true);
@@ -230,7 +230,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 		
 		return resDto;
 	}
-
+  
 	public void validationSave(TransactionDetail data) throws Exception {
 		if(data.getAssetId() == null || data.getIsActive() == null || data.getStatusAssetCheckoutId() == null || data.getStatusTrCheckinId() == null || data.getTransactionId() == null ) {
 			throw new ValidationGlexyException("Data not Complete");

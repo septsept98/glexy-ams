@@ -121,7 +121,7 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		});
 		return listResult;
 	}
-	
+  
 	public List<TransactionDetail> findByStatusAssetId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT status_asset_checkout_id FROM transaction_details ");

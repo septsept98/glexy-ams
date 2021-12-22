@@ -185,7 +185,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		});
 		return listResult;
 	}
-	
+  
 	public List<Asset> findByInventoryId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT asset_type_id FROM assets ");
