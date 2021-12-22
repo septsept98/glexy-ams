@@ -7,13 +7,12 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.LocationDao;
 import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.service.LocationService;
 
 @Service
-public class LocationServiceImpl extends BaseServiceImpl implements LocationService {
+public class LocationServiceImpl extends BaseGlexyServiceImpl implements LocationService {
 
 	@Autowired
 	private LocationDao locationDao;
@@ -27,10 +26,10 @@ public class LocationServiceImpl extends BaseServiceImpl implements LocationServ
 				data.setCode(location.getCode());
 				data.setCreatedAt(location.getCreatedAt());
 				data.setCreatedBy(location.getCreatedBy());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(location.getVersion());
 			} else {
-				data.setCreatedBy("3");
+				data.setCreatedBy(getIdAuth());
 			}
 			
 			begin();

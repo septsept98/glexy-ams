@@ -2,11 +2,15 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.lawencon.glexy.model.Invoice;
 
 public interface InvoiceService {
 	
-	Invoice saveOrUpdate(Invoice data) throws Exception;
+	Invoice save(Invoice data) throws Exception;
+	
+	Invoice update(Invoice data, MultipartFile file) throws Exception;
 	
 	Invoice findById(String id) throws Exception;
 	

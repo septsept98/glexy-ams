@@ -7,13 +7,12 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.InventoryDao;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.service.InventoryService;
 
 @Service
-public class InventoryServiceImpl extends BaseServiceImpl implements InventoryService{
+public class InventoryServiceImpl extends BaseGlexyServiceImpl implements InventoryService{
 
 	@Autowired
 	private InventoryDao inventoryDao;
@@ -27,12 +26,13 @@ public class InventoryServiceImpl extends BaseServiceImpl implements InventorySe
 				data.setCode(inventory.getCode());
 				data.setCreatedAt(inventory.getCreatedAt());
 				data.setCreatedBy(inventory.getCreatedBy());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(inventory.getVersion());
 				data = inventoryDao.saveOrUpdate(data);
 			} else {
 				
-				data.setCreatedBy("3");
+				data.setCreatedBy(getIdAuth());
+				data.setIsActive(true);
 				data = inventoryDao.saveOrUpdate(data);
 			}
 		} catch (Exception e) {

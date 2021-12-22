@@ -7,13 +7,12 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetTypeDao;
 import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.service.AssetTypeService;
 
 @Service
-public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeService {
+public class AssetTypeServiceImpl extends BaseGlexyServiceImpl implements AssetTypeService {
 
 	@Autowired
 	private AssetTypeDao assetTypeDao;
@@ -26,10 +25,10 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 				data.setCode(assetType.getCode());
 				data.setCreatedAt(assetType.getCreatedAt());
 				data.setCreatedBy(assetType.getCreatedBy());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(assetType.getVersion());
 			} else {
-				data.setCreatedBy("3");
+				data.setCreatedBy(getIdAuth());
 			}
 			
 			begin();

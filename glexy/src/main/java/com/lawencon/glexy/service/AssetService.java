@@ -32,7 +32,7 @@ public interface AssetService {
 	
 	boolean hasExcelFormat(MultipartFile file) throws Exception;
 	
-	Asset saveExcel(MultipartFile file) throws Exception;
+	void saveExcel(MultipartFile file) throws Exception;
 	
 	Asset updateImage(String id, MultipartFile assetImg) throws Exception;
 
