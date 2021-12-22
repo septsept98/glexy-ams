@@ -40,5 +40,8 @@ public interface AssetService {
 	Asset updateImage(String id, MultipartFile assetImg) throws Exception;
 	
 	void validationFk(String id)throws Exception;
-
+	
+	void validationSave(Asset data) throws Exception;
+	
+	void validationUpdate(Asset data) throws Exception;
 }

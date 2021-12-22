@@ -40,6 +40,7 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 	
 		try {
 			if (data.getId() != null) {
+				validationUpdate(data);
 				Permissions permissions = findById(data.getId());
 				data.setCode(permissions.getCode()); 
 				data.setCreatedAt(permissions.getCreatedAt());
@@ -48,6 +49,7 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 				data.setVersion(permissions.getVersion());
 				data.setIsActive(permissions.getIsActive());
 			}else {
+				validationSave(data);
 				data.setUpdatedBy(getIdAuth());
 			}
 			begin();
@@ -85,6 +87,31 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 		if (dataPermissionDetail != null) {
 
 			throw new ValidationGlexyException("Permission in Use");
+		}
+		
+	}
+
+	@Override
+	public void validationSave(Permissions data) throws Exception {
+		if(data.getCode() == null || data.getNamePermission() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Permissions data) throws Exception {
+		if (data.getId() != null) {
+			Permissions permission = findById(data.getId());
+			if (permission == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getCode() == null || data.getNamePermission() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
 		}
 		
 	}

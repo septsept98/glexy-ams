@@ -2,6 +2,7 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.model.StatusAsset;
 
 public interface StatusAssetService {
@@ -17,4 +18,10 @@ public interface StatusAssetService {
 	List<StatusAsset> findAll() throws Exception;
 	
 	String generateCodeSA() throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(StatusAsset data) throws Exception;
+
+	void validationUpdate(StatusAsset data) throws Exception;
 }

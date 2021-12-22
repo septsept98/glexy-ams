@@ -2,6 +2,7 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
+import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.StatusTransaction;
 
 public interface StatusTransactionService {
@@ -15,4 +16,10 @@ public interface StatusTransactionService {
 	List<StatusTransaction> findAll() throws Exception;
 	
 	String generateCodeSTR() throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(StatusTransaction data) throws Exception;
+
+	void validationUpdate(StatusTransaction data) throws Exception;
 }

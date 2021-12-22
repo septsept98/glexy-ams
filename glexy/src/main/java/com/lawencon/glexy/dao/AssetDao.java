@@ -24,5 +24,11 @@ public interface AssetDao {
 	
 	List<Asset> findAllGeneralAsset() throws Exception;
 	
-	List<Asset> findByAssetTypeId(String Id) throws Exception;
+	List<Asset> findByAssetTypeId(String id) throws Exception;
+	
+	List<Asset> findByInventoryId(String id) throws Exception;
+	
+	List<Asset> findByInvoiceId(String id) throws Exception;
+	
+	List<Asset> findByStatusAssetId(String id) throws Exception;
 }

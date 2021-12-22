@@ -58,6 +58,8 @@ public class BrandDaoImpl extends BaseDaoImpl<Brand> implements BrandDao{
 		}
 		return brand;
 	}
+
+	
 	
 	
 	

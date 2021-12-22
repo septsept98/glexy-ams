@@ -14,5 +14,7 @@ public interface StatusTransactionDao {
 	StatusTransaction saveOrUpdate(StatusTransaction data) throws Exception;
 
 	boolean removeById(String id) throws Exception;
+	
+	List<StatusTransaction> findByStatusAssetId(String id)throws Exception;
 
 }

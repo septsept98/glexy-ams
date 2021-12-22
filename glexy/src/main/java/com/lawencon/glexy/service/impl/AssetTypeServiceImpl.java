@@ -22,14 +22,15 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 
 	@Autowired
 	private AssetTypeDao assetTypeDao;
-	
+
 	@Autowired
-	private AssetDao assetDao; 
+	private AssetDao assetDao;
 
 	@Override
 	public AssetType saveOrUpdate(AssetType data) throws Exception {
 		try {
 			if (data.getId() != null) {
+				validationUpdate(data);
 				AssetType assetType = findById(data.getId());
 				data.setCode(assetType.getCode());
 				data.setCreatedAt(assetType.getCreatedAt());
@@ -37,6 +38,7 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 				data.setUpdatedBy("1");
 				data.setVersion(assetType.getVersion());
 			} else {
+				validationSave(data);
 				data.setCreatedBy("3");
 			}
 
@@ -93,6 +95,34 @@ public class AssetTypeServiceImpl extends BaseServiceImpl implements AssetTypeSe
 		if (dataEmployee != null) {
 
 			throw new ValidationGlexyException("Asset Type in Use");
+		}
+
+	}
+
+	@Override
+	public void validationSave(AssetType data) throws Exception {
+		if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+
+			throw new ValidationGlexyException("Data not Complete");
+
+		}
+
+	}
+
+	@Override
+	public void validationUpdate(AssetType data) throws Exception {
+		if (data.getId() != null) {
+			AssetType assetType = findById(data.getId());
+			if (assetType == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}
+		if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+
+			throw new ValidationGlexyException("Data not Complete");
+
 		}
 
 	}
