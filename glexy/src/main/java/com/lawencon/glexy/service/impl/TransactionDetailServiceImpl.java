@@ -2,28 +2,34 @@ package com.lawencon.glexy.service.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.constant.StatusAssetEnum;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.email.EmailHandler;
 import com.lawencon.glexy.helper.EmailHelper;
+import com.lawencon.glexy.helper.ReportDataTransactionOutDate;
 import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
+import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.InventoryService;
 import com.lawencon.glexy.service.TrackAssetService;
 import com.lawencon.glexy.service.TransactionDetailService;
+import com.lawencon.glexy.service.UsersService;
+import com.lawencon.util.JasperUtil;
 
 @Service
 public class TransactionDetailServiceImpl extends BaseServiceImpl implements TransactionDetailService {
@@ -38,8 +44,11 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 	private TrackAssetService trackAssetService;
 
 	@Autowired
+	private UsersService usersService;
+
+	@Autowired
 	private InventoryService inventoryService;
-	
+
 	@Autowired
 	private EmailHandler emailHandler;
 
@@ -126,7 +135,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Override
 	@Async
-	
+
 	public List<TransactionDetail> expDurationAssign() throws Exception {
 		List<TransactionDetail> listResult = transactionDetailDao.expDurationAssign();
 
@@ -140,13 +149,13 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 					email.setEmployeeName(listResult.get(i).getTransactionId().getEmployeeId().getNameEmployee());
 					email.setValueName(listResult.get(i).getAssetId().getNames());
 					email.setExpiredDate(listResult.get(i).getDurationDate());
-					
+
 					emailHandler.sendSimpleMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);
 					emailHandler.sendSimpleMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);
 					TransactionDetail transactionDetail = listResult.get(i);
 					transactionDetail.setUpdatedBy("1");
 					transactionDetail.setStatusEmail(true);
-					
+
 					begin();
 					transactionDetailDao.saveOrUpdate(transactionDetail);
 					commit();
@@ -155,6 +164,70 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<ReportDataTransactionOutDate> reportAllDataOutDate() throws Exception {
+		List<ReportDataTransactionOutDate> listResult = new ArrayList<>();
+		List<TransactionDetail> listTrxDetail = findAllOutDate();
+
+		for (int i = 0; i < listTrxDetail.size(); i++) {
+			TransactionDetail detail = listTrxDetail.get(i);
+			ReportDataTransactionOutDate dataTrxOutDate = new ReportDataTransactionOutDate();
+			if (detail.getTransactionId().getEmployeeId() != null) {
+				dataTrxOutDate.setCodeTrx(detail.getTransactionId().getCodeTransaction());
+				dataTrxOutDate.setEmployeeName(detail.getTransactionId().getEmployeeId().getNameEmployee());
+				dataTrxOutDate.setNip(detail.getTransactionId().getEmployeeId().getNip());
+				dataTrxOutDate.setCodeAsset(detail.getAssetId().getCode());
+				dataTrxOutDate.setNameAsset(detail.getAssetId().getNames());
+				dataTrxOutDate.setDueDate(detail.getDurationDate());
+				dataTrxOutDate.setCheckinDate(detail.getDateCheckin());
+
+				listResult.add(dataTrxOutDate);
+			}
+		}
+
+		return listResult;
+	}
+
+	@Override
+	public byte[] pdfTransactionOutDate() throws Exception {
+		Users users = usersService.findById("1");
+		Company company = users.getEmployeeId().getCompanyId();
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("company", company.getNames());
+		map.put("address", company.getAddress());
+		map.put("website", company.getWebsite());
+		map.put("telp", company.getPhoneNumber());
+		map.put("fax", company.getFax());
+		map.put("description", company.getDescription());
+		map.put("logo", company.getId());
+		map.put("title", "TRANSACTION OUT of DATE");
+		
+		byte[] data = JasperUtil.responseToByteArray(reportAllDataOutDate(), "trx-outdate", map);
+
+		return data;
+	}
+
+	@Override
+	public List<TransactionDetail> findAllOutDate() throws Exception {
+		return transactionDetailDao.findAllOutDate();
+	}
+
+	@Override
+	public ResDto sendEmailTrxExpiredReport() throws Exception {
+		byte[] data = pdfTransactionOutDate();
+		
+		EmailHelper emailHelper = new EmailHelper();
+		emailHelper.setAttach(data);
+		emailHelper.setFileName("trx-outdate.pdf");
+		
+		emailHandler.sendSimpleMessage("septianardi053@gmail.com", "Transaction Expired Report", "Expired Transaction", emailHelper);
+		
+		ResDto resDto = new ResDto();
+		resDto.setMsg("Send to Email");
+		
+		return resDto;
 	}
 
 }

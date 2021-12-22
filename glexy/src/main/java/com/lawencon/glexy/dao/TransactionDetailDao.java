@@ -9,6 +9,8 @@ public interface TransactionDetailDao {
 
 	List<TransactionDetail> findAll() throws Exception;
 
+	List<TransactionDetail> findAllOutDate() throws Exception;
+
 	TransactionDetail findById(String id) throws Exception;
 	
 	List<TransactionDetail> findByTr(String id) throws Exception;

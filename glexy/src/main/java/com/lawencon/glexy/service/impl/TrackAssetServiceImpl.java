@@ -1,5 +1,6 @@
 package com.lawencon.glexy.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -7,16 +8,28 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.TrackAssetDao;
+import com.lawencon.glexy.dto.ResDto;
+import com.lawencon.glexy.email.EmailHandler;
+import com.lawencon.glexy.helper.EmailHelper;
+import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.TrackAsset;
+import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.TrackAssetService;
+import com.lawencon.glexy.service.UsersService;
+import com.lawencon.util.JasperUtil;
 
 @Service
-public class TrackAssetServiceImpl extends BaseServiceImpl implements TrackAssetService {
+public class TrackAssetServiceImpl extends BaseGlexyServiceImpl implements TrackAssetService {
 	
 	@Autowired
 	private TrackAssetDao trackAssetDao;
+	
+	@Autowired
+	private UsersService usersService;
+	
+	@Autowired
+	private EmailHandler emailHandler;
 
 	@Override
 	public List<TrackAsset> findAll() throws Exception {
@@ -57,6 +70,41 @@ public class TrackAssetServiceImpl extends BaseServiceImpl implements TrackAsset
 	@Override
 	public List<TrackAsset> findByAsset(String assetCode) throws Exception {
 		return trackAssetDao.findByAsset(assetCode);
+	}
+
+	@Override
+	public byte[] pdfTrackAsset() throws Exception {
+		Users users = usersService.findById("1");
+		Company company = users.getEmployeeId().getCompanyId();
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("company", company.getNames());
+		map.put("address", company.getAddress());
+		map.put("website", company.getWebsite());
+		map.put("telp", company.getPhoneNumber());
+		map.put("fax", company.getFax());
+		map.put("description", company.getDescription());
+		map.put("logo", company.getId());
+		map.put("title", "TRACK ASSET");
+		
+		byte[] data = JasperUtil.responseToByteArray(findAll(), "track-asset", map);
+		
+		return data;
+	}
+
+	@Override
+	public ResDto sendEmailTrackAssetReport() throws Exception {
+		byte[] data = pdfTrackAsset();
+		
+		EmailHelper emailHelper = new EmailHelper();
+		emailHelper.setAttach(data);
+		emailHelper.setFileName("track-asset.pdf");
+		
+		emailHandler.sendSimpleMessage("septianardi053@gmail.com", "Track Asset Report", "Track Asset", emailHelper);
+		
+		ResDto resDto = new ResDto();
+		resDto.setMsg("Send to Email");
+		
+		return resDto;
 	}
 
 }

@@ -10,8 +10,6 @@ import com.lawencon.glexy.dao.PermissionsDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Permissions;
-import com.lawencon.glexy.model.Users;
-import com.lawencon.glexy.service.PermissionDetailService;
 import com.lawencon.glexy.service.PermissionsService;
 
 @Service

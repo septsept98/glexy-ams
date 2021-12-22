@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.constant.MessageEnum;
-import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
@@ -83,11 +84,11 @@ public class CompanyController {
 	}
 	
 	@DeleteMapping("{id}")
-	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = companyService.removeById(id);
 		
-		DeleteResDto result = new DeleteResDto();
+		ResDto result = new ResDto();
 		
 		if(data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
@@ -96,5 +97,9 @@ public class CompanyController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "pic/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] getPic(@PathVariable("id") String id) throws Exception {
+		return companyService.findById(id).getCompanyImg().getFile();
+	}
 
 }

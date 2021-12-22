@@ -3,7 +3,9 @@ package com.lawencon.glexy.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.glexy.constant.MessageEnum;
-import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
@@ -28,6 +30,7 @@ import com.lawencon.glexy.service.AssetService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import net.sf.jasperreports.engine.JRException;
 
 @RestController
 @RequestMapping("assets")
@@ -149,17 +152,35 @@ public class AssetController extends BaseController {
 	}
 
 	@DeleteMapping("{id}")
-	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = assetService.removeById(id);
 
-		DeleteResDto result = new DeleteResDto();
+		ResDto result = new ResDto();
 
 		if (data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
 		}
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/pdf")
+	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
+		
+		byte[] data = assetService.pdfAssetExpired();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=assets-expired.pdf");
+		
+		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+	}
+	
+	@GetMapping("/send-email")
+	public ResponseEntity<?> sendEmailTrackAsset() throws Exception, JRException {
+		
+		ResDto resDto = assetService.sendEmailAssetExpiredReport();
+		
+		return new ResponseEntity<>(resDto, HttpStatus.OK);
 	}
 
 }

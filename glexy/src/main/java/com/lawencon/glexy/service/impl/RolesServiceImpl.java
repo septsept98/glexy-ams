@@ -5,10 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dao.RolesDao;
 import com.lawencon.glexy.dao.UsersDao;
-import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.PermissionDetail;
@@ -16,7 +14,6 @@ import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.PermissionDetailService;
 import com.lawencon.glexy.service.RolesService;
-import com.lawencon.glexy.service.UsersService;
 
 @Service
 public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesService {

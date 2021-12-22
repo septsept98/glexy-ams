@@ -3,7 +3,9 @@ package com.lawencon.glexy.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
+import com.lawencon.glexy.helper.ReportDataTransactionOutDate;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.TransactionDetailService;
 
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import net.sf.jasperreports.engine.JRException;
 
 @RestController
 @RequestMapping("transaction-details")
@@ -89,5 +94,29 @@ public class TransactionDetailController {
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/pdf")
+	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
+		byte[] data = transactionDetailService.pdfTransactionOutDate();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=trx-outdate.pdf");
+		
+		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+	}
+	
+	@GetMapping("/out-date")
+	public ResponseEntity<?> getData() throws Exception {
+		List<ReportDataTransactionOutDate> result = transactionDetailService.reportAllDataOutDate();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/send-email")
+	public ResponseEntity<?> sendEmailTrackAsset() throws Exception, JRException {
+		
+		ResDto resDto = transactionDetailService.sendEmailTrxExpiredReport();
+		
+		return new ResponseEntity<>(resDto, HttpStatus.OK);
+	}
+	
 }
