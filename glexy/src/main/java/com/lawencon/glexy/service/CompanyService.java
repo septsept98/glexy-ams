@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.model.Company;
 
 public interface CompanyService {
@@ -21,5 +22,9 @@ public interface CompanyService {
 	boolean removeById(String id) throws Exception;
 	
 	void validationFk(String id) throws Exception;
+	
+	void validationSave(Company data) throws Exception;
+
+	void validationUpdate(Company data) throws Exception;
 
 }

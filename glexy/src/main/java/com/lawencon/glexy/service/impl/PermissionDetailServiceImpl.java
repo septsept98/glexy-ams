@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.glexy.dao.PermissionDetailDao;
 import com.lawencon.glexy.dao.RolesDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
+import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
@@ -43,6 +44,7 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 
 		try {
 			if (data.getId() != null) {
+				validationUpdate(data);
 				PermissionDetail permissionDetail = findById(data.getId());
 				data.setUpdatedBy(getIdAuth());
 				data.setCreatedAt(permissionDetail.getCreatedAt());
@@ -50,6 +52,7 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 				data.setVersion(permissionDetail.getVersion());
 				data.setIsActive(permissionDetail.getIsActive());
 			} else {
+				validationSave(data);
 				data.setCreatedBy(getIdAuth());
 			}
 			Roles roles = rolesDao.findById(data.getRolesId().getId());
@@ -106,6 +109,29 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 	public List<PermissionDetail> findByPermissionsId(String id) throws Exception {
 
 		return permissionDetailDao.findByPermissionsId(id);
+	}
+
+	@Override
+	public void validationSave(PermissionDetail data) throws Exception {
+		if(data.getRolesId() == null || data.getPermissionsId() == null || data.getIsActive()) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(PermissionDetail data) throws Exception {
+		if (data.getId() != null) {
+			PermissionDetail permissionDetail = findById(data.getId());
+			if (permissionDetail == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getRolesId() == null || data.getPermissionsId() == null || data.getIsActive()) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
 	}
 
 }

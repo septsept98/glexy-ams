@@ -12,6 +12,7 @@ import com.lawencon.glexy.dto.DeleteResDto;
 import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.PermissionDetail;
+import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.PermissionDetailService;
@@ -47,12 +48,14 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 		try {
 			if (data.getRoles().getId() != null) {
+				validationUpdate(null);
 				Roles roles = findById(data.getRoles().getId());
 				roles.setNameRole(data.getRoles().getNameRole());
 				roles.setUpdatedBy(getIdAuth());
 				data.setRoles(roles);
 
 			} else {
+				validationSave(null);
 				Roles roles = new Roles();
 				roles.setNameRole(data.getRoles().getNameRole());
 				roles.setCode(data.getRoles().getCode());
@@ -108,6 +111,33 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 			throw new ValidationGlexyException("Roles in Use");
 		}
 
+	}
+
+	@Override
+	public void validationSave(Roles data) throws Exception {
+		if(data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+			
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Roles data) throws Exception {
+		if (data.getId() != null) {
+			Roles role = findById(data.getId());
+			if (role == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+			
+		}
+		
 	}
 
 }

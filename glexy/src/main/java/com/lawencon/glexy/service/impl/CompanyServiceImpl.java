@@ -9,13 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.CompanyDao;
 import com.lawencon.glexy.dao.EmployeeDao;
+import com.lawencon.glexy.dao.LocationDao;
 import com.lawencon.glexy.dao.UsersDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
+import com.lawencon.glexy.model.Asset;
+import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.File;
+import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;
@@ -32,11 +37,17 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	
 	@Autowired
 	private EmployeeDao employeeDao;
+	
+	@Autowired
+	private AssetDao assetDao;
+	
+	@Autowired
+	private LocationDao locationDao; 
 
 	@Override
 	public Company save(Company data, MultipartFile files) throws Exception {
 		try {
-
+			validationSave(data);
 			Company company = data;
 			company.setCreatedBy("3");
 			company.setVersion(data.getVersion());
@@ -62,6 +73,7 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 
 	@Override
 	public Company update(Company data) throws Exception {
+		validationUpdate(data);
 		Company company = findById(data.getId());
 		company.setNames(data.getNames());
 		company.setUpdatedBy("1");
@@ -113,9 +125,38 @@ public class CompanyServiceImpl extends BaseServiceImpl implements CompanyServic
 	public void validationFk(String id) throws Exception {
 		
 		List<Employee> dataEmployee = employeeDao.findByCompanyId(id);
-		if (dataEmployee != null) {
+		List<Asset> dataAsset = assetDao.findByCompanyId(id);
+		List<Location> dataLocation = locationDao.findByCompanyId(id);
+		if (dataEmployee != null || dataAsset != null || dataLocation != null) {
 
 			throw new ValidationGlexyException("Company in Use");
+		}
+		
+	}
+
+	@Override
+	public void validationSave(Company data) throws Exception {
+		if(data.getAddress() == null || data.getCode() == null || data.getDescription() == null || data.getEmail() == null || data.getFax() == null|| data.getNames() == null || data.getPhoneNumber() == null || data.getWebsite() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+			
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Company data) throws Exception {
+		if (data.getId() != null) {
+			Company company = findById(data.getId());
+			if (company == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getAddress() == null || data.getCode() == null || data.getDescription() == null || data.getEmail() == null || data.getFax() == null|| data.getNames() == null || data.getPhoneNumber() == null || data.getWebsite() == null) {
+			
+			throw new ValidationGlexyException("Data not Complete");
+			
 		}
 		
 	}

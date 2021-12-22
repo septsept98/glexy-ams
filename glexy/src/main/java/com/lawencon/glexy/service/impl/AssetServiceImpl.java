@@ -70,6 +70,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	@Override
 	public Asset save(Asset data, MultipartFile invoiceImg, MultipartFile assetImg) throws Exception {
 		try {
+			validationSave(data);
 			Asset asset = data;
 			Invoice invoice = data.getInvoiceId();
 			Inventory inven = data.getInventoryId();
@@ -100,7 +101,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			}
 			if (inventory != null) {
 				stock = inventory.getStock() + stockInven;
-				System.out.println("Stock Inventory : "+stock);
+				System.out.println("Stock Inventory : " + stock);
 				int latest = inventory.getLatestStock() + stockInven;
 				inven.setId(inventory.getId());
 				inven.setNameAsset(inventory.getNameAsset());
@@ -151,9 +152,9 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			}
 			for (int i = index; i < invenStock; i++) {
 				Asset assetInsert = new Asset();
-				String codeAsset = generateCode(inven.getCode(), company.getCode(),invenStock, i);
+				String codeAsset = generateCode(inven.getCode(), company.getCode(), invenStock, i);
 				assetInsert.setAssetTypeId(assetType);
-				
+
 				assetInsert.setBrandId(brand);
 				assetInsert.setCompanyId(company);
 				assetInsert.setExpiredDate(asset.getExpiredDate());
@@ -196,12 +197,12 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 			throw new ValidationGlexyException("Asset Not Found");
 		}
 		StatusAsset statusAsset = new StatusAsset();
-		
+
 		statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
 		if (statusAsset == null) {
 			throw new ValidationGlexyException("Status Asset Not Found");
 		}
-		
+
 		statusAsset.setId(data.getStatusAssetId().getId());
 		asset.setStatusAssetId(statusAsset);
 		asset.setUpdatedBy("1");
@@ -308,7 +309,7 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				stock = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
 				String codeInsert = excelUtil.getCellData(i, 2);
 				inventory = inventoryService.findByCode(codeInsert);
-				if(inventory == null) {
+				if (inventory == null) {
 					Inventory inven = new Inventory();
 					inven.setStock(stock);
 					inven.setNameAsset(excelUtil.getCellData(i, 0));
@@ -324,11 +325,11 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 					inventory.setLatestStock(latest);
 					inventory.setUpdatedBy("2");
 					index = inventory.getStock();
-					
+
 				}
-				
+
 				inventoryService.saveOrUpdate(inventory);
-				
+
 				Invoice invoice = new Invoice();
 				invoice.setCode(excelUtil.getCellData(i, 3));
 				BigDecimal bigDecimal = new BigDecimal(excelUtil.getCellData(i, 4));
@@ -336,22 +337,22 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 				invoice.setPurchaseDate(LocalDate.now());
 				invoice.setCreatedBy("2");
 				invoice.setIsActive(true);
-				
+
 				invoiceService.saveOrUpdate(invoice);
-				
+
 				Brand brand = brandService.findByCode(excelUtil.getCellData(i, 5));
 				AssetType assetType = assetTypeService.findByCode(excelUtil.getCellData(i, 6));
 				StatusAsset statusAsset = statusAssetService.findByCode(excelUtil.getCellData(i, 8));
 				Company company = companyService.findByCode(excelUtil.getCellData(i, 9));
-				
+
 				for (int j = index; j < stock; j++) {
 					Asset assetInsert = new Asset();
-					String codeAsset = generateCode(inventory.getCode(), company.getCode(),stock, j);
+					String codeAsset = generateCode(inventory.getCode(), company.getCode(), stock, j);
 					assetInsert.setAssetTypeId(assetType);
-					
+
 					assetInsert.setBrandId(brand);
 					assetInsert.setCompanyId(company);
-					if(excelUtil.getCellData(i, 7) != null) {
+					if (excelUtil.getCellData(i, 7) != null) {
 						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
 						assetInsert.setExpiredDate(date);
@@ -377,10 +378,10 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 					trackAssetService.saveOrUpdate(trackAsset);
 					asset = assetInsert;
 				}
-				
+
 			}
 			commit();
-			
+
 			return asset;
 		} catch (Exception e) {
 			throw new RuntimeException("fail to store excel data: " + e.getMessage());
@@ -392,35 +393,66 @@ public class AssetServiceImpl extends BaseServiceImpl implements AssetService {
 	public Asset updateImage(String id, MultipartFile assetImg) throws Exception {
 		File imgAsset = new File();
 		Asset asset = assetDao.findById(id);
-		
+
 		imgAsset.setFiles(assetImg.getBytes());
 		String ext = assetImg.getOriginalFilename();
 		ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
 		imgAsset.setExtension(ext);
-		
+
 		File imgInsert = fileService.findByByte(imgAsset.getFile(), ext);
-		if(imgInsert != null) {
+		if (imgInsert != null) {
 			asset.setAssetImg(imgInsert);
 		} else {
 			asset.setAssetImg(imgAsset);
 		}
-		
+
 		asset.setUpdatedBy("2");
 		begin();
 		asset = assetDao.saveOrUpdate(asset);
 		commit();
-		
+
 		return asset;
 	}
 
 	@Override
 	public void validationFk(String id) throws Exception {
-		
+
 		List<TransactionDetail> dataEmployee = transactionDetailDao.findByAssetId(id);
 		if (dataEmployee != null) {
 
 			throw new ValidationGlexyException("Asset in Use");
 		}
 	}
-	
+
+	@Override
+	public void validationSave(Asset data) throws Exception {
+
+		if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
+				|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getNames() == null
+				|| data.getStatusAssetId() == null) {
+
+			throw new ValidationGlexyException("Data not Complete");
+		}
+
+	}
+
+	@Override
+	public void validationUpdate(Asset data) throws Exception {
+		if (data.getId() != null) {
+			Asset asset = findById(data.getId());
+			if (asset == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}
+
+		if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
+				|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getNames() == null
+				|| data.getStatusAssetId() == null) {
+
+			throw new ValidationGlexyException("Data not Complete");
+		}
+	}
+
 }
