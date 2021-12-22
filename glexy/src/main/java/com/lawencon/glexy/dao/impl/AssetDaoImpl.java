@@ -11,6 +11,7 @@ import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
+import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.StatusAsset;
 
 @Repository
@@ -168,6 +169,25 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 	}
 
 	@Override
+	public List<Asset> findExpiredAsset() throws Exception {
+		List<Asset> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select id ");
+		sql.append("FROM assets ");
+		sql.append("WHERE expired_date <= now() ");
+		sql.append("ORDER BY expired_date ASC");
+		List<?> result = createNativeQuery(sql.toString())
+				.getResultList();
+
+		result.forEach(rs -> {
+			Asset asset = new Asset();
+			asset.setId(rs.toString());
+			asset = getById(asset.getId());
+			
+			listResult.add(asset);
+		});
+		return listResult;
+
 	public List<Asset> findByInventoryId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT asset_type_id FROM assets ");

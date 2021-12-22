@@ -1,6 +1,5 @@
 package com.lawencon.glexy.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.service.TrackAssetService;
-import com.lawencon.util.JasperUtil;
 
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -80,18 +79,21 @@ public class TrackAssetController {
 	
 	@GetMapping("/pdf")
 	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("company", "PT. Lawencon");
-		map.put("address", "Jl. Pahlawan No. 28");
-		map.put("website", "Lawencon.co.id");
-		map.put("telp", "0245995");
-		map.put("fax", "0247717");
 		
-		byte[] data = JasperUtil.responseToByteArray(trackAssetService.findAll(), "track-asset", map);
-		
+		byte[] data = trackAssetService.pdfTrackAsset();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=track-asset.pdf");
 		
 		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
 	}
+	
+	@GetMapping("/send-email")
+	public ResponseEntity<?> sendEmailTrackAsset() throws Exception, JRException {
+		
+		ResDto resDto = trackAssetService.sendEmailTrackAssetReport();
+		
+		return new ResponseEntity<>(resDto, HttpStatus.OK);
+	}
+	
+	
 }

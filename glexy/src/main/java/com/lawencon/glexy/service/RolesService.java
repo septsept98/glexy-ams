@@ -2,7 +2,7 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
-import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
 import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;

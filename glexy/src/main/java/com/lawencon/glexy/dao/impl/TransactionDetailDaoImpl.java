@@ -14,7 +14,6 @@ import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TransactionDetail;
-import com.lawencon.glexy.model.Transactions;
 
 @Repository
 public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> implements TransactionDetailDao {
@@ -104,6 +103,26 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 	}
 
 	@Override
+	public List<TransactionDetail> findAllOutDate() throws Exception {
+		List<TransactionDetail> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select id ");
+		sql.append("FROM transaction_details ");
+		sql.append("WHERE date_checkin > duration_date ");
+		sql.append("ORDER BY duration_date ASC");
+		List<?> result = createNativeQuery(sql.toString())
+				.getResultList();
+
+		result.forEach(rs -> {
+			TransactionDetail transactionDetail = new TransactionDetail();
+			transactionDetail.setId(rs.toString());
+			transactionDetail = getById(transactionDetail.getId());
+			
+			listResult.add(transactionDetail);
+		});
+		return listResult;
+  }
+    
 	public List<TransactionDetail> findByStatusAssetId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT status_asset_checkout_id FROM transaction_details ");

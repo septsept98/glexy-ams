@@ -1,6 +1,6 @@
 package com.lawencon.glexy.dto;
 
-public class DeleteResDto {
+public class ResDto {
 
 	private String msg;
 

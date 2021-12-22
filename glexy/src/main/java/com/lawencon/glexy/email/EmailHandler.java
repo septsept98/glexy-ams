@@ -1,11 +1,11 @@
 package com.lawencon.glexy.email;
 
+import javax.activation.DataSource;
 import java.time.LocalDate;
-
 import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -22,9 +22,9 @@ public class EmailHandler {
 	protected JavaMailSender mailSender;
 	
 	@Async
-	public void sendSimpleMessage(String to, String subject, String header ,EmailHelper data) throws Exception{
+	public void sendSimpleMessage(String to, String subject, String header, EmailHelper data) throws Exception{
 
-		
+
 		MimeMessage message = mailSender.createMimeMessage();
 	     
 	    MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -128,6 +128,10 @@ public class EmailHandler {
 	    		+ "    </div>"
 	    		+ "</body>"
 	    		+ "</html>",true);
+	    
+	    DataSource dataSource = new ByteArrayDataSource(data.getAttach(), "application/pdf");
+	    helper.addAttachment(data.getFileName(), dataSource);
+	    
 	    mailSender.send(message);
 	}
 

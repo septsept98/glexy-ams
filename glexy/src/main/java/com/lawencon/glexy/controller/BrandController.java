@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.glexy.constant.MessageEnum;
-import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
@@ -80,11 +80,11 @@ public class BrandController {
 	}
 	
 	@DeleteMapping("{id}")
-	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = DeleteResDto.class)))
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = brandService.removeById(id);
 		
-		DeleteResDto result = new DeleteResDto();
+		ResDto result = new ResDto();
 		
 		if(data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
