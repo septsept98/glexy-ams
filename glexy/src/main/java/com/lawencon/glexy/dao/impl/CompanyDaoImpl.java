@@ -1,6 +1,5 @@
 package com.lawencon.glexy.dao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -10,10 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.CompanyDao;
-import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.model.Company;
-import com.lawencon.glexy.model.Location;
 
 @Repository
 public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {

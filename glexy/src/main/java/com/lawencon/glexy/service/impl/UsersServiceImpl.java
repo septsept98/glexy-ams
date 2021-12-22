@@ -21,7 +21,6 @@ import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Roles;
-import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;

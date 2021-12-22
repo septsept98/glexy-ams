@@ -17,7 +17,6 @@ import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.model.StatusAsset;
-import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.Transactions;

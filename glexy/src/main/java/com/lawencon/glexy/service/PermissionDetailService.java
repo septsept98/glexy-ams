@@ -2,7 +2,6 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
-import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.model.PermissionDetail;
 
 public interface PermissionDetailService {

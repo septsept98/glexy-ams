@@ -9,9 +9,6 @@ import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.AssetType;
-import com.lawencon.glexy.model.Company;
-import com.lawencon.glexy.model.Employee;
-import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.StatusAsset;
 
 @Repository
@@ -187,7 +184,8 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 			listResult.add(asset);
 		});
 		return listResult;
-
+	}
+  
 	public List<Asset> findByInventoryId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT asset_type_id FROM assets ");

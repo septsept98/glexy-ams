@@ -7,11 +7,10 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.InventoryDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.service.InventoryService;
 

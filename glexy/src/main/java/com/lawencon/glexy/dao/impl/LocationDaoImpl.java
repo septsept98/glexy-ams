@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.LocationDao;
-import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.AssetType;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Location;
 

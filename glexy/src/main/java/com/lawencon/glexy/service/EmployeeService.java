@@ -2,7 +2,6 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
-import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
 
 public interface EmployeeService {

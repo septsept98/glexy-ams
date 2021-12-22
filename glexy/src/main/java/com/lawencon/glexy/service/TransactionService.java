@@ -5,7 +5,6 @@ import java.util.List;
 import com.lawencon.glexy.dto.transaction.InsertReqDataAssetTransactionDto;
 import com.lawencon.glexy.dto.transaction.InsertReqTransactionDto;
 import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.Transactions;
 
 public interface TransactionService {

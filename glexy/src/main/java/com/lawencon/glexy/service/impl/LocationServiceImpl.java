@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.glexy.dao.LocationDao;
 import com.lawencon.glexy.dao.TransactionDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
-import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.Invoice;
 import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.service.LocationService;

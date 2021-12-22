@@ -9,8 +9,6 @@ import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.EmployeeDao;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
-import com.lawencon.glexy.model.Roles;
-import com.lawencon.glexy.model.Users;
 
 @Repository
 public class EmployeeDaoImpl extends BaseDaoImpl<Employee> implements EmployeeDao {

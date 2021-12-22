@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.glexy.dao.PermissionDetailDao;
 import com.lawencon.glexy.dao.RolesDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
-import com.lawencon.glexy.model.Location;
 import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Permissions;
 import com.lawencon.glexy.model.Roles;

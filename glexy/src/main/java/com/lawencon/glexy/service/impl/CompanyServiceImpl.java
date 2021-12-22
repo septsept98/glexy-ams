@@ -8,20 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.CompanyDao;
 import com.lawencon.glexy.dao.EmployeeDao;
 import com.lawencon.glexy.dao.LocationDao;
-import com.lawencon.glexy.dao.UsersDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.Brand;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Location;
-import com.lawencon.glexy.model.Transactions;
-import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.FileService;
 

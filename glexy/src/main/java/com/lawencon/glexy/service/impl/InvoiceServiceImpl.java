@@ -8,14 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.glexy.model.File;
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.InvoiceDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.Inventory;
-
+import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Invoice;
 import com.lawencon.glexy.service.FileService;
 import com.lawencon.glexy.service.InvoiceService;
@@ -27,6 +24,8 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 	private InvoiceDao invoiceDao;
 	@Autowired
 	private FileService fileService;
+	@Autowired 
+	private AssetDao assetDao;
 	
 	@Override
 	public Invoice save(Invoice data) throws Exception {

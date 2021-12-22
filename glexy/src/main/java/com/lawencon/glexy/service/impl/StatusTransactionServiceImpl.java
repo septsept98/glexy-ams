@@ -11,7 +11,6 @@ import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.StatusTransactionDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
-import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TransactionDetail;

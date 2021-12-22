@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.model.Asset;
-import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TransactionDetail;
@@ -121,8 +120,8 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 			listResult.add(transactionDetail);
 		});
 		return listResult;
-  }
-    
+	}
+  
 	public List<TransactionDetail> findByStatusAssetId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT status_asset_checkout_id FROM transaction_details ");

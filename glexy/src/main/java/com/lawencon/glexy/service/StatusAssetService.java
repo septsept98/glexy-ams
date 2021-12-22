@@ -2,7 +2,6 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
-import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.model.StatusAsset;
 
 public interface StatusAssetService {

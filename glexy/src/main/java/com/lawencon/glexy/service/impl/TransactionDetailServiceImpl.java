@@ -23,7 +23,6 @@ import com.lawencon.glexy.helper.ReportDataTransactionOutDate;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Inventory;
-import com.lawencon.glexy.model.StatusTransaction;
 import com.lawencon.glexy.model.TrackAsset;
 import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.model.Users;
@@ -150,10 +149,10 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 					email.setEmployeeName(listResult.get(i).getTransactionId().getEmployeeId().getNameEmployee());
 					email.setValueName(listResult.get(i).getAssetId().getNames());
 					email.setExpiredDate(listResult.get(i).getDurationDate());
-					
-					emailHandler.sendExpiredMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);  
-					emailHandler.sendExpiredMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);;
 
+					emailHandler.sendExpiredMessage(emailAssign, "Expired Asset Reminder", "Close To Expired", email);  
+					emailHandler.sendExpiredMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);
+          
 					TransactionDetail transactionDetail = listResult.get(i);
 					transactionDetail.setUpdatedBy("1");
 					transactionDetail.setStatusEmail(true);

@@ -11,7 +11,6 @@ import com.lawencon.glexy.dao.UsersDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
-import com.lawencon.glexy.model.PermissionDetail;
 import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;

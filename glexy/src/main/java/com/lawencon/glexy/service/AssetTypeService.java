@@ -2,7 +2,6 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
-import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.AssetType;
 
 public interface AssetTypeService {

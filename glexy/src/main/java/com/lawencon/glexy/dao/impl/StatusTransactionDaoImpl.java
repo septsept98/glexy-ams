@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.StatusTransactionDao;
-import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.StatusAsset;
 import com.lawencon.glexy.model.StatusTransaction;
 

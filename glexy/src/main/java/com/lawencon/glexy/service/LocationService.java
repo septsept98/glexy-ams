@@ -2,7 +2,6 @@ package com.lawencon.glexy.service;
 
 import java.util.List;
 
-import com.lawencon.glexy.model.Invoice;
 import com.lawencon.glexy.model.Location;
 
 public interface LocationService {

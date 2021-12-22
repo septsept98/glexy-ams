@@ -11,9 +11,7 @@ import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.TransactionDao;
 import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.Location;
-import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.model.Transactions;
-import com.lawencon.glexy.model.Users;
 
 @Repository
 public class TransactionDaoImpl extends BaseDaoImpl<Transactions> implements TransactionDao {
