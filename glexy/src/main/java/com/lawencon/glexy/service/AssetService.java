@@ -44,9 +44,6 @@ public interface AssetService {
 	
 	byte[] pdfAssetExpired() throws Exception;
 	
-	List<ReportDataExpiredAsset> findExpiredAsset() throws Exception;
-	
-	byte[] pdfAssetExpired() throws Exception;
 	
 	ResDto sendEmailAssetExpiredReport() throws Exception;
 
