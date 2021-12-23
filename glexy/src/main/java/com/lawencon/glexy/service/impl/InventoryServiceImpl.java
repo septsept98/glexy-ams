@@ -28,13 +28,12 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 				data.setCreatedBy(inventory.getCreatedBy());
 				data.setUpdatedBy(getIdAuth());
 				data.setVersion(inventory.getVersion());
-				data = inventoryDao.saveOrUpdate(data);
 			} else {
 				
 				data.setCreatedBy(getIdAuth());
 				data.setIsActive(true);
-				data = inventoryDao.saveOrUpdate(data);
 			}
+			data = inventoryDao.saveOrUpdate(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();

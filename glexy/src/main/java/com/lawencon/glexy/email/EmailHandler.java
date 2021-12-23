@@ -3,6 +3,7 @@ package com.lawencon.glexy.email;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.lawencon.glexy.helper.EmailHelper;
 
 @Component
+//@Profile("email")
 public class EmailHandler {
 	
 	@Autowired

@@ -40,12 +40,12 @@ public class AuthorizationFilter extends BasicAuthenticationFilter  {
 			return;
 		}
 		
-		Long usersId = null;
+		String usersId = null;
 		
 		try {
 			String bodyToken = header.replace("Bearer", "");
 			Claims claims = jwtComponent.parseClaim(bodyToken);
-			usersId =  Long.valueOf(claims.get("userId").toString())  ;
+			usersId =  claims.get("userId").toString();
 		} catch (Exception e) {
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			e.printStackTrace();

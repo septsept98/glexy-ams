@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.lawencon.util.ExcelUtil;
@@ -15,6 +16,7 @@ import liquibase.integration.spring.SpringLiquibase;
 
 @Configuration
 @ComponentScan(basePackages = "com.lawencon")
+//@Profile("kkkk")
 public class ObjectConfig {
 	
 	
