@@ -58,7 +58,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 
 			} else {
 				validationSave(data);
-				data.setCreatedBy(getIdAuth());
+				data.setCreatedBy("1");
 
 			}
 

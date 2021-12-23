@@ -111,7 +111,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			commit();
 			EmailHelper email = new EmailHelper();
 			email.setValueName(pass);
-			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia", "Password", email);
+			emailHandler.sendSimpleMessage(user.getEmail(), "Password ini rahasia", "Password", email);
 			return user;
 
 		} catch (Exception e) {
@@ -260,7 +260,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public void validationSave(Users data) throws Exception {
-		if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive()) {
+		if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive() == null) {
 			throw new ValidationGlexyException("Data not Complete");
 		}
 		
