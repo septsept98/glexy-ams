@@ -10,7 +10,6 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -104,10 +103,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			int stockInven = inven.getStock();
 			int index = 0;
 
-			Inventory inventory = inventoryService.findByCode(inven.getCode());
-			if (inventory == null) {
-				throw new ValidationGlexyException("Inventory Not Found");
-			}
+			Inventory inventory = inventoryService.findById(inven.getCode()); //code
 			if (inventory != null) {
 				stock = inventory.getStock() + stockInven;
 				System.out.println("Stock Inventory : " + stock);
@@ -139,11 +135,11 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 			asset.setAssetImg(imgAsset);
 
-			Brand brand = brandService.findByCode(asset.getBrandId().getCode());
+			Brand brand = brandService.findById(asset.getBrandId().getCode());
 			if (brand == null) {
 				throw new ValidationGlexyException("Brand Not Found");
 			}
-			Company company = companyService.findByCode(asset.getCompanyId().getCode());
+			Company company = companyService.findById(asset.getCompanyId().getCode());
 			if (company == null) {
 				throw new ValidationGlexyException("Company Not Found");
 			}
@@ -303,8 +299,8 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	}
 
 	@Override
-	@Async
 	public void saveExcel(MultipartFile file) throws Exception {
+
 		try {
 			Integer stock = 0;
 			int index = 0;
@@ -315,7 +311,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				inventory.setNameAsset(excelUtil.getCellData(i, 0));
 				stock = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
 				String codeInsert = excelUtil.getCellData(i, 2);
-				inventory = inventoryService.findByCode(codeInsert);
+				inventory = inventoryService.findById(codeInsert); //bycode
 				if (inventory == null) {
 					Inventory inven = new Inventory();
 					inven.setStock(stock);
@@ -342,10 +338,25 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 				invoiceService.save(invoice);
 
-				Brand brand = brandService.findByCode(excelUtil.getCellData(i, 5));
-				AssetType assetType = assetTypeService.findByCode(excelUtil.getCellData(i, 6));
-				StatusAsset statusAsset = statusAssetService.findByCode(excelUtil.getCellData(i, 8));
-				Company company = companyService.findByCode(excelUtil.getCellData(i, 9));
+				Brand brand = brandService.findById(excelUtil.getCellData(i, 5));
+				if (brand == null) {
+					throw new ValidationGlexyException("Brand Not Found");
+				}
+
+				AssetType assetType = assetTypeService.findById(excelUtil.getCellData(i, 6));
+				if (assetType == null) {
+					throw new ValidationGlexyException("Asset Type Not Found");
+				}
+
+				StatusAsset statusAsset = statusAssetService.findById(excelUtil.getCellData(i, 8));
+				if (statusAsset == null) {
+					throw new ValidationGlexyException("Status Asset Not Found");
+				}
+
+				Company company = companyService.findById(excelUtil.getCellData(i, 9));
+				if (company == null) {
+					throw new ValidationGlexyException("Company Not Found");
+				}
 
 				for (int j = index; j < stock; j++) {
 					Asset assetInsert = new Asset();
@@ -354,7 +365,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 					assetInsert.setBrandId(brand);
 					assetInsert.setCompanyId(company);
-          
+
 					if (excelUtil.getCellData(i, 7) != null) {
 						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
@@ -385,9 +396,8 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			}
 			commit();
 
-
 		} catch (Exception e) {
-			throw new RuntimeException("fail to store excel data: " + e.getMessage());
+			throw new Exception("fail to store excel data: " + e.getMessage());
 		}
 
 	}

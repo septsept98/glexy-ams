@@ -39,16 +39,15 @@ public interface AssetService {
 	Asset updateImage(String id, MultipartFile assetImg) throws Exception;
 	
 	void validationFk(String id)throws Exception;
-
-	List<ReportDataExpiredAsset> findExpiredAsset() throws Exception;
-	
-	byte[] pdfAssetExpired() throws Exception;
-	
 	
 	ResDto sendEmailAssetExpiredReport() throws Exception;
 
 	void validationSave(Asset data) throws Exception;
 	
 	void validationUpdate(Asset data) throws Exception;
+	
+	List<ReportDataExpiredAsset> findExpiredAsset() throws Exception;
+	
+	byte[] pdfAssetExpired() throws Exception;
 
 }

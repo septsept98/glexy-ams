@@ -37,16 +37,15 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 				data.setCreatedBy(inventory.getCreatedBy());
 				data.setUpdatedBy(getIdAuth());
 				data.setVersion(inventory.getVersion());
-				data = inventoryDao.saveOrUpdate(data);
 			} else {
 
 				data.setCreatedBy(getIdAuth());
 				data.setIsActive(true);
-
 				validationSave(data);
 
-				data = inventoryDao.saveOrUpdate(data);
+
 			}
+			data = inventoryDao.saveOrUpdate(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
@@ -72,13 +71,8 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 	}
 
 	@Override
-	public List<Inventory> findByName(String name) throws Exception {
-		return inventoryDao.findByName(name);
-	}
-
-	@Override
-	public Inventory findByCode(String code) throws Exception {
-		return inventoryDao.findByCode(code);
+	public List<Inventory> findByNameCode(String search) throws Exception {
+		return inventoryDao.findByNameCode(search);
 	}
 
 	@Override

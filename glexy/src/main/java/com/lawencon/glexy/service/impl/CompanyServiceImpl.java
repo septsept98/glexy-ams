@@ -122,8 +122,8 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 	}
 
 	@Override
-	public Company findByCode(String Code) throws Exception {
-		return companyDao.findByCode(Code);
+	public List<Company> findByNameCode(String search) throws Exception {
+		return companyDao.findByNameCode(search);
 	}
 
 

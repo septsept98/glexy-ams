@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.lawencon.glexy.helper.EmailHelper;
 
 @Component
+//@Profile("email")
 public class EmailHandler {
 	
 	@Autowired
