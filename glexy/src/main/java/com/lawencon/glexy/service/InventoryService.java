@@ -12,9 +12,7 @@ public interface InventoryService {
 	
 	List<Inventory> findAll() throws Exception;
 	
-	List<Inventory> findByName(String name) throws Exception;
-	
-	Inventory findByCode(String code) throws Exception;
+	List<Inventory> findByNameCode(String search) throws Exception;
 
 	boolean removeById(String id) throws Exception;
 	

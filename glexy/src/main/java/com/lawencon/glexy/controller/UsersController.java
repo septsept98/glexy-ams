@@ -103,7 +103,7 @@ public class UsersController {
 	
 	@GetMapping("/nip")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
-	public ResponseEntity<?> getByNip(@RequestParam (required = false) String nip, String code) throws Exception {
+	public ResponseEntity<?> getByNip(@RequestParam (required = false) String nip) throws Exception {
 		Users result = usersService.getByNip(nip);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 

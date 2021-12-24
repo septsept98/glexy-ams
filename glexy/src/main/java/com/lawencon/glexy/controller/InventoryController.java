@@ -52,7 +52,7 @@ public class InventoryController {
 	
 	@GetMapping("/")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
-	public ResponseEntity<?> getByName(@RequestParam (required = true) String name) throws Exception {
+	public ResponseEntity<?> getByName(@RequestParam (required = false) String name) throws Exception {
 		List<Inventory> result = inventoryService.findByName(name);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 

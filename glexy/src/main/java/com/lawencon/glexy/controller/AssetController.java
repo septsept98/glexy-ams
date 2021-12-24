@@ -1,6 +1,9 @@
 package com.lawencon.glexy.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +41,9 @@ public class AssetController extends BaseController {
 
 	@Autowired
 	private AssetService assetService;
+	
+	@Autowired
+	private Executor executor;
 
 	@GetMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
@@ -108,16 +114,26 @@ public class AssetController extends BaseController {
 
 	@PostMapping("/upload")
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
-	public ResponseEntity<?> uploadFile(@RequestPart MultipartFile file) throws Exception {
-		assetService.saveExcel(file);
-		
-		InsertResDataDto id = new InsertResDataDto();
+	public CompletableFuture<ResponseEntity<?>>  uploadFile(@RequestPart MultipartFile file) throws Exception {
 
-		InsertResDto result = new InsertResDto();
-		result.setData(id);
-		result.setMsg(MessageEnum.CREATED.getMsg());
+		return CompletableFuture.supplyAsync(() -> {
+			
+			InsertResDataDto id = new InsertResDataDto();
+			
+			InsertResDto result = new InsertResDto();
+			result.setData(id);
+			result.setMsg(MessageEnum.CREATED.getMsg());
+			
+			try {
+				assetService.saveExcel(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return new ResponseEntity<>(result, HttpStatus.OK);
+
+		}, executor);
 		
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		
 	}
 
 	@PutMapping

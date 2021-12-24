@@ -3,9 +3,6 @@ package com.lawencon.glexy.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
@@ -36,12 +33,12 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 	}
 
 	@Override
-	public List<Inventory> findByName(String name) throws Exception {
+	public List<Inventory> findByNameCode(String search) throws Exception {
 		List<Inventory> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
 		sql.append("FROM inventories ");
-		sql.append("WHERE name_asset ILIKE '" + name + "%'");
+		sql.append("WHERE name_asset LIKE '%" + search + "%' OR code LIKE '%" + search + "%' ");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 
@@ -54,32 +51,6 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 		});
 		return listResult;
 	}
-
-	@Override
-	public Inventory findByCode(String code) throws Exception {
-		Inventory inventory = new Inventory();
-		try {
-			StringBuilder sql = new StringBuilder();
-			sql.append("Select id ");
-			sql.append("FROM inventories ");
-			sql.append("WHERE code = :code");
-
-			Object result = createNativeQuery(sql.toString()).setParameter("code", code).getSingleResult();
-
-			if (result != null) {
-				inventory.setId(result.toString());
-				inventory = getById(inventory.getId());
-			}
-		} catch (NoResultException e) {
-			return null;
-		} catch (NonUniqueResultException e) {
-			e.printStackTrace();
-		}
-
-		return inventory;
-
-	}
-
 	
 
 }

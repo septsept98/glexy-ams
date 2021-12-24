@@ -9,6 +9,7 @@ public class RolesInsertReqDto {
 	
 	private Roles roles;
 	private List<PermissionDetail> data;
+	
 	public Roles getRoles() {
 		return roles;
 	}

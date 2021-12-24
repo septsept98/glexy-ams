@@ -84,8 +84,8 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 	}
 
 	@Override
-	public Brand findByCode(String code) throws Exception {
-		return brandDao.findByCode(code);
+	public List<Brand> findByNameCode(String search) throws Exception {
+		return brandDao.findByNameCode(search);
 	}
 
 	@Override

@@ -10,7 +10,7 @@ public interface BrandService {
 
 	Brand findById(String id) throws Exception;
 	
-	Brand findByCode(String code) throws Exception;
+	List<Brand> findByNameCode(String search) throws Exception;
 
 	List<Brand> findAll() throws Exception;
 	
