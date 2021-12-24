@@ -12,12 +12,16 @@ public interface InventoryService {
 	
 	List<Inventory> findAll() throws Exception;
 	
-	List<Inventory> findByName(String name) throws Exception;
-	
-	Inventory findByCode(String code) throws Exception;
+	List<Inventory> findByNameCode(String search) throws Exception;
 
 	boolean removeById(String id) throws Exception;
 	
 	String generateCode(int index) throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Inventory data) throws Exception;
+
+	void validationUpdate(Inventory data) throws Exception;
 	
 }

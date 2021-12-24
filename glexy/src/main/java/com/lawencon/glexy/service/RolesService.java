@@ -6,13 +6,19 @@ import com.lawencon.glexy.dto.roles.RolesInsertReqDto;
 import com.lawencon.glexy.model.Roles;
 
 public interface RolesService {
-	
-	List<Roles> findAll() throws Exception; 
 
-	Roles findById(String id) throws Exception; 
-	
+	List<Roles> findAll() throws Exception;
+
+	Roles findById(String id) throws Exception;
+
 	Roles saveOrUpdate(RolesInsertReqDto data) throws Exception;
-	
+
 	boolean deleteById(String id) throws Exception;
+
+	void validationFk(String id) throws Exception;
+
+	void validationSave(Roles data) throws Exception;
+
+	void validationUpdate(Roles data) throws Exception;
 
 }

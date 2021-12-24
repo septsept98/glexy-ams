@@ -4,12 +4,11 @@ import java.time.LocalDate;
 
 public class EmailHelper {
 
-
 	private String valueName;
 	private String employeeName;
 	private LocalDate expiredDate;
-
-	
+	private String fileName;
+	private byte[] attach;
 
 	public String getValueName() {
 		return valueName;
@@ -35,6 +34,20 @@ public class EmailHelper {
 		this.expiredDate = expiredDate;
 	}
 
-	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public byte[] getAttach() {
+		return attach;
+	}
+
+	public void setAttach(byte[] attach) {
+		this.attach = attach;
+	}
 
 }

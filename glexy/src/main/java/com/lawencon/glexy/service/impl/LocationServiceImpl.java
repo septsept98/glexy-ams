@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.glexy.dao.LocationDao;
+import com.lawencon.glexy.dao.TransactionDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.model.Location;
+import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.service.LocationService;
 
 @Service
@@ -17,11 +20,15 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 	@Autowired
 	private LocationDao locationDao;
 	
+	@Autowired
+	private TransactionDao transactionDao;
+	
 	@Override
 	public Location saveOrUpdate(Location data) throws Exception {
 		
 		try {
 			if(data.getId() != null) {
+				validationUpdate(data);
 				Location location = findById(data.getId());
 				data.setCode(location.getCode());
 				data.setCreatedAt(location.getCreatedAt());
@@ -29,7 +36,11 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 				data.setUpdatedBy(getIdAuth());
 				data.setVersion(location.getVersion());
 			} else {
+
 				data.setCreatedBy(getIdAuth());
+
+				validationSave(data);
+
 			}
 			
 			begin();
@@ -64,6 +75,7 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = locationDao.removeById(id);
 			commit();
@@ -72,6 +84,39 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 			rollback();
 		}
 		return result;
+	}
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		List<Transactions> dataEmployee = transactionDao.findByLocationId(id);
+		if (dataEmployee != null) {
+
+			throw new ValidationGlexyException("Location Type in Use");
+		}
+		
+	}
+
+	@Override
+	public void validationSave(Location data) throws Exception {
+		if(data.getCode() == null || data.getNamePlace() == null || data.getCompanyId() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Location data) throws Exception {
+		if (data.getId() != null) {
+			Location location = findById(data.getId());
+			if (location == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getCode() == null || data.getNamePlace() == null || data.getCompanyId() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
 	}
 	
 	

@@ -10,10 +10,16 @@ public interface BrandService {
 
 	Brand findById(String id) throws Exception;
 	
-	Brand findByCode(String code) throws Exception;
+	List<Brand> findByNameCode(String search) throws Exception;
 
 	List<Brand> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Brand data) throws Exception;
+
+	void validationUpdate(Brand data) throws Exception;
 	
 }

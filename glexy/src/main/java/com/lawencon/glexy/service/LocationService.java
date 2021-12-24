@@ -13,4 +13,10 @@ public interface LocationService {
 	List<Location> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Location data) throws Exception;
+
+	void validationUpdate(Location data) throws Exception;
 }

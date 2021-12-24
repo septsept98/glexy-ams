@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.glexy.security.jwt.JwtComponent;
 import com.lawencon.glexy.service.UsersService;
 
-//@Profile("kkk")
 @EnableWebSecurity
+//@Profile("kkk")
 public class AppSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Autowired

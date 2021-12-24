@@ -10,12 +10,12 @@ public interface InventoryDao {
 
 	Inventory findById(String id) throws Exception;
 	
-	List<Inventory> findByName(String name) throws Exception;
-	
-	Inventory findByCode(String code) throws Exception;
+	List<Inventory> findByNameCode(String search) throws Exception;
 	
 	List<Inventory> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
+	
+	
 	
 }

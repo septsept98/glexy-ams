@@ -17,7 +17,10 @@ public interface UsersDao {
 	boolean deleteById(String id) throws Exception;
 	
 	Users getEmail(String email) throws Exception;
-	
-	Users getByNip(String nip) throws Exception;
 
+	Users getByNip(String nip) throws Exception;
+	
+	List<Users> findByRolesId(String id)throws Exception;
+	
+	List<Users> findByEmployeeId(String id)throws Exception;
 }

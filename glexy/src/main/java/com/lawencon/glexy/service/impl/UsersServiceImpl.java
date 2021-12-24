@@ -12,13 +12,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lawencon.glexy.dao.TransactionDao;
 import com.lawencon.glexy.dao.UsersDao;
 import com.lawencon.glexy.email.EmailHandler;
+import com.lawencon.glexy.exception.ValidationGlexyException;
 import com.lawencon.glexy.helper.EmailHelper;
 import com.lawencon.glexy.model.Company;
 import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.File;
 import com.lawencon.glexy.model.Roles;
+import com.lawencon.glexy.model.Transactions;
 import com.lawencon.glexy.model.Users;
 import com.lawencon.glexy.service.CompanyService;
 import com.lawencon.glexy.service.EmployeeService;
@@ -50,13 +53,16 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	@Autowired
 	private EmailHandler emailHandler;
 
+	@Autowired
+	private TransactionDao transactionDao;
+
 	@Override
 	public List<Users> findAll() throws Exception {
 		EmailHelper data = new EmailHelper();
 		data.setEmployeeName("septian");
 		data.setValueName("lenovo");
 		data.setExpiredDate(LocalDate.now());
-		emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Expired Asset Reminder","Close To Expired", data);
+		emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Expired Asset Reminder", "Close To Expired", data);
 		return usersDao.findAll();
 	}
 
@@ -69,7 +75,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	@Override
 	public Users save(Users data, MultipartFile file) throws Exception {
 		try {
-
+			validationSave(data);
 			String pass = generatePassword();
 			System.out.println(pass);
 			data.setPass(bCryptPasswordEncoder.encode(pass));
@@ -77,10 +83,17 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			Roles roles = rolesService.findById(data.getRolesId().getId());
 			data.setRolesId(roles);
 			begin();
-//			Employee employeeSet = new Employee();
+
 			Employee employee = employeeService.saveOrUpdate(data.getEmployeeId());
+			
+			if (employee == null) {
+				throw new ValidationGlexyException("Employee Not Found");
+			}
 
 			Company company = companyService.findById(data.getEmployeeId().getCompanyId().getId());
+			if (company == null) {
+				throw new ValidationGlexyException("Company Not Found");
+			}
 			employee.setCompanyId(company);
 
 			File files = new File();
@@ -98,7 +111,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			commit();
 			EmailHelper email = new EmailHelper();
 			email.setValueName(pass);
-			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia","Password", email);
+			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia", "Password", email);
 			return user;
 
 		} catch (Exception e) {
@@ -135,7 +148,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	public Users update(Users data, MultipartFile file) throws Exception {
 
 		try {
-
+			validationUpdate(data);
 			Users users = usersDao.findById(data.getId());
 			users.setUpdatedBy(getIdAuth());
 			users.setVersion(data.getVersion());
@@ -144,8 +157,13 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			users.setRolesId(roles);
 			begin();
 			Employee employee = employeeService.saveOrUpdate(data.getEmployeeId());
-
+			if (employee == null) {
+				throw new ValidationGlexyException("Employee Not Found");
+			}
 			Company company = companyService.findById(data.getEmployeeId().getCompanyId().getId());
+			if (company == null) {
+				throw new ValidationGlexyException("Company Not Found");
+			}
 			employee.setCompanyId(company);
 
 			if (file != null) {
@@ -222,6 +240,45 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			rollback();
 			throw new Exception(e);
 		}
+	}
+
+	@Override
+	public List<Users> findByRolesId(String id) throws Exception {
+
+		return usersDao.findByRolesId(id);
+	}
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		List<Transactions> dataTransactions = transactionDao.findByUsersId(id);
+		if (dataTransactions != null) {
+
+			throw new ValidationGlexyException("User in Use");
+		}
+
+	}
+
+	@Override
+	public void validationSave(Users data) throws Exception {
+		if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive() == null) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Users data) throws Exception {
+		if (data.getId() != null) {
+			Users user = findById(data.getId());
+			if (user == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive()) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
 	}
 
 }

@@ -10,11 +10,10 @@ public interface BrandDao {
 
 	Brand findById(String id) throws Exception;
 	
-	Brand findByCode(String code) throws Exception;
+	List<Brand> findByNameCode(String search) throws Exception;
 	
 	List<Brand> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
 	
-
 }

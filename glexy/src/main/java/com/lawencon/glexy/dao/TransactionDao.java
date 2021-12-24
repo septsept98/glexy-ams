@@ -11,5 +11,10 @@ public interface TransactionDao {
 	Transactions findById(String id) throws Exception;
 
 	Transactions saveOrUpdate(Transactions data) throws Exception;
-
+	
+	List<Transactions> findByEmployeeId(String id) throws Exception;
+	
+	List<Transactions> findByUsersId(String id) throws Exception;
+	
+	List<Transactions> findByLocationId(String id) throws Exception;
 }

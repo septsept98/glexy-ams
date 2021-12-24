@@ -7,20 +7,29 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.InventoryDao;
+import com.lawencon.glexy.exception.ValidationGlexyException;
+import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.model.Inventory;
 import com.lawencon.glexy.service.InventoryService;
 
 @Service
+
 public class InventoryServiceImpl extends BaseGlexyServiceImpl implements InventoryService{
+
 
 	@Autowired
 	private InventoryDao inventoryDao;
 	
+	@Autowired
+	private AssetDao assetDao;
+
 	@Override
 	public Inventory saveOrUpdate(Inventory data) throws Exception {
 		try {
-			if(data.getId() != null) {
+			if (data.getId() != null) {
+				validationUpdate(data);
 				Inventory inventory = findById(data.getId());
 				data.setNameAsset(inventory.getNameAsset());
 				data.setCode(inventory.getCode());
@@ -29,9 +38,12 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 				data.setUpdatedBy(getIdAuth());
 				data.setVersion(inventory.getVersion());
 			} else {
-				
+
 				data.setCreatedBy(getIdAuth());
 				data.setIsActive(true);
+				validationSave(data);
+
+
 			}
 			data = inventoryDao.saveOrUpdate(data);
 		} catch (Exception e) {
@@ -52,7 +64,6 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 		}
 		return result;
 	}
-	
 
 	@Override
 	public List<Inventory> findAll() throws Exception {
@@ -60,19 +71,15 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 	}
 
 	@Override
-	public List<Inventory> findByName(String name) throws Exception {
-		return inventoryDao.findByName(name);
-	}
-	
-	@Override
-	public Inventory findByCode(String code) throws Exception {
-		return inventoryDao.findByCode(code);
+	public List<Inventory> findByNameCode(String search) throws Exception {
+		return inventoryDao.findByNameCode(search);
 	}
 
 	@Override
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
+			validationFk(id);
 			begin();
 			result = inventoryDao.removeById(id);
 			commit();
@@ -85,11 +92,40 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 
 	@Override
 	public String generateCode(int index) throws Exception {
-		return "inven" + "" + (index+1);
+		return "inven" + "" + (index + 1);
 	}
-	
-	
-	
-	
+
+	@Override
+	public void validationFk(String id) throws Exception {
+		List<Asset> dataAsset = assetDao.findByInventoryId(id);
+		if (dataAsset != null) {
+
+			throw new ValidationGlexyException("Inventory Type in Use");
+		}
+		
+	}
+
+	@Override
+	public void validationSave(Inventory data) throws Exception {
+		if(data.getCode() == null || data.getLatestStock() == null || data.getNameAsset() == null ) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
+
+	@Override
+	public void validationUpdate(Inventory data) throws Exception {
+		if (data.getId() != null) {
+			Inventory inventory = findById(data.getId());
+			if (inventory == null) {
+				throw new ValidationGlexyException("Data not Found");
+			}
+		} else {
+			throw new ValidationGlexyException("Data not Found");
+		}if(data.getCode() == null || data.getLatestStock() == null || data.getNameAsset() == null ) {
+			throw new ValidationGlexyException("Data not Complete");
+		}
+		
+	}
 
 }

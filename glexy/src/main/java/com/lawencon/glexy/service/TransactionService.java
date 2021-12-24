@@ -16,5 +16,7 @@ public interface TransactionService {
 	List<Asset> findAssetDetail(InsertReqDataAssetTransactionDto data) throws Exception;
 
 	InsertReqTransactionDto saveOrUpdate(InsertReqTransactionDto data) throws Exception;
+	
+	void validationSave(Transactions data) throws Exception;
 
 }

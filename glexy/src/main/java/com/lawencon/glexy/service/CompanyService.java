@@ -14,10 +14,16 @@ public interface CompanyService {
 
 	Company findById(String id) throws Exception;
 	
-	Company findByCode(String Code) throws Exception;
+	List<Company> findByNameCode(String search) throws Exception;
 
 	List<Company> findAll() throws Exception;
 	
 	boolean removeById(String id) throws Exception;
+	
+	void validationFk(String id) throws Exception;
+	
+	void validationSave(Company data) throws Exception;
+
+	void validationUpdate(Company data) throws Exception;
 
 }

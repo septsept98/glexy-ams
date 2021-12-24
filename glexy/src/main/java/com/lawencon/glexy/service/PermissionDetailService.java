@@ -16,4 +16,11 @@ public interface PermissionDetailService {
 	
 	List<PermissionDetail> findByRoleId(String id)throws Exception;
 	
+	List<PermissionDetail> findByRoleCode(String code)throws Exception;
+	
+	List<PermissionDetail> findByPermissionsId(String id)throws Exception;
+	
+	void validationSave(PermissionDetail data) throws Exception;
+
+	void validationUpdate(PermissionDetail data) throws Exception;
 }

@@ -14,6 +14,9 @@ public interface PermissionDetailDao {
 
 	boolean deleteById(String id) throws Exception;
 
+	List<PermissionDetail> findByRoleCode(String code) throws Exception;
+	
 	List<PermissionDetail> findByRoleId(String id) throws Exception;
-
+	
+	List<PermissionDetail> findByPermissionsId(String id) throws Exception;
 }

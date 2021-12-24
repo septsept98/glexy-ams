@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.glexy.constant.MessageEnum;
-import com.lawencon.glexy.dto.DeleteResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("roles")
-public class RolesController {
+public class RolesController extends BaseController {
 	
 	@Autowired
 	private RolesService rolesService;
@@ -82,7 +82,7 @@ public class RolesController {
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = rolesService.deleteById(id);
 		
-		DeleteResDto result = new DeleteResDto();
+		ResDto result = new ResDto();
 		
 		if(data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());

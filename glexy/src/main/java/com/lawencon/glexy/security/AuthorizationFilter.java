@@ -45,7 +45,9 @@ public class AuthorizationFilter extends BasicAuthenticationFilter  {
 		try {
 			String bodyToken = header.replace("Bearer", "");
 			Claims claims = jwtComponent.parseClaim(bodyToken);
+
 			usersId =  claims.get("userId").toString();
+
 		} catch (Exception e) {
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			e.printStackTrace();
