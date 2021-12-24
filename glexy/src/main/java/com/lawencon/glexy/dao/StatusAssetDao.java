@@ -11,6 +11,8 @@ public interface StatusAssetDao {
 	StatusAsset findById(String id) throws Exception;
 	
 	StatusAsset findByCode(String code) throws Exception;
+	
+	List<StatusAsset> findByName(String name) throws Exception;
 
 	StatusAsset saveOrUpdate(StatusAsset data) throws Exception;
 

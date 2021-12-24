@@ -145,4 +145,9 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		
 	}
 
+	@Override
+	public List<StatusAsset> findByName(String name) throws Exception {
+		return statusAssetDao.findByName(name);
+	}
+
 }
