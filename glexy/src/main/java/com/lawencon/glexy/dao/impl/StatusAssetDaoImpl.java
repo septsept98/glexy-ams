@@ -1,5 +1,6 @@
 package com.lawencon.glexy.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -58,6 +59,28 @@ public class StatusAssetDaoImpl extends BaseDaoImpl<StatusAsset> implements Stat
 			e.printStackTrace();
 		}
 		return statusAsset;
+	}
+
+	@Override
+	public List<StatusAsset> findByName(String name) throws Exception {
+		List<StatusAsset> listStatusAssets = new ArrayList<>();
+			StringBuilder sql = new StringBuilder();
+			sql.append("Select id ");
+			sql.append("FROM status_assets ");
+			sql.append("WHERE name_status_asset LIKE %:name% OR code_status_asset LIKE %:name%");
+			
+			List<?> result = createNativeQuery(sql.toString())
+					.setParameter("name", name)
+					.getResultList();	
+			result.forEach(rs -> {
+				StatusAsset statusAsset = new StatusAsset();
+				statusAsset.setId(rs.toString());
+				statusAsset = getById(statusAsset.getId());	
+				
+				listStatusAssets.add(statusAsset);
+			});
+			
+		return listStatusAssets;
 	}
 	
 }

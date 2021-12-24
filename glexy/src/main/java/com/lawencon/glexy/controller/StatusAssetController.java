@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.glexy.constant.MessageEnum;
@@ -95,6 +96,13 @@ public class StatusAssetController {
 		if(data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
 		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/search")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StatusAsset.class)))
+	public ResponseEntity<?> getByCodeName(@RequestParam("query") String query) throws Exception {
+		List<StatusAsset> result = statusAssetService.findByName(query);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

@@ -1,8 +1,6 @@
 package com.lawencon.glexy.service;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,11 +40,14 @@ public interface AssetService {
 	
 	void validationFk(String id)throws Exception;
 	
-	
 	ResDto sendEmailAssetExpiredReport() throws Exception;
 
 	void validationSave(Asset data) throws Exception;
 	
 	void validationUpdate(Asset data) throws Exception;
+	
+	List<ReportDataExpiredAsset> findExpiredAsset() throws Exception;
+	
+	byte[] pdfAssetExpired() throws Exception;
 
 }

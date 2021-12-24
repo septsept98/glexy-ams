@@ -6,18 +6,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.Future;
 
 import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.dto.ResDto;
