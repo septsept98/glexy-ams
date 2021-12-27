@@ -70,6 +70,11 @@ public class AssetTypeServiceImpl extends BaseGlexyServiceImpl implements AssetT
 	}
 
 	@Override
+	public List<AssetType> searchByNameCode(String search) throws Exception {
+		return assetTypeDao.searchByNameCode(search);
+	}
+
+	@Override
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {

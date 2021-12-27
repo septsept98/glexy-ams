@@ -50,10 +50,10 @@ public class InventoryController {
 
 	}
 	
-	@GetMapping("/")
+	@GetMapping("search")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
-	public ResponseEntity<?> getByName(@RequestParam (required = false) String name) throws Exception {
-		List<Inventory> result = inventoryService.findByName(name);
+	public ResponseEntity<?> getAllBySearch(@RequestParam ("query") String query) throws Exception {
+		List<Inventory> result = inventoryService.searchByNameCode(query);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}

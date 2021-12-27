@@ -14,6 +14,8 @@ public interface AssetTypeDao {
 	
 	List<AssetType> findAll() throws Exception;
 	
+	List<AssetType> searchByNameCode(String search) throws Exception;
+	
 	boolean removeById(String id) throws Exception;
 	
 

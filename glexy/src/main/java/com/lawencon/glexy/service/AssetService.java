@@ -1,8 +1,6 @@
 package com.lawencon.glexy.service;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 import org.springframework.web.multipart.MultipartFile;
 

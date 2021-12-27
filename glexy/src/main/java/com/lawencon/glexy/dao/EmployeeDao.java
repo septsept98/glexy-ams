@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.lawencon.glexy.model.Employee;
 
-
-
 public interface EmployeeDao {
 	
 	List<Employee> findAll() throws Exception; 
@@ -17,5 +15,7 @@ public interface EmployeeDao {
 	boolean deleteById(String id) throws Exception;
 	
 	List<Employee> findByCompanyId(String id) throws Exception;
+	
+	List<Employee> searchByNameCode(String search) throws Exception;
 	
 }

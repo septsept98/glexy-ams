@@ -14,7 +14,9 @@ public interface CompanyService {
 
 	Company findById(String id) throws Exception;
 	
-	List<Company> findByNameCode(String search) throws Exception;
+	Company findByCode(String code) throws Exception;
+	
+	List<Company> searchByNameCode(String search) throws Exception;
 
 	List<Company> findAll() throws Exception;
 	

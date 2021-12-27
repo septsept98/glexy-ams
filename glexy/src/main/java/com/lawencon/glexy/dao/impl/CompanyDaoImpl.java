@@ -3,6 +3,9 @@ package com.lawencon.glexy.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
@@ -33,7 +36,7 @@ public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {
 	}
 
 	@Override
-	public List<Company> findByNameCode(String search) throws Exception {
+	public List<Company> searchByNameCode(String search) throws Exception {
 		List<Company> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
@@ -51,6 +54,30 @@ public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {
 		});
 
 		return listResult;
+	}
+
+	@Override
+	public Company findByCode(String code) throws Exception {
+		Company company = new Company();
+		try {
+
+			StringBuilder sql = new StringBuilder();
+			sql.append("Select id ");
+			sql.append("FROM companies ");
+			sql.append("WHERE code=:code");
+
+			Object result = createNativeQuery(sql.toString()).setParameter("code", code).getSingleResult();
+			if (result != null) {
+				company.setId(result.toString());
+				company = getById(company.getId());
+			}
+
+		} catch (NoResultException e) {
+			e.printStackTrace();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+		}
+		return company;
 	}
 
 }

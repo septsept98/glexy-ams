@@ -36,8 +36,8 @@ public class LocationDaoImpl extends BaseDaoImpl<Location> implements LocationDa
 	@Override
 	public List<Location> findByCompanyId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT asset_type_id FROM assets ");
-		sql.append("WHERE invoice_id = :id");
+		sql.append("SELECT company_id FROM locations ");
+		sql.append("WHERE company_id = :id");
 		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
 
 		List<Location> resultLocation= new ArrayList<>();
@@ -54,6 +54,28 @@ public class LocationDaoImpl extends BaseDaoImpl<Location> implements LocationDa
 
 		return resultLocation;
 	}
+
+	@Override
+	public List<Location> searchByNameCode(String search) throws Exception {
+		List<Location> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select id ");
+		sql.append("FROM brands ");
+		sql.append("WHERE code LIKE '%" + search + "%' OR names LIKE '%" + search + "%' ");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			Location location = new Location();
+			location.setId(rs.toString());
+			location = getById(location.getId());
+
+			listResult.add(location);
+		});
+
+		return listResult;
+	}
+	
 	
 
 }

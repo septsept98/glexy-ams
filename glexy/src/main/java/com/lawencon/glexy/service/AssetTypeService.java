@@ -11,6 +11,8 @@ public interface AssetTypeService {
 	AssetType findById(String id) throws Exception;
 
 	List<AssetType> findAll() throws Exception;
+	
+	List<AssetType> searchByNameCode(String search) throws Exception;
 
 	boolean removeById(String id) throws Exception;
 

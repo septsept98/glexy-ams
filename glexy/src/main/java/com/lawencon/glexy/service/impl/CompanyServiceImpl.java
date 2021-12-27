@@ -122,10 +122,14 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 	}
 
 	@Override
-	public List<Company> findByNameCode(String search) throws Exception {
-		return companyDao.findByNameCode(search);
+	public List<Company> searchByNameCode(String search) throws Exception {
+		return companyDao.searchByNameCode(search);
 	}
 
+	@Override
+	public Company findByCode(String code) throws Exception {
+		return companyDao.findByCode(code);
+	}
 
 	@Override
 	public void validationFk(String id) throws Exception {

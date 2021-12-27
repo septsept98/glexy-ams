@@ -3,6 +3,9 @@ package com.lawencon.glexy.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
@@ -33,7 +36,7 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 	}
 
 	@Override
-	public List<Inventory> findByNameCode(String search) throws Exception {
+	public List<Inventory> searchByNameCode(String search) throws Exception {
 		List<Inventory> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
@@ -51,6 +54,34 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 		});
 		return listResult;
 	}
+
+	@Override
+	public Inventory findByCode(String code) throws Exception {
+		Inventory inven = new Inventory();
+		try {
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("Select id ");
+			sql.append("FROM inventories ");
+			sql.append("WHERE code=:code");
+			
+			Object result = createNativeQuery(sql.toString())
+					.setParameter("code", code)
+					.getSingleResult();	
+			if(result != null) {
+				inven.setId(result.toString());
+				inven = getById(inven.getId());
+			}
+
+		} catch (NoResultException e) {
+			e.printStackTrace();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+		}
+		return inven;
+	}
+	
+	
 	
 
 }

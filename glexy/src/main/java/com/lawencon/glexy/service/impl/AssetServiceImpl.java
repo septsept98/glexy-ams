@@ -6,18 +6,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.Future;
 
 import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.glexy.constant.MessageEnum;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.dto.ResDto;
@@ -108,7 +103,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			int stockInven = inven.getStock();
 			int index = 0;
 
-			Inventory inventory = inventoryService.findById(inven.getCode()); //code
+			Inventory inventory = inventoryService.findByCode(inven.getCode()); //code
 			if (inventory != null) {
 				stock = inventory.getStock() + stockInven;
 				System.out.println("Stock Inventory : " + stock);
@@ -140,11 +135,11 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 			asset.setAssetImg(imgAsset);
 
-			Brand brand = brandService.findById(asset.getBrandId().getCode());
+			Brand brand = brandService.findByCode(asset.getBrandId().getCode());
 			if (brand == null) {
 				throw new ValidationGlexyException("Brand Not Found");
 			}
-			Company company = companyService.findById(asset.getCompanyId().getCode());
+			Company company = companyService.findByCode(asset.getCompanyId().getCode());
 			if (company == null) {
 				throw new ValidationGlexyException("Company Not Found");
 			}
@@ -343,22 +338,22 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 				invoiceService.save(invoice);
 
-				Brand brand = brandService.findById(excelUtil.getCellData(i, 5));
+				Brand brand = brandService.findByCode(excelUtil.getCellData(i, 5));
 				if (brand == null) {
 					throw new ValidationGlexyException("Brand Not Found");
 				}
 
-				AssetType assetType = assetTypeService.findById(excelUtil.getCellData(i, 6));
+				AssetType assetType = assetTypeService.findByCode(excelUtil.getCellData(i, 6));
 				if (assetType == null) {
 					throw new ValidationGlexyException("Asset Type Not Found");
 				}
 
-				StatusAsset statusAsset = statusAssetService.findById(excelUtil.getCellData(i, 8));
+				StatusAsset statusAsset = statusAssetService.findByCode(excelUtil.getCellData(i, 8));
 				if (statusAsset == null) {
 					throw new ValidationGlexyException("Status Asset Not Found");
 				}
 
-				Company company = companyService.findById(excelUtil.getCellData(i, 9));
+				Company company = companyService.findByCode(excelUtil.getCellData(i, 9));
 				if (company == null) {
 					throw new ValidationGlexyException("Company Not Found");
 				}

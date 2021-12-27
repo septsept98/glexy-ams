@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.glexy.constant.MessageEnum;
-import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.InsertResDataDto;
 import com.lawencon.glexy.dto.InsertResDto;
+import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
 import com.lawencon.glexy.model.AssetType;
@@ -49,6 +50,22 @@ public class AssetTypeController {
 
 	}
 	
+	@GetMapping("search")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = AssetType.class)))
+	public ResponseEntity<?> getAllBySearch(@RequestParam ("query") String query) throws Exception {
+		List<AssetType> result = assetTypeService.searchByNameCode(query);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/code/{code}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = AssetType.class)))
+	public ResponseEntity<?> getByCode(@PathVariable("code") String code) throws Exception {
+		AssetType result = assetTypeService.findByCode(code);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody AssetType data) throws Exception {
@@ -63,6 +80,8 @@ public class AssetTypeController {
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	
 
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
