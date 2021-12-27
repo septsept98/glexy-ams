@@ -12,6 +12,8 @@ public interface LocationDao {
 	
 	List<Location> findAll() throws Exception;
 	
+	List<Location> searchByNameCode(String search) throws Exception;
+	
 	boolean removeById(String id) throws Exception;
 	
 	List<Location> findByCompanyId(String id) throws Exception;

@@ -69,10 +69,16 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 	public List<Inventory> findAll() throws Exception {
 		return inventoryDao.findAll();
 	}
+	
 
 	@Override
-	public List<Inventory> findByNameCode(String search) throws Exception {
-		return inventoryDao.findByNameCode(search);
+	public List<Inventory> searchByNameCode(String search) throws Exception {
+		return inventoryDao.searchByNameCode(search);
+	}
+
+	@Override
+	public Inventory findByCode(String code) throws Exception {
+		return inventoryDao.findByCode(code);
 	}
 
 	@Override

@@ -56,5 +56,26 @@ public class EmployeeDaoImpl extends BaseDaoImpl<Employee> implements EmployeeDa
 		return resultEmployee;
 	}
 
+	@Override
+	public List<Employee> searchByNameCode(String search) throws Exception {
+		List<Employee> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select id ");
+		sql.append("FROM employees ");
+		sql.append("WHERE code LIKE '%" + search + "%' OR names LIKE '%" + search + "%' ");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			Employee employee = new Employee();
+			employee.setId(rs.toString());
+			employee = getById(employee.getId());
+
+			listResult.add(employee);
+		});
+
+		return listResult;
+	}
+
 
 }

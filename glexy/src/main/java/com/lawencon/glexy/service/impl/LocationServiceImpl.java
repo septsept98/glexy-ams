@@ -72,6 +72,16 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 	}
 
 	@Override
+	public List<Location> searchByNameCode(String search) throws Exception {
+		return locationDao.searchByNameCode(search);
+	}
+	
+	@Override
+	public List<Location> findByCompanyId(String id) throws Exception {
+		return locationDao.findByCompanyId(id);
+	}
+
+	@Override
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {

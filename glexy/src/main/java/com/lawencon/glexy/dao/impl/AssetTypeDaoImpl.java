@@ -1,5 +1,6 @@
 package com.lawencon.glexy.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -57,6 +58,27 @@ public class AssetTypeDaoImpl extends BaseDaoImpl<AssetType> implements AssetTyp
 			e.printStackTrace();
 		}
 		return assetType;
+	}
+
+	@Override
+	public List<AssetType> searchByNameCode(String search) throws Exception {
+		List<AssetType> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select id ");
+		sql.append("FROM asset_types ");
+		sql.append("WHERE code LIKE '%" + search + "%' OR names LIKE '%" + search + "%' ");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			AssetType assetType = new AssetType();
+			assetType.setId(rs.toString());
+			assetType = getById(assetType.getId());
+
+			listResult.add(assetType);
+		});
+
+		return listResult;
 	}
 	
 	
