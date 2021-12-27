@@ -18,6 +18,8 @@ public interface StatusAssetService {
 	
 	String generateCodeSA() throws Exception;
 	
+	List<StatusAsset> findByName(String name) throws Exception;
+	
 	void validationFk(String id) throws Exception;
 	
 	void validationSave(StatusAsset data) throws Exception;

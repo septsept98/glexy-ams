@@ -111,7 +111,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			commit();
 			EmailHelper email = new EmailHelper();
 			email.setValueName(pass);
-			emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Password ini rahasia", "Password", email);
+			emailHandler.sendSimpleMessage(user.getEmail(), "Password ini rahasia", "Password", email);
 			return user;
 
 		} catch (Exception e) {
