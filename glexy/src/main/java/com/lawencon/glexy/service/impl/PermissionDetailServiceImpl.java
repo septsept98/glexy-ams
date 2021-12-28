@@ -52,7 +52,7 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 				data.setIsActive(permissionDetail.getIsActive());
 			} else {
 				validationSave(data);
-				data.setCreatedBy(getIdAuth());
+				data.setCreatedBy("1");
 			}
 			Roles roles = rolesDao.findById(data.getRolesId().getId());
 
@@ -60,7 +60,7 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 				throw new ValidationGlexyException("Roles Not Found");
 			}
 			data.setRolesId(roles);
-			
+
 			Permissions permissions = permissionsService.findById(data.getPermissionsId().getId());
 			if (permissions == null) {
 				throw new ValidationGlexyException("Permission Not Found");
@@ -112,25 +112,32 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 
 	@Override
 	public void validationSave(PermissionDetail data) throws Exception {
-		if(data.getRolesId() == null || data.getPermissionsId() == null || data.getIsActive()) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getRolesId() == null || data.getPermissionsId() == null || data.getIsActive() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(PermissionDetail data) throws Exception {
-		if (data.getId() != null) {
-			PermissionDetail permissionDetail = findById(data.getId());
-			if (permissionDetail == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				PermissionDetail permissionDetail = findById(data.getId());
+				if (permissionDetail == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getRolesId() == null || data.getPermissionsId() == null || data.getIsActive() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getRolesId() == null || data.getPermissionsId() == null || data.getIsActive()) {
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 }

@@ -34,4 +34,6 @@ public interface UsersService extends UserDetailsService {
 	void validationSave(Users data) throws Exception;
 
 	void validationUpdate(Users data) throws Exception;
+	
+	Users findByIdAuth() throws Exception; 
 }

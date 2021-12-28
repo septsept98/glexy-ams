@@ -19,7 +19,7 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 
 	@Autowired
 	private BrandDao brandDao;
-	
+
 	@Autowired
 	private AssetDao assetDao;
 
@@ -95,9 +95,9 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 
 	@Override
 	public void validationFk(String id) throws Exception {
-		
+
 		List<Asset> dataAsset = assetDao.findByBrandId(id);
-		
+
 		if (dataAsset != null) {
 
 			throw new ValidationGlexyException("Brand Type in Use");
@@ -107,27 +107,34 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 
 	@Override
 	public void validationSave(Brand data) throws Exception {
-		if(data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Brand data) throws Exception {
-		if (data.getId() != null) {
-			Brand brand = findById(data.getId());
-			if (brand == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Brand brand = findById(data.getId());
+				if (brand == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 }

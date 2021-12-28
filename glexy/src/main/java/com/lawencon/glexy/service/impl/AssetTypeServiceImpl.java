@@ -106,30 +106,36 @@ public class AssetTypeServiceImpl extends BaseGlexyServiceImpl implements AssetT
 
 	@Override
 	public void validationSave(AssetType data) throws Exception {
-		if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+		if (data != null) {
+			if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
 
-			throw new ValidationGlexyException("Data not Complete");
+				throw new ValidationGlexyException("Data not Complete");
 
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-
 	}
 
 	@Override
 	public void validationUpdate(AssetType data) throws Exception {
-		if (data.getId() != null) {
-			AssetType assetType = findById(data.getId());
-			if (assetType == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				AssetType assetType = findById(data.getId());
+				if (assetType == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
-
-			throw new ValidationGlexyException("Data not Complete");
-
-		}
-
 	}
 
 }

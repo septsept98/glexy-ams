@@ -85,7 +85,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			begin();
 
 			Employee employee = employeeService.saveOrUpdate(data.getEmployeeId());
-			
+
 			if (employee == null) {
 				throw new ValidationGlexyException("Employee Not Found");
 			}
@@ -260,25 +260,38 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public void validationSave(Users data) throws Exception {
-		if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getEmail() == null || data.getRolesId() == null || data.getIsActive() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Users data) throws Exception {
-		if (data.getId() != null) {
-			Users user = findById(data.getId());
-			if (user == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Users user = findById(data.getId());
+				if (user == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getEmail() == null || data.getRolesId() == null || data.getIsActive()) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getEmail() == null || data.getRolesId() == null || data.getIsActive()) {
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
+	}
+
+	@Override
+	public Users findByIdAuth() throws Exception {
+
+		return usersDao.findById("8830ab01-7102-4efc-a9b6-70f834578965");
 	}
 
 }

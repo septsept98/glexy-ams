@@ -24,9 +24,9 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 	private InvoiceDao invoiceDao;
 	@Autowired
 	private FileService fileService;
-	@Autowired 
+	@Autowired
 	private AssetDao assetDao;
-	
+
 	@Override
 	public Invoice save(Invoice data) throws Exception {
 
@@ -39,7 +39,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 				data.setVersion(invoice.getVersion());
 			} else {
 
-				data.setCreatedBy(getIdAuth());		
+				data.setCreatedBy(getIdAuth());
 				data.setIsActive(true);
 
 				validationSave(data);
@@ -53,35 +53,33 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 		return data;
 
 	}
-	
+
 	@Override
 	public Invoice update(Invoice data, MultipartFile file) throws Exception {
 		Invoice invoice = invoiceDao.findByCode(data.getCode());
 		File imgInvoice = new File();
-		
+
 		imgInvoice.setFiles(file.getBytes());
 		String ext = file.getOriginalFilename();
 		ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
 		imgInvoice.setExtension(ext);
 
 		File imgInsert = fileService.findByByte(imgInvoice.getFile(), ext);
-		
-		if(imgInsert != null) {
+
+		if (imgInsert != null) {
 			invoice.setInvoiceImg(imgInsert);
 		} else {
 			invoice.setInvoiceImg(imgInvoice);
 		}
-		
+
 		invoice.setUpdatedBy(getIdAuth());
-		
+
 		begin();
 		invoice = invoiceDao.saveOrUpdate(invoice);
 		commit();
-		
+
 		return invoice;
 	}
-
-
 
 	@Override
 	public Invoice findById(String id) throws Exception {
@@ -128,26 +126,32 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 
 	@Override
 	public void validationSave(Invoice data) throws Exception {
-		if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-
 	}
 
 	@Override
 	public void validationUpdate(Invoice data) throws Exception {
-		if (data.getId() != null) {
-			Invoice invoice = findById(data.getId());
-			if (invoice == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Invoice invoice = findById(data.getId());
+				if (invoice == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
-			throw new ValidationGlexyException("Data not Complete");
-		}
-
 	}
 
 }

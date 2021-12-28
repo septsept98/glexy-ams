@@ -106,25 +106,34 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 
 	@Override
 	public void validationSave(Employee data) throws Exception {
-		if(data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null || data.getPhoneNumber() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null
+					|| data.getPhoneNumber() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Employee data) throws Exception {
-		if (data.getId() != null) {
-			Employee employee = findById(data.getId());
-			if (employee == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Employee employee = findById(data.getId());
+				if (employee == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null
+					|| data.getPhoneNumber() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null || data.getPhoneNumber() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 }

@@ -103,7 +103,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			int stockInven = inven.getStock();
 			int index = 0;
 
-			Inventory inventory = inventoryService.findByCode(inven.getCode()); //code
+			Inventory inventory = inventoryService.findByCode(inven.getCode()); // code
 			if (inventory != null) {
 				stock = inventory.getStock() + stockInven;
 				System.out.println("Stock Inventory : " + stock);
@@ -311,7 +311,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				inventory.setNameAsset(excelUtil.getCellData(i, 0));
 				stock = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
 				String codeInsert = excelUtil.getCellData(i, 2);
-				inventory = inventoryService.findById(codeInsert); //bycode
+				inventory = inventoryService.findById(codeInsert); // bycode
 				if (inventory == null) {
 					Inventory inven = new Inventory();
 					inven.setStock(stock);
@@ -427,7 +427,6 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		return asset;
 	}
 
-
 	@Override
 	public void validationFk(String id) throws Exception {
 
@@ -442,8 +441,8 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public List<ReportDataExpiredAsset> findExpiredAsset() throws Exception {
 		List<ReportDataExpiredAsset> listResult = new ArrayList<>();
 		List<Asset> listAsset = assetDao.findExpiredAsset();
-		
-		for(int i=0; i<listAsset.size(); i++) {
+
+		for (int i = 0; i < listAsset.size(); i++) {
 			ReportDataExpiredAsset assetDto = new ReportDataExpiredAsset();
 			Asset asset = listAsset.get(i);
 			assetDto.setImage(asset.getId());
@@ -453,10 +452,10 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			assetDto.setTypeAsset(asset.getAssetTypeId().getNames());
 			assetDto.setStatusAsset(asset.getStatusAssetId().getNameStatusAsset());
 			assetDto.setExpiredDate(asset.getExpiredDate());
-			
+
 			listResult.add(assetDto);
 		}
-		
+
 		return listResult;
 	}
 
@@ -473,55 +472,62 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		map.put("description", company.getDescription());
 		map.put("logo", company.getId());
 		map.put("title", "LICENSE ASSETS EXPIRED");
-		
+
 		byte[] data = JasperUtil.responseToByteArray(findExpiredAsset(), "asset-expired", map);
-		
+
 		return data;
 	}
 
 	@Override
 	public ResDto sendEmailAssetExpiredReport() throws Exception {
 		byte[] data = pdfAssetExpired();
-		
+
 		EmailHelper emailHelper = new EmailHelper();
 		emailHelper.setAttach(data);
 		emailHelper.setFileName("asset-expired.pdf");
-		
-		emailHandler.sendSimpleMessage("septianardi053@gmail.com", "License Asset Expired Report", "Expired Asset", emailHelper);
-		
+
+		emailHandler.sendSimpleMessage("septianardi053@gmail.com", "License Asset Expired Report", "Expired Asset",
+				emailHelper);
+
 		ResDto resDto = new ResDto();
 		resDto.setMsg("Send to Email");
-		
+
 		return resDto;
 	}
-	
+
 	public void validationSave(Asset data) throws Exception {
+		if (data != null) {
+			if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
+					|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getNames() == null
+					|| data.getStatusAssetId() == null) {
 
-		if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
-				|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getNames() == null
-				|| data.getStatusAssetId() == null) {
-
-			throw new ValidationGlexyException("Data not Complete");
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-
 	}
 
 	@Override
 	public void validationUpdate(Asset data) throws Exception {
-		if (data.getId() != null) {
-			Asset asset = findById(data.getId());
-			if (asset == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Asset asset = findById(data.getId());
+				if (asset == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+
+			if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
+					|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getNames() == null
+					|| data.getStatusAssetId() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}
-
-		if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
-				|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getNames() == null
-				|| data.getStatusAssetId() == null) {
-
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
 	}
 }
