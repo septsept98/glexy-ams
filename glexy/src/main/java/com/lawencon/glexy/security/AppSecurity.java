@@ -16,7 +16,6 @@ import com.lawencon.glexy.service.UsersService;
 
 @Profile("test")
 @EnableWebSecurity
-//@Profile("kkk")
 public class AppSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Autowired

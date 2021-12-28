@@ -16,12 +16,11 @@ import com.lawencon.glexy.service.InventoryService;
 
 @Service
 
-public class InventoryServiceImpl extends BaseGlexyServiceImpl implements InventoryService{
-
+public class InventoryServiceImpl extends BaseGlexyServiceImpl implements InventoryService {
 
 	@Autowired
 	private InventoryDao inventoryDao;
-	
+
 	@Autowired
 	private AssetDao assetDao;
 
@@ -42,7 +41,6 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 				data.setCreatedBy(getIdAuth());
 				data.setIsActive(true);
 				validationSave(data);
-
 
 			}
 			data = inventoryDao.saveOrUpdate(data);
@@ -69,7 +67,6 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 	public List<Inventory> findAll() throws Exception {
 		return inventoryDao.findAll();
 	}
-	
 
 	@Override
 	public List<Inventory> searchByNameCode(String search) throws Exception {
@@ -108,30 +105,37 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 
 			throw new ValidationGlexyException("Inventory Type in Use");
 		}
-		
+
 	}
 
 	@Override
 	public void validationSave(Inventory data) throws Exception {
-		if(data.getCode() == null || data.getLatestStock() == null || data.getNameAsset() == null ) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getCode() == null || data.getLatestStock() == null || data.getNameAsset() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Inventory data) throws Exception {
-		if (data.getId() != null) {
-			Inventory inventory = findById(data.getId());
-			if (inventory == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Inventory inventory = findById(data.getId());
+				if (inventory == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getCode() == null || data.getLatestStock() == null || data.getNameAsset() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getCode() == null || data.getLatestStock() == null || data.getNameAsset() == null ) {
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 }

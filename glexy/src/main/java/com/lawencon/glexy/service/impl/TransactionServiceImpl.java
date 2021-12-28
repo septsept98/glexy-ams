@@ -184,12 +184,11 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 
 	@Override
 	public void validationSave(Transactions data) throws Exception {
-		if(data.getIsActive() == null || data.getQuantity() == null || data.getUserId() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getIsActive() == null || data.getQuantity() == null || data.getUserId() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		}
-		
 	}
-
-	
 
 }

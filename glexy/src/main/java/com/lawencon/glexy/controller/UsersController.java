@@ -121,5 +121,13 @@ public class UsersController {
 		result.setMsg(MessageEnum.UPDATED.getMsg());
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/profile")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
+	public ResponseEntity<?> getByIdAuth() throws Exception {
+		Users result = usersService.findByIdAuth();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
 
 }

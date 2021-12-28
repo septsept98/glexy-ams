@@ -14,46 +14,46 @@ import com.lawencon.glexy.service.PermissionsService;
 
 @Service
 public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements PermissionsService {
-	
+
 	@Autowired
 	private PermissionsDao permissionsDao;
-	
+
 	@Autowired
 	private PermissionDetailDao permissionDetailDao;
-	
+
 	@Override
 	public List<Permissions> findAll() throws Exception {
-		
+
 		return permissionsDao.findAll();
 	}
 
 	@Override
 	public Permissions findById(String id) throws Exception {
-		
+
 		return permissionsDao.findById(id);
 	}
 
 	@Override
 	public Permissions saveOrUpdate(Permissions data) throws Exception {
-	
+
 		try {
 			if (data.getId() != null) {
 				validationUpdate(data);
 				Permissions permissions = findById(data.getId());
-				data.setCode(permissions.getCode()); 
+				data.setCode(permissions.getCode());
 				data.setCreatedAt(permissions.getCreatedAt());
 				data.setCreatedBy(permissions.getCreatedBy());
 				data.setUpdatedBy(getIdAuth());
 				data.setVersion(permissions.getVersion());
 				data.setIsActive(permissions.getIsActive());
-			}else {
+			} else {
 				validationSave(data);
 				data.setUpdatedBy(getIdAuth());
 			}
 			begin();
 			data = permissionsDao.saveOrUpdate(data);
 			commit();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
@@ -63,7 +63,7 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 
 	@Override
 	public boolean deleteById(String id) throws Exception {
-		
+
 		boolean result = false;
 		try {
 			validationFk(id);
@@ -81,39 +81,44 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 	@Override
 	public void validationFk(String id) throws Exception {
 		List<PermissionDetail> dataPermissionDetail = permissionDetailDao.findByPermissionsId(id);
-		
+
 		if (dataPermissionDetail != null) {
 
 			throw new ValidationGlexyException("Permission in Use");
 		}
-		
+
 	}
 
 	@Override
 	public void validationSave(Permissions data) throws Exception {
-		if(data.getCode() == null || data.getNamePermission() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getCode() == null || data.getNamePermission() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Permissions data) throws Exception {
-		if (data.getId() != null) {
-			Permissions permission = findById(data.getId());
-			if (permission == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Permissions permission = findById(data.getId());
+				if (permission == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getCode() == null || data.getNamePermission() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getCode() == null || data.getNamePermission() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
-	
-	
 }

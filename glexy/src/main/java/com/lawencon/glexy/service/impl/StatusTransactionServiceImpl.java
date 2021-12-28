@@ -25,7 +25,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 
 	@Autowired
 	private StatusAssetService statusAssetService;
-	
+
 	@Autowired
 	private TransactionDetailDao transactionDetailDao;
 
@@ -100,55 +100,62 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 		String code = "STR";
 		List<StatusTransaction> listStatusTransactions = findAll();
 		int index = 1;
-		if(listStatusTransactions != null) {
+		if (listStatusTransactions != null) {
 			index = listStatusTransactions.size();
 		}
 		String codeSTR = code + index;
 		System.out.println(codeSTR);
-		for(int i = 0; i<listStatusTransactions.size();i++) {
+		for (int i = 0; i < listStatusTransactions.size(); i++) {
 			System.out.println(listStatusTransactions.get(i).getCodeStatusTr());
-			if(listStatusTransactions.get(i).getCodeStatusTr().equals(codeSTR)) {
+			if (listStatusTransactions.get(i).getCodeStatusTr().equals(codeSTR)) {
 				index++;
 			}
 			codeSTR = code + index;
 		}
-		
-		return codeSTR ;
+
+		return codeSTR;
 	}
 
 	@Override
 	public void validationFk(String id) throws Exception {
-		
+
 		List<TransactionDetail> dataTranscation = transactionDetailDao.findByStatusTransactionId(id);
 
 		if (dataTranscation != null) {
 
 			throw new ValidationGlexyException("Status Transaction in Use");
 		}
-		
+
 	}
 
 	@Override
 	public void validationSave(StatusTransaction data) throws Exception {
-		if(data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(StatusTransaction data) throws Exception {
-		if (data.getId() != null) {
-			StatusTransaction statusTransaction = findById(data.getId());
-			if (statusTransaction == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				StatusTransaction statusTransaction = findById(data.getId());
+				if (statusTransaction == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 }
