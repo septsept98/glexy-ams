@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.glexy.dao.UsersDao;
+import com.lawencon.glexy.model.Employee;
 import com.lawencon.glexy.model.Roles;
 import com.lawencon.glexy.model.Users;
 
@@ -101,7 +102,7 @@ public class UsersDaoImpl extends BaseDaoImpl<Users> implements UsersDao {
 	@Override
 	public List<Users> findByEmployeeId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT roles_id FROM users ");
+		sql.append("SELECT employee_id FROM users ");
 		sql.append("WHERE employee_id = :id");
 		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
 
@@ -111,9 +112,9 @@ public class UsersDaoImpl extends BaseDaoImpl<Users> implements UsersDao {
 
 			Users data = new Users();
 
-			Roles roles = new Roles();
-			roles.setId(rs.toString());
-			data.setRolesId(roles);
+			Employee employee = new Employee();
+			employee.setId(rs.toString());
+			data.setEmployeeId(employee);
 			resultUsers.add(data);
 		});
 
