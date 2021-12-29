@@ -49,7 +49,7 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 			company.setVersion(data.getVersion());
 
 			
-			data.setCreatedBy(getIdAuth());
+			data.setCreatedBy("3");
 
 			File file = new File();
 			file.setFiles(files.getBytes());

@@ -39,7 +39,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 				data.setVersion(invoice.getVersion());
 			} else {
 
-				data.setCreatedBy(getIdAuth());		
+				data.setCreatedBy("3");		
 				data.setIsActive(true);
 
 				validationSave(data);
@@ -128,7 +128,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 
 	@Override
 	public void validationSave(Invoice data) throws Exception {
-		if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
+		if (data.getCode() == null || data.getTotalPrice() == null) {
 			throw new ValidationGlexyException("Data not Complete");
 		}
 

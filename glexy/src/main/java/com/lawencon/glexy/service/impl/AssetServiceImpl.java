@@ -165,7 +165,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				assetInsert.setNames(inven.getNameAsset());
 				assetInsert.setAssetImg(asset.getAssetImg());
 				assetInsert.setCode(codeAsset);
-				assetInsert.setCreatedBy(getIdAuth());
+				assetInsert.setCreatedBy("3");
 				assetInsert.setInvoiceId(invoice);
 				assetInsert.setInventoryId(inven);
 
@@ -177,7 +177,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				trackAsset.setDateActivity(LocalDate.now());
 				trackAsset.setUserId(getIdAuth());
 				trackAsset.setTransactionCode("BBA");
-				trackAsset.setCreatedBy(getIdAuth());
+				trackAsset.setCreatedBy("3");
 				trackAsset.setIsActive(true);
 
 				trackAssetService.saveOrUpdate(trackAsset);
@@ -498,8 +498,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public void validationSave(Asset data) throws Exception {
 
 		if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
-				|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getNames() == null
-				|| data.getStatusAssetId() == null) {
+				|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getStatusAssetId() == null) {
 
 			throw new ValidationGlexyException("Data not Complete");
 		}
