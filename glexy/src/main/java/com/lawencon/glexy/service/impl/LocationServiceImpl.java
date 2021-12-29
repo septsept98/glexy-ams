@@ -95,7 +95,7 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 	@Override
 	public void validationFk(String id) throws Exception {
 		List<Transactions> dataEmployee = transactionDao.findByLocationId(id);
-		if (dataEmployee != null) {
+		if (dataEmployee.size() != 0) {
 
 			throw new ValidationGlexyException("Location Type in Use");
 		}
@@ -105,7 +105,7 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 	@Override
 	public void validationSave(Location data) throws Exception {
 		if (data != null) {
-			if (data.getCode() == null || data.getNamePlace() == null || data.getCompanyId() == null) {
+			if (data.getCode().isBlank()  || data.getNamePlace().isBlank()  || data.getCompanyId().isBlank() ) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		}else {

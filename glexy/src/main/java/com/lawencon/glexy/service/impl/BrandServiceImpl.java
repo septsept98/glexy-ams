@@ -35,10 +35,8 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 				data.setUpdatedBy(getIdAuth());
 				data.setVersion(brand.getVersion());
 			} else {
-				data.setCreatedBy(getIdAuth());
-
+				data.setCreatedBy("1");
 				validationSave(data);
-
 			}
 
 			begin();
@@ -98,7 +96,7 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 
 		List<Asset> dataAsset = assetDao.findByBrandId(id);
 
-		if (dataAsset != null) {
+		if (dataAsset.size() != 0) {
 
 			throw new ValidationGlexyException("Brand Type in Use");
 		}
@@ -108,7 +106,7 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 	@Override
 	public void validationSave(Brand data) throws Exception {
 		if (data != null) {
-			if (data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
+			if (data.getCode().isBlank()  || data.getNames().isBlank()  || data.getIsActive() == null) {
 
 				throw new ValidationGlexyException("Data not Complete");
 			}
@@ -128,7 +126,7 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-			if (data.getCode() == null || data.getNames() == null || data.getIsActive() == null) {
+			if (data.getCode().isBlank()  || data.getNames().isBlank()  || data.getIsActive() == null) {
 
 				throw new ValidationGlexyException("Data not Complete");
 			}

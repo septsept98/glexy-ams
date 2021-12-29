@@ -97,7 +97,7 @@ public class AssetTypeServiceImpl extends BaseGlexyServiceImpl implements AssetT
 	@Override
 	public void validationFk(String id) throws Exception {
 		List<Asset> dataEmployee = assetDao.findByAssetTypeId(id);
-		if (dataEmployee != null) {
+		if (dataEmployee.size() != 0) {
 
 			throw new ValidationGlexyException("Asset Type in Use");
 		}
@@ -107,7 +107,7 @@ public class AssetTypeServiceImpl extends BaseGlexyServiceImpl implements AssetT
 	@Override
 	public void validationSave(AssetType data) throws Exception {
 		if (data != null) {
-			if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+			if (data.getCode().isBlank() || data.getIsActive() == null || data.getNames().isBlank() ) {
 
 				throw new ValidationGlexyException("Data not Complete");
 
@@ -128,7 +128,7 @@ public class AssetTypeServiceImpl extends BaseGlexyServiceImpl implements AssetT
 			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-			if (data.getCode() == null || data.getIsActive() == null || data.getNames() == null) {
+			if (data.getCode().isBlank()  || data.getIsActive() == null || data.getNames().isBlank() ) {
 
 				throw new ValidationGlexyException("Data not Complete");
 

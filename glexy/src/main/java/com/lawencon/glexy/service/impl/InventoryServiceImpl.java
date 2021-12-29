@@ -38,7 +38,7 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 				data.setVersion(inventory.getVersion());
 			} else {
 
-				data.setCreatedBy(getIdAuth());
+				data.setCreatedBy("3");
 				data.setIsActive(true);
 				validationSave(data);
 
@@ -101,7 +101,7 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 	@Override
 	public void validationFk(String id) throws Exception {
 		List<Asset> dataAsset = assetDao.findByInventoryId(id);
-		if (dataAsset != null) {
+		if (dataAsset.size() != 0) {
 
 			throw new ValidationGlexyException("Inventory Type in Use");
 		}
@@ -110,8 +110,9 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 
 	@Override
 	public void validationSave(Inventory data) throws Exception {
+
 		if (data != null) {
-			if (data.getCode() == null || data.getLatestStock() == null || data.getNameAsset() == null) {
+			if (data.getCode().isBlank()  || data.getStock() == null || data.getNameAsset().isBlank() ) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {

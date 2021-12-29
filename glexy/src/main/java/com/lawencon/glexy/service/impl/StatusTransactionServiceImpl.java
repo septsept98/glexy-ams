@@ -121,11 +121,9 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 
 		List<TransactionDetail> dataTranscation = transactionDetailDao.findByStatusTransactionId(id);
 
-		if (!dataTranscation.isEmpty()) {
-
+		if (dataTranscation.size() != 0) {
 			throw new ValidationGlexyException("Status Transaction in Use");
-		}
-
+    }
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class EmployeeController extends BaseController {
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody Employee data) throws Exception {
-		employeeService.saveOrUpdate(data);
+		employeeService.saveOrUpdateEmployee(data);
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(data.getId());
 		
@@ -66,7 +66,7 @@ public class EmployeeController extends BaseController {
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Employee data) throws Exception {
-		data = employeeService.saveOrUpdate(data);
+		data = employeeService.saveOrUpdateEmployee(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(data.getVersion());
 		

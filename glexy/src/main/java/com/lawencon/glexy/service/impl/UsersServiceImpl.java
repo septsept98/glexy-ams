@@ -150,7 +150,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 		try {
 			validationUpdate(data);
 			Users users = usersDao.findById(data.getId());
-			users.setUpdatedBy(getIdAuth());
+			users.setUpdatedBy("1");
 			users.setVersion(data.getVersion());
 
 			Roles roles = rolesService.findById(data.getRolesId().getId());
@@ -251,7 +251,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	@Override
 	public void validationFk(String id) throws Exception {
 		List<Transactions> dataTransactions = transactionDao.findByUsersId(id);
-		if (dataTransactions != null) {
+		if (dataTransactions.size() != 0) {
 
 			throw new ValidationGlexyException("User in Use");
 		}
@@ -261,7 +261,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	@Override
 	public void validationSave(Users data) throws Exception {
 		if (data != null) {
-			if (data.getEmail() == null || data.getRolesId() == null || data.getIsActive() == null) {
+			if (data.getEmail().isBlank()  || data.getRolesId() == null || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {
@@ -280,7 +280,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-			if (data.getEmail() == null || data.getRolesId() == null || data.getIsActive()) {
+			if (data.getEmail().isBlank()  || data.getRolesId() == null || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {

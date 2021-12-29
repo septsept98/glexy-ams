@@ -136,7 +136,7 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 		List<Employee> dataEmployee = employeeDao.findByCompanyId(id);
 		List<Asset> dataAsset = assetDao.findByCompanyId(id);
 		List<Location> dataLocation = locationDao.findByCompanyId(id);
-		if (dataEmployee != null || dataAsset != null || dataLocation != null) {
+		if (dataEmployee.size() != 0 || dataAsset.size() != 0|| dataLocation.size() != 0) {
 
 			throw new ValidationGlexyException("Company in Use");
 		}
@@ -146,9 +146,9 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 	@Override
 	public void validationSave(Company data) throws Exception {
 		if (data != null) {
-			if (data.getAddress() == null || data.getCode() == null || data.getDescription() == null
-					|| data.getEmail() == null || data.getFax() == null || data.getNames() == null
-					|| data.getPhoneNumber() == null || data.getWebsite() == null) {
+			if (data.getAddress().isBlank()  || data.getCode().isBlank()  || data.getDescription().isBlank() 
+					|| data.getEmail().isBlank()  || data.getFax().isBlank()  || data.getNames().isBlank() 
+					|| data.getPhoneNumber().isBlank() || data.getWebsite().isBlank() ) {
 
 				throw new ValidationGlexyException("Data not Complete");
 
@@ -169,9 +169,9 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-			if (data.getAddress() == null || data.getCode() == null || data.getDescription() == null
-					|| data.getEmail() == null || data.getFax() == null || data.getNames() == null
-					|| data.getPhoneNumber() == null || data.getWebsite() == null) {
+			if (data.getAddress().isBlank() || data.getCode().isBlank()  || data.getDescription().isBlank() 
+					|| data.getEmail().isBlank()  || data.getFax().isBlank()  || data.getNames().isBlank() 
+					|| data.getPhoneNumber().isBlank()  || data.getWebsite().isBlank() ) {
 
 				throw new ValidationGlexyException("Data not Complete");
 

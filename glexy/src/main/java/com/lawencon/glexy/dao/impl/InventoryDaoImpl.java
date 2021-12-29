@@ -74,7 +74,7 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 			}
 
 		} catch (NoResultException e) {
-			e.printStackTrace();
+			return null;
 		} catch (NonUniqueResultException e) {
 			e.printStackTrace();
 		}

@@ -82,7 +82,7 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 	public void validationFk(String id) throws Exception {
 		List<PermissionDetail> dataPermissionDetail = permissionDetailDao.findByPermissionsId(id);
 
-		if (dataPermissionDetail != null) {
+		if (dataPermissionDetail.size() != 0) {
 
 			throw new ValidationGlexyException("Permission in Use");
 		}
@@ -92,7 +92,7 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 	@Override
 	public void validationSave(Permissions data) throws Exception {
 		if (data != null) {
-			if (data.getCode() == null || data.getNamePermission() == null) {
+			if (data.getCode().isBlank()  || data.getNamePermission().isBlank() ) {
 
 				throw new ValidationGlexyException("Data not Complete");
 			}

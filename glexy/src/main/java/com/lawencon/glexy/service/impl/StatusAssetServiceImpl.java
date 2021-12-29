@@ -113,7 +113,7 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		List<Asset> dataAsset = assetDao.findByStatusAssetId(id);
 		List<TransactionDetail> dataTranscation = transactionDetailDao.findByStatusAssetId(id);
 		List<StatusTransaction> dataStatusTransaction = statusTransactionDao.findByStatusAssetId(id);
-		if (!dataAsset.isEmpty() || !dataTranscation.isEmpty() || !dataStatusTransaction.isEmpty()) {
+		if (dataAsset.size() != 0|| dataTranscation.size() != 0 || dataStatusTransaction.size() != 0) {
 			throw new ValidationGlexyException("Status Asset in Use");
 		}
 

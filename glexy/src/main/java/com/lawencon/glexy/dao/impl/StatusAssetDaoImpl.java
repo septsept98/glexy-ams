@@ -67,10 +67,9 @@ public class StatusAssetDaoImpl extends BaseDaoImpl<StatusAsset> implements Stat
 			StringBuilder sql = new StringBuilder();
 			sql.append("Select id ");
 			sql.append("FROM status_assets ");
-			sql.append("WHERE name_status_asset LIKE %:name% OR code_status_asset LIKE %:name%");
+			sql.append("WHERE name_status_asset LIKE '%"+name+"%' OR code_status_asset LIKE '%"+name+"%'");
 			
 			List<?> result = createNativeQuery(sql.toString())
-					.setParameter("name", name)
 					.getResultList();	
 			result.forEach(rs -> {
 				StatusAsset statusAsset = new StatusAsset();
