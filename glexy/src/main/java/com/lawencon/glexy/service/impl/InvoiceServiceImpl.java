@@ -126,8 +126,9 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 
 	@Override
 	public void validationSave(Invoice data) throws Exception {
+
 		if (data != null) {
-			if (data.getCode().isBlank()  || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
+			if (data.getCode().isBlank() || data.getTotalPrice() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {
