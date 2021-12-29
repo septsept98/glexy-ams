@@ -22,13 +22,13 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 
 	@Autowired
 	private StatusAssetDao statusAssetDao;
-	
+
 	@Autowired
 	private AssetDao assetDao;
-	
+
 	@Autowired
 	private TransactionDetailDao transactionDetailDao;
-	
+
 	@Autowired
 	private StatusTransactionDao statusTransactionDao;
 
@@ -54,7 +54,6 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 			commit();
 			return data;
 		} catch (Exception e) {
-			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
@@ -70,7 +69,6 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 			commit();
 			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
 			rollback();
 			throw new Exception(e);
 		}
@@ -96,18 +94,18 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		String code = "SA";
 		List<StatusAsset> listStatusAsset = findAll();
 		int index = 1;
-		if(listStatusAsset != null) {
+		if (listStatusAsset != null) {
 			index = listStatusAsset.size();
 		}
 		String codeSA = code + index;
-		for(int i = 0; i<listStatusAsset.size();i++) {
-			if(listStatusAsset.get(i).getCodeStatusAsset().equals(codeSA)) {
+		for (int i = 0; i < listStatusAsset.size(); i++) {
+			if (listStatusAsset.get(i).getCodeStatusAsset().equals(codeSA)) {
 				index++;
 			}
 			codeSA = code + index;
 		}
-		
-		return codeSA ;
+
+		return codeSA;
 	}
 
 	@Override
@@ -115,34 +113,53 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		List<Asset> dataAsset = assetDao.findByStatusAssetId(id);
 		List<TransactionDetail> dataTranscation = transactionDetailDao.findByStatusAssetId(id);
 		List<StatusTransaction> dataStatusTransaction = statusTransactionDao.findByStatusAssetId(id);
-		if (dataAsset != null || dataTranscation != null || dataStatusTransaction != null) {
-
+		if (dataAsset.size() != 0|| dataTranscation.size() != 0 || dataStatusTransaction.size() != 0) {
 			throw new ValidationGlexyException("Status Asset in Use");
 		}
-		
+
 	}
 
 	@Override
 	public void validationSave(StatusAsset data) throws Exception {
-		if(data.getCodeStatusAsset() == null || data.getNameStatusAsset() == null || data.getVersion() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			List<StatusAsset> listStatusAssets = statusAssetDao.findAll();
+			for (int i = 0; i < listStatusAssets.size(); i++) {
+				if (data.getNameStatusAsset().equalsIgnoreCase(listStatusAssets.get(i).getNameStatusAsset())) {
+					throw new ValidationGlexyException("Name Status Already Exist");
+				}
+			}
+			if (data.getNameStatusAsset() == null || data.getIsActive() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(StatusAsset data) throws Exception {
-		if (data.getId() != null) {
-			StatusAsset statusAsset = findById(data.getId());
-			if (statusAsset == null) {
+		if (data != null) {
+			List<StatusAsset> listStatusAssets = statusAssetDao.findAll();
+			for (int i = 0; i < listStatusAssets.size(); i++) {
+				if (data.getNameStatusAsset().equalsIgnoreCase(listStatusAssets.get(i).getNameStatusAsset())) {
+					throw new ValidationGlexyException("Name Status Already Exist");
+				}
+			}
+			if (data.getId() != null) {
+				StatusAsset statusAsset = findById(data.getId());
+				if (statusAsset == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getCodeStatusAsset() == null || data.getNameStatusAsset() == null || data.getVersion() == null) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getCodeStatusAsset() == null || data.getNameStatusAsset() == null || data.getVersion() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
+
 	}
 
 	@Override

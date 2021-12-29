@@ -68,8 +68,8 @@ public class UsersController {
 	
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
-	public ResponseEntity<?> update(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
-		Users user = usersService.update(new ObjectMapper().readValue(data, Users.class), file);
+	public ResponseEntity<?> update(@RequestBody Users data ) throws Exception {
+		Users user = usersService.update(data, null);
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(user.getVersion());
 		
@@ -120,6 +120,14 @@ public class UsersController {
 		result.setData(ver);
 		result.setMsg(MessageEnum.UPDATED.getMsg());
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/profile")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
+	public ResponseEntity<?> getByIdAuth() throws Exception {
+		Users result = usersService.findByIdAuth();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
 	}
 
 }

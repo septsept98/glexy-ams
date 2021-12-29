@@ -20,4 +20,6 @@ public interface EmployeeService {
 
 	void validationUpdate(Employee data) throws Exception;
 	
+	Employee saveOrUpdateEmployee(Employee data) throws Exception;
+	
 }

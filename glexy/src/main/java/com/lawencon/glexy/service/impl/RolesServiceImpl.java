@@ -23,7 +23,7 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 	@Autowired
 	private PermissionDetailService permissionDetailService;
-	
+
 	@Autowired
 	private UsersDao usersDao;
 
@@ -47,7 +47,7 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 				validationUpdate(null);
 				Roles roles = findById(data.getRoles().getId());
 				roles.setNameRole(data.getRoles().getNameRole());
-				roles.setUpdatedBy(getIdAuth());
+				roles.setUpdatedBy("1");
 				data.setRoles(roles);
 
 			} else {
@@ -56,16 +56,17 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 				roles.setNameRole(data.getRoles().getNameRole());
 				roles.setCode(data.getRoles().getCode());
 				roles.setIsActive(data.getRoles().getIsActive());
-				roles.setCreatedBy(getIdAuth());
+				roles.setCreatedBy("1");
+				data.setRoles(roles);
 			}
 
 			begin();
 			Roles rolesNew = rolesDao.saveOrUpdate(data.getRoles());
-			if (data.getRoles().getId() == null) {
-				for (int i = 0; i < data.getData().size(); i++) {
-					data.getData().get(i).setRolesId(rolesNew);
-					permissionDetailService.saveOrUpdate(data.getData().get(i));
-				}
+
+			for (int i = 0; i < data.getData().size(); i++) {
+				data.getData().get(i).setRolesId(rolesNew);
+
+				permissionDetailService.saveOrUpdate(data.getData().get(i));
 			}
 			commit();
 			return data.getRoles();
@@ -101,8 +102,8 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 	public void validationFk(String id) throws Exception {
 
 		List<PermissionDetail> dataPermissionDetail = permissionDetailService.findByRoleId(id);
-		List<Users> dataUsers  = usersDao.findByRolesId(id);
-		if (dataPermissionDetail != null || dataUsers != null) {
+		List<Users> dataUsers = usersDao.findByRolesId(id);
+		if (dataPermissionDetail.size() != 0 || dataUsers.size() != 0) {
 
 			throw new ValidationGlexyException("Roles in Use");
 		}
@@ -111,29 +112,37 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 	@Override
 	public void validationSave(Roles data) throws Exception {
-		if(data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
-			
+		if (data != null) {
+			if (data.getCode().isBlank() || data.getNameRole().isBlank()  || data.getIsActive() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Roles data) throws Exception {
-		if (data.getId() != null) {
-			Roles role = findById(data.getId());
-			if (role == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Roles role = findById(data.getId());
+				if (role == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+
+			if (data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
+
+				throw new ValidationGlexyException("Data not Complete");
+
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
-			
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 }

@@ -50,7 +50,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 				validationUpdate(data);
 				Employee employee = findById(data.getId());
 				data.setNip(employee.getNip());
-				data.setUpdatedBy(getIdAuth());
+				data.setUpdatedBy("1");
 				data.setCreatedAt(employee.getCreatedAt());
 				data.setCreatedBy(employee.getCreatedBy());
 				data.setVersion(employee.getVersion());
@@ -98,7 +98,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 
 		List<Users> dataUsers = usersDao.findByEmployeeId(id);
 		List<Transactions> dataTransactions = transactionDao.findByEmployeeId(id);
-		if (dataUsers != null || dataTransactions != null) {
+		if (dataUsers.size() != 0 || dataTransactions.size() != 0) {
 
 			throw new ValidationGlexyException("Employee in Use");
 		}
@@ -106,25 +106,68 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 
 	@Override
 	public void validationSave(Employee data) throws Exception {
-		if(data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null || data.getPhoneNumber() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+		if (data != null) {
+			if (data.getGender().isBlank()  || data.getNameEmployee().isBlank()  || data.getNip().isBlank() 
+					|| data.getPhoneNumber().isBlank() ) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Employee data) throws Exception {
-		if (data.getId() != null) {
-			Employee employee = findById(data.getId());
-			if (employee == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Employee employee = findById(data.getId());
+				if (employee == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
+			if (data.getGender().isBlank()  || data.getNameEmployee().isBlank()  || data.getNip().isBlank() 
+					|| data.getPhoneNumber().isBlank() ) {
+				throw new ValidationGlexyException("Data not Complete");
+			}
 		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getGender() == null || data.getNameEmployee() == null || data.getNip() == null || data.getPhoneNumber() == null) {
-			throw new ValidationGlexyException("Data not Complete");
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
+	}
+
+	@Override
+	public Employee saveOrUpdateEmployee(Employee data) throws Exception {
+		try {
+			if (data.getId() != null) {
+				validationUpdate(data);
+				Employee employee = findById(data.getId());
+				data.setNip(employee.getNip());
+				data.setUpdatedBy("1");
+				data.setCreatedAt(employee.getCreatedAt());
+				data.setCreatedBy(employee.getCreatedBy());
+				data.setVersion(employee.getVersion());
+				data.setIsActive(employee.getIsActive());
+
+			} else {
+				validationSave(data);
+				data.setCreatedBy("1");
+
+			}
+
+			Company company = companyService.findById(data.getCompanyId().getId());
+			if (company == null) {
+				throw new ValidationGlexyException("Company Not Found");
+			}
+			data.setCompanyId(company);
+			begin();
+			data = employeeDao.saveOrUpdate(data);
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+		return data;
 	}
 
 }

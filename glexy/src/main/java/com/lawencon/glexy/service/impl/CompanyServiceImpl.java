@@ -26,18 +26,18 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 
 	@Autowired
 	private CompanyDao companyDao;
-	
+
 	@Autowired
 	private FileService fileService;
-	
+
 	@Autowired
 	private EmployeeDao employeeDao;
-	
+
 	@Autowired
 	private AssetDao assetDao;
-	
+
 	@Autowired
-	private LocationDao locationDao; 
+	private LocationDao locationDao;
 
 	@Override
 	public Company save(Company data, MultipartFile files) throws Exception {
@@ -48,8 +48,7 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 			company.setCreatedBy("3");
 			company.setVersion(data.getVersion());
 
-			
-			data.setCreatedBy("3");
+			data.setCreatedBy(getIdAuth());
 
 			File file = new File();
 			file.setFiles(files.getBytes());
@@ -133,43 +132,53 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 
 	@Override
 	public void validationFk(String id) throws Exception {
-		
+
 		List<Employee> dataEmployee = employeeDao.findByCompanyId(id);
 		List<Asset> dataAsset = assetDao.findByCompanyId(id);
 		List<Location> dataLocation = locationDao.findByCompanyId(id);
-		if (dataEmployee != null || dataAsset != null || dataLocation != null) {
+		if (dataEmployee.size() != 0 || dataAsset.size() != 0|| dataLocation.size() != 0) {
 
 			throw new ValidationGlexyException("Company in Use");
 		}
-		
+
 	}
 
 	@Override
 	public void validationSave(Company data) throws Exception {
-		if(data.getAddress() == null || data.getCode() == null || data.getDescription() == null || data.getEmail() == null || data.getFax() == null|| data.getNames() == null || data.getPhoneNumber() == null || data.getWebsite() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
-			
+		if (data != null) {
+			if (data.getAddress().isBlank()  || data.getCode().isBlank()  || data.getDescription().isBlank() 
+					|| data.getEmail().isBlank()  || data.getFax().isBlank()  || data.getNames().isBlank() 
+					|| data.getPhoneNumber().isBlank() || data.getWebsite().isBlank() ) {
+
+				throw new ValidationGlexyException("Data not Complete");
+
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
 		}
-		
 	}
 
 	@Override
 	public void validationUpdate(Company data) throws Exception {
-		if (data.getId() != null) {
-			Company company = findById(data.getId());
-			if (company == null) {
+		if (data != null) {
+			if (data.getId() != null) {
+				Company company = findById(data.getId());
+				if (company == null) {
+					throw new ValidationGlexyException("Data not Found");
+				}
+			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-		} else {
-			throw new ValidationGlexyException("Data not Found");
-		}if(data.getAddress() == null || data.getCode() == null || data.getDescription() == null || data.getEmail() == null || data.getFax() == null|| data.getNames() == null || data.getPhoneNumber() == null || data.getWebsite() == null) {
-			
-			throw new ValidationGlexyException("Data not Complete");
-			
-		}
-		
-	}
+			if (data.getAddress().isBlank() || data.getCode().isBlank()  || data.getDescription().isBlank() 
+					|| data.getEmail().isBlank()  || data.getFax().isBlank()  || data.getNames().isBlank() 
+					|| data.getPhoneNumber().isBlank()  || data.getWebsite().isBlank() ) {
 
+				throw new ValidationGlexyException("Data not Complete");
+
+			}
+		} else {
+			throw new ValidationGlexyException("Data Empty");
+		}
+	}
 
 }
