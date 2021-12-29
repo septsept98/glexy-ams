@@ -121,7 +121,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 
 		List<TransactionDetail> dataTranscation = transactionDetailDao.findByStatusTransactionId(id);
 
-		if (dataTranscation != null) {
+		if (dataTranscation.size() != 0) {
 
 			throw new ValidationGlexyException("Status Transaction in Use");
 		}
@@ -131,7 +131,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 	@Override
 	public void validationSave(StatusTransaction data) throws Exception {
 		if (data != null) {
-			if (data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+			if (data.getCodeStatusTr().isBlank()  || data.getNameStatusTr().isBlank() || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {
@@ -150,7 +150,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-			if (data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+			if (data.getCodeStatusTr().isBlank()  || data.getNameStatusTr().isBlank()  || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {

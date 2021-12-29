@@ -117,7 +117,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 	public void validationFk(String id) throws Exception {
 
 		List<Asset> dataAsset = assetDao.findByInventoryId(id);
-		if (dataAsset != null) {
+		if (dataAsset.size() != 0) {
 
 			throw new ValidationGlexyException("Invoice in Use");
 		}
@@ -127,7 +127,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 	@Override
 	public void validationSave(Invoice data) throws Exception {
 		if (data != null) {
-			if (data.getCode() == null || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
+			if (data.getCode().isBlank()  || data.getPurchaseDate() == null || data.getTotalPrice() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {

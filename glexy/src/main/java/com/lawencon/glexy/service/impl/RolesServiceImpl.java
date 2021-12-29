@@ -103,7 +103,7 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 		List<PermissionDetail> dataPermissionDetail = permissionDetailService.findByRoleId(id);
 		List<Users> dataUsers = usersDao.findByRolesId(id);
-		if (dataPermissionDetail != null || dataUsers != null) {
+		if (dataPermissionDetail.size() != 0 || dataUsers.size() != 0) {
 
 			throw new ValidationGlexyException("Roles in Use");
 		}
@@ -113,7 +113,7 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 	@Override
 	public void validationSave(Roles data) throws Exception {
 		if (data != null) {
-			if (data.getCode() == null || data.getNameRole() == null || data.getIsActive() == null) {
+			if (data.getCode().isBlank() || data.getNameRole().isBlank()  || data.getIsActive() == null) {
 
 				throw new ValidationGlexyException("Data not Complete");
 
