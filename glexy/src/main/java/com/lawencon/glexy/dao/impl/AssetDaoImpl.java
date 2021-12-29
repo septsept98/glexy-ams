@@ -251,4 +251,26 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		return resultAsset;
 	}
 
+	@Override
+	public List<Asset> searchAssetGeneral(String search) throws Exception {
+		List<Asset> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select id ");
+		sql.append("FROM assets ");
+		sql.append("WHERE status_asset_id = (SELECT id FROM asset_types WHERE lower(names) = 'general') AND ");
+		sql.append("(lower(names) LIKE lower('%" + search + "%') OR lower(code) LIKE lower('%" + search + "%'))");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			Asset asset = new Asset();
+			asset.setId(rs.toString());
+			asset = getById(asset.getId());
+
+			listResult.add(asset);
+		});
+
+		return listResult;
+	}
+
 }

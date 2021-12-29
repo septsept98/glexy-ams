@@ -54,7 +54,7 @@ public class LocationController {
 	@GetMapping("search")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Location.class)))
 	public ResponseEntity<?> getAllBySearch(@RequestParam ("query") String query) throws Exception {
-		List<Location> result = locationService.searchByNameCode(query);
+		List<Location> result = locationService.search(query);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}

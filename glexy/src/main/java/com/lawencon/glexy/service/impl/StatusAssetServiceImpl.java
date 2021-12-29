@@ -128,7 +128,7 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 					throw new ValidationGlexyException("Name Status Already Exist");
 				}
 			}
-			if (data.getNameStatusAsset() == null || data.getIsActive() == null) {
+			if (data.getNameStatusAsset().isBlank() || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {
@@ -141,7 +141,8 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 		if (data != null) {
 			List<StatusAsset> listStatusAssets = statusAssetDao.findAll();
 			for (int i = 0; i < listStatusAssets.size(); i++) {
-				if (data.getNameStatusAsset().equalsIgnoreCase(listStatusAssets.get(i).getNameStatusAsset())) {
+				if (data.getNameStatusAsset().equalsIgnoreCase(listStatusAssets.get(i).getNameStatusAsset())
+						&& !data.getId().equals(listStatusAssets.get(i).getId())) {
 					throw new ValidationGlexyException("Name Status Already Exist");
 				}
 			}
@@ -153,7 +154,7 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-			if (data.getCodeStatusAsset() == null || data.getNameStatusAsset() == null || data.getVersion() == null) {
+			if (data.getCodeStatusAsset().isBlank() || data.getNameStatusAsset().isBlank() || data.getVersion() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {

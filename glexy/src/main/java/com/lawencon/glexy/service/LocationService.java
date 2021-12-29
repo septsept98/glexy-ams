@@ -14,7 +14,7 @@ public interface LocationService {
 	
 	List<Location> findAll() throws Exception;
 	
-	List<Location> searchByNameCode(String search) throws Exception;
+	List<Location> search(String search) throws Exception;
 	
 	boolean removeById(String id) throws Exception;
 	

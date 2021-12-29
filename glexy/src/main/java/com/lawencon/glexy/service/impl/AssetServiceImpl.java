@@ -530,4 +530,15 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			throw new ValidationGlexyException("Data Empty");
 		}
 	}
+
+	@Override
+	public List<Asset> searchAssetGeneral(String search) throws Exception {
+		List<Asset> result = new ArrayList<>();
+		if(search.isBlank()) {
+			return result;
+		} else {
+			result = assetDao.searchAssetGeneral(search);
+			return result;
+		}
+	}
 }

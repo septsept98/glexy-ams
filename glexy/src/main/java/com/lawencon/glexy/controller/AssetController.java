@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -195,6 +196,15 @@ public class AssetController extends BaseController {
 		ResDto resDto = assetService.sendEmailAssetExpiredReport();
 		
 		return new ResponseEntity<>(resDto, HttpStatus.OK);
+	}
+
+	
+	@GetMapping("search-general-asset/")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
+	public ResponseEntity<?> getAllBySearch(@RequestParam ("query") String query) throws Exception {
+		List<Asset> result = assetService.searchAssetGeneral(query);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
 	}
 
 }

@@ -16,6 +16,6 @@ public interface EmployeeDao {
 	
 	List<Employee> findByCompanyId(String id) throws Exception;
 	
-	List<Employee> searchByNameCode(String search) throws Exception;
+	List<Employee> search(String search) throws Exception;
 	
 }

@@ -50,4 +50,6 @@ public interface AssetService {
 	
 	byte[] pdfAssetExpired() throws Exception;
 
+	List<Asset> searchAssetGeneral(String search) throws Exception;
+
 }

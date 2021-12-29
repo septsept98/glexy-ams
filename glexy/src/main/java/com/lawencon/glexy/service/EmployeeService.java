@@ -12,6 +12,8 @@ public interface EmployeeService {
 	
 	Employee saveOrUpdate(Employee data) throws Exception;
 	
+	List<Employee> search(String search) throws Exception;
+	
 	boolean deleteById(String id) throws Exception;
 	
 	void validationFk(String id) throws Exception;
