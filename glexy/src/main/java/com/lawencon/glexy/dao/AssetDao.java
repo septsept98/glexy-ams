@@ -33,4 +33,6 @@ public interface AssetDao {
 	List<Asset> findByInvoiceId(String id) throws Exception;
 	
 	List<Asset> findByStatusAssetId(String id) throws Exception;
+	
+	List<Asset> searchAssetGeneral(String search) throws Exception;
 }

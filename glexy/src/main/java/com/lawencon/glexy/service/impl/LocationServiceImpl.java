@@ -1,5 +1,6 @@
 package com.lawencon.glexy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -72,11 +73,6 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 	}
 
 	@Override
-	public List<Location> searchByNameCode(String search) throws Exception {
-		return locationDao.searchByNameCode(search);
-	}
-
-	@Override
 	public List<Location> findByCompanyId(String id) throws Exception {
 		return locationDao.findByCompanyId(id);
 	}
@@ -133,6 +129,17 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 			}
 		}else {
 			throw new ValidationGlexyException("Data Empty");
+		}
+	}
+
+	@Override
+	public List<Location> search(String search) throws Exception {
+		List<Location> result = new ArrayList<>();
+		if(search.isBlank()) {
+			return result;
+		} else {
+			result = locationDao.search(search);
+			return result;
 		}
 	}
 

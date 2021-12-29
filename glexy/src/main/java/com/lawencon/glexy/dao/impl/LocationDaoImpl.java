@@ -56,12 +56,12 @@ public class LocationDaoImpl extends BaseDaoImpl<Location> implements LocationDa
 	}
 
 	@Override
-	public List<Location> searchByNameCode(String search) throws Exception {
+	public List<Location> search(String search) throws Exception {
 		List<Location> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
-		sql.append("FROM brands ");
-		sql.append("WHERE code LIKE '%" + search + "%' OR names LIKE '%" + search + "%' ");
+		sql.append("FROM locations ");
+		sql.append("WHERE lower(name_place) LIKE lower('%" + search + "%') OR lower(code) LIKE lower('%" + search + "%')");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 

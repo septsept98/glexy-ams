@@ -3,6 +3,7 @@ package com.lawencon.glexy.service.impl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,33 +95,34 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 
 		if (data.getDataTransaction().getEmployeeId() == null && data.getDataTransaction().getLocationId() == null
 				&& data.getDataTransaction().getAssetGeneralId() == null) {
-			throw new Exception();
+			throw new ValidationGlexyException("Data not Complete");
 		} else if (data.getDataTransaction().getEmployeeId() != null
 				&& data.getDataTransaction().getLocationId() != null
 				&& data.getDataTransaction().getAssetGeneralId() == null) {
-			throw new Exception();
+			throw new ValidationGlexyException("Must one");
 		} else if (data.getDataTransaction().getEmployeeId() == null
 				&& data.getDataTransaction().getLocationId() != null
 				&& data.getDataTransaction().getAssetGeneralId() != null) {
-			throw new Exception();
+			throw new ValidationGlexyException("Must one");
 		} else if (data.getDataTransaction().getEmployeeId() != null
 				&& data.getDataTransaction().getLocationId() == null
 				&& data.getDataTransaction().getAssetGeneralId() != null) {
-			throw new Exception();
+			throw new ValidationGlexyException("Must one");
 		} else if (data.getDataTransaction().getEmployeeId() != null
 				&& data.getDataTransaction().getLocationId() != null
 				&& data.getDataTransaction().getAssetGeneralId() != null) {
-			throw new Exception();
+			throw new ValidationGlexyException("Must one");
 		} else {
 			InsertReqTransactionDto result = new InsertReqTransactionDto();
 
 			Transactions dataTransaction = data.getDataTransaction();
-			dataTransaction.setCodeTransaction("TR3");
+			dataTransaction.setCodeTransaction(generateCode());
 			dataTransaction.setCreatedBy("3");
 			Users users = new Users();
 			users.setId("1");
 			dataTransaction.setUserId(users);
 			dataTransaction.setCheckOutDate(LocalDate.now());
+			validationSave(dataTransaction);
 			begin();
 			dataTransaction = transactionDao.saveOrUpdate(dataTransaction);
 
@@ -185,10 +187,23 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 	@Override
 	public void validationSave(Transactions data) throws Exception {
 		if (data != null) {
-			if (data.getIsActive() == null || data.getQuantity() == null || data.getUserId() == null) {
+			if (data.getDescription().isBlank()) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		}
+	}
+
+	@Override
+	public String generateCode() throws Exception {
+		String number = "123456789";
+		StringBuilder sb = new StringBuilder();
+		sb.append("TRX");
+		Random random = new Random();
+		for (int i = 0; i < 7; i++) {
+			int indNumber = random.nextInt(number.length());
+			sb.append(number.charAt(indNumber));
+		}
+		return sb.toString();
 	}
 
 }

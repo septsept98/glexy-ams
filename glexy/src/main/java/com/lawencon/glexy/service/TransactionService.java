@@ -18,5 +18,7 @@ public interface TransactionService {
 	InsertReqTransactionDto saveOrUpdate(InsertReqTransactionDto data) throws Exception;
 	
 	void validationSave(Transactions data) throws Exception;
+	
+	String generateCode() throws Exception; 
 
 }

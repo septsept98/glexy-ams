@@ -1,5 +1,6 @@
 package com.lawencon.glexy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +134,17 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 			}
 		} else {
 			throw new ValidationGlexyException("Data Empty");
+		}
+	}
+
+	@Override
+	public List<Employee> search(String search) throws Exception {
+		List<Employee> result = new ArrayList<>();
+		if(search.isBlank()) {
+			return result;
+		} else {
+			result = employeeDao.search(search);
+			return result;
 		}
 	}
 

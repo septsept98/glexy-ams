@@ -57,12 +57,13 @@ public class EmployeeDaoImpl extends BaseDaoImpl<Employee> implements EmployeeDa
 	}
 
 	@Override
-	public List<Employee> searchByNameCode(String search) throws Exception {
+	public List<Employee> search(String search) throws Exception {
 		List<Employee> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
 		sql.append("FROM employees ");
-		sql.append("WHERE code LIKE '%" + search + "%' OR names LIKE '%" + search + "%' ");
+		sql.append("WHERE lower(nip) LIKE lower('%" + search + "%') OR lower(name_employee) LIKE lower('%" + search + "%') ");
+		sql.append("OR phone_number LIKE '%" + search + "%'");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 

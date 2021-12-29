@@ -121,7 +121,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 
 		List<TransactionDetail> dataTranscation = transactionDetailDao.findByStatusTransactionId(id);
 
-		if (dataTranscation != null) {
+		if (!dataTranscation.isEmpty()) {
 
 			throw new ValidationGlexyException("Status Transaction in Use");
 		}
@@ -131,7 +131,14 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 	@Override
 	public void validationSave(StatusTransaction data) throws Exception {
 		if (data != null) {
-			if (data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+			List<StatusTransaction> listStatusTransactions = statusTransactionDao.findAll();
+			for(int i=0; i<listStatusTransactions.size(); i++) {
+				if(data.getNameStatusTr().equalsIgnoreCase(listStatusTransactions.get(i).getNameStatusTr()) 
+						&& data.getStatusAssetId().getId().equals(listStatusTransactions.get(i).getStatusAssetId().getId())) {
+					throw new ValidationGlexyException("Status Trx Already Exist");
+				}
+			}
+			if (data.getStatusAssetId().getId().isBlank() || data.getNameStatusTr().isBlank() || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {
@@ -142,6 +149,14 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 	@Override
 	public void validationUpdate(StatusTransaction data) throws Exception {
 		if (data != null) {
+			List<StatusTransaction> listStatusTransactions = statusTransactionDao.findAll();
+			for(int i=0; i<listStatusTransactions.size(); i++) {
+				if(data.getNameStatusTr().equalsIgnoreCase(listStatusTransactions.get(i).getNameStatusTr()) 
+						&& data.getStatusAssetId().getId().equals(listStatusTransactions.get(i).getStatusAssetId().getId())
+						&& !data.getId().equals(listStatusTransactions.get(i).getId())) {
+					throw new ValidationGlexyException("Status Trx Already Exist");
+				}
+			}
 			if (data.getId() != null) {
 				StatusTransaction statusTransaction = findById(data.getId());
 				if (statusTransaction == null) {
@@ -150,7 +165,7 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 			} else {
 				throw new ValidationGlexyException("Data not Found");
 			}
-			if (data.getCodeStatusTr() == null || data.getNameStatusTr() == null || data.getIsActive() == null) {
+			if (data.getStatusAssetId().getId().isBlank() || data.getNameStatusTr().isBlank() || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {
