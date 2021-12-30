@@ -1,22 +1,35 @@
 package com.lawencon.glexy.dto.transaction;
 
 public class InsertReqDataAssetTransactionDto {
-	
-	private String name;
-	
+
+	private String inventId;
+
 	private Integer qty;
-	
-	public String getName() {
-		return name;
+
+	private String brandId;
+
+	public String getInventId() {
+		return inventId;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setInventId(String inventId) {
+		this.inventId = inventId;
 	}
+
 	public Integer getQty() {
 		return qty;
 	}
+
 	public void setQty(Integer qty) {
 		this.qty = qty;
+	}
+
+	public String getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(String brandId) {
+		this.brandId = brandId;
 	}
 
 }

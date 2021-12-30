@@ -541,4 +541,15 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			return result;
 		}
 	}
+
+	@Override
+	public List<Asset> findAssetByInventBrand(String inventId, String brandId) throws Exception {
+		List<Asset> result = new ArrayList<>();
+		if(inventId.isBlank() && brandId.isBlank()) {
+			return result;
+		} else {
+			result = assetDao.findAssetByInventBrand(inventId, brandId);
+			return result;
+		}
+	}
 }

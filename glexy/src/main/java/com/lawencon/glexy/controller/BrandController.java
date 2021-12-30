@@ -110,5 +110,12 @@ public class BrandController {
 
 	}
 	
+	@GetMapping("filter/{code}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Brand.class)))
+	public ResponseEntity<?> getAllByFilter(@PathVariable("code") String code) throws Exception {
+		List<Brand> result = brandService.findAllFilter(code);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 
 }

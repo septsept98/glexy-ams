@@ -41,7 +41,7 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
 		sql.append("FROM inventories ");
-		sql.append("WHERE name_asset LIKE '%" + search + "%' OR code LIKE '%" + search + "%' ");
+		sql.append("WHERE lower(name_asset) LIKE lower('%" + search + "%') OR lower(code) LIKE lower('%" + search + "%') ");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 
