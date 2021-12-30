@@ -291,7 +291,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	@Override
 	public Users findByIdAuth() throws Exception {
 
-		return usersDao.findById("8830ab01-7102-4efc-a9b6-70f834578965");
+		return usersDao.findById(getIdAuth());
 	}
 
 }

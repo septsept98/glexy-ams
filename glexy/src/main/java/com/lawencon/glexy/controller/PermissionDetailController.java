@@ -52,7 +52,7 @@ public class PermissionDetailController {
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody PermissionDetail data) throws Exception {
-		permissionDetailService.saveOrUpdate(data);
+		permissionDetailService.saveOrUpdatePermDetail(data);
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(data.getId());
 		
@@ -65,7 +65,7 @@ public class PermissionDetailController {
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody PermissionDetail data) throws Exception {
-		data = permissionDetailService.saveOrUpdate(data);
+		data = permissionDetailService.saveOrUpdatePermDetail(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(data.getVersion());
 		
