@@ -105,7 +105,7 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 	@Override
 	public void validationSave(Location data) throws Exception {
 		if (data != null) {
-			if (data.getCode().isBlank()  || data.getNamePlace().isBlank()  || data.getCompanyId().isBlank() ) {
+			if (data.getCode().isBlank()  || data.getNamePlace().isBlank()  || data.getCompanyId() == null ) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		}else {
