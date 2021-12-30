@@ -48,7 +48,7 @@ public class PermissionsServiceImpl extends BaseGlexyServiceImpl implements Perm
 				data.setIsActive(permissions.getIsActive());
 			} else {
 				validationSave(data);
-				data.setUpdatedBy(getIdAuth());
+				data.setCreatedBy(getIdAuth());
 			}
 			begin();
 			data = permissionsDao.saveOrUpdate(data);
