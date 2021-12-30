@@ -16,6 +16,8 @@ public interface BrandDao {
 	
 	List<Brand> findAll() throws Exception;
 	
+	List<Brand> findAllFilter(String search) throws Exception;
+	
 	boolean removeById(String id) throws Exception;
 	
 }

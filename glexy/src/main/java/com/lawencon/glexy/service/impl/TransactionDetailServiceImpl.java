@@ -118,7 +118,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 				commit();
 			} else {
-				data.setStatusEmail(false);
+				validationSave(data);
 				data = transactionDetailDao.saveOrUpdate(data);
 			}
 		} catch (Exception e) {
@@ -232,7 +232,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 	}
   
 	public void validationSave(TransactionDetail data) throws Exception {
-		if(data.getAssetId() == null || data.getIsActive() == null || data.getStatusAssetCheckoutId() == null || data.getStatusTrCheckinId() == null || data.getTransactionId() == null ) {
+		if(data.getAssetId().getId().isBlank()) {
 			throw new ValidationGlexyException("Data not Complete");
 		}
 		

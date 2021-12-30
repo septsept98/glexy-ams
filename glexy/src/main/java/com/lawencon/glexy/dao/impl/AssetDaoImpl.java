@@ -273,4 +273,28 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		return listResult;
 	}
 
+	@Override
+	public List<Asset> findAssetByInventBrand(String inventId, String brandId) throws Exception {
+		List<Asset> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select a.id ");
+		sql.append("FROM assets a ");
+		sql.append("INNER JOIN inventories i ON i.id = a.inventory_id ");
+		sql.append("INNER JOIN brands b ON b.id = a.brand_id ");
+		sql.append("INNER JOIN status_assets sa ON sa.id = a.status_asset_id ");
+		sql.append("WHERE sa.code_status_asset = 'SA1' AND i.id = '" + inventId + "' AND b.id = '" + brandId + "' ");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			Asset asset = new Asset();
+			asset.setId(rs.toString());
+			asset = getById(asset.getId());
+
+			listResult.add(asset);
+		});
+
+		return listResult;
+	}
+
 }

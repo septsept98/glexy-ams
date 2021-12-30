@@ -18,6 +18,8 @@ public interface BrandService {
 	
 	boolean removeById(String id) throws Exception;
 	
+	List<Brand> findAllFilter(String search) throws Exception;
+	
 	void validationFk(String id) throws Exception;
 	
 	void validationSave(Brand data) throws Exception;

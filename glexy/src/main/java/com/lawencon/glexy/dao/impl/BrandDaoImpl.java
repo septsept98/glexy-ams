@@ -41,7 +41,7 @@ public class BrandDaoImpl extends BaseDaoImpl<Brand> implements BrandDao {
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
 		sql.append("FROM brands ");
-		sql.append("WHERE code LIKE '%" + search + "%' OR names LIKE '%" + search + "%' ");
+		sql.append("WHERE lower(code) LIKE lower('%" + search + "%') OR lower(names) LIKE lower('%" + search + "%') ");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 
@@ -78,6 +78,31 @@ public class BrandDaoImpl extends BaseDaoImpl<Brand> implements BrandDao {
 			e.printStackTrace();
 		}
 		return brand;
+	}
+
+	@Override
+	public List<Brand> findAllFilter(String search) throws Exception {
+		List<Brand> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select b.id ");
+		sql.append("FROM brands b ");
+		sql.append("INNER JOIN assets a ON a.brand_id = b.id ");
+		sql.append("INNER JOIN inventories i ON a.inventory_id = i.id ");
+		sql.append("WHERE i.id LIKE '%" + search + "%'");
+		sql.append("GROUP BY b.id ");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+		System.out.println(result);
+
+		result.forEach(rs -> {
+			Brand brand = new Brand();
+			brand.setId(rs.toString());
+			brand = getById(brand.getId());
+
+			listResult.add(brand);
+		});
+
+		return listResult;
 	}
 
 }

@@ -62,13 +62,13 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 	@Override
 	public List<Asset> findAssetDetail(InsertReqDataAssetTransactionDto data) throws Exception {
 		int qtyTr = data.getQty();
-		String nameAsset = data.getName();
+		String inventId = data.getInventId();
 		boolean sameAsset = false;
 		int indexInven = 0;
 		List<Inventory> listInventory = inventoryService.findAll();
 
 		for (int i = 0; i < listInventory.size(); i++) {
-			if (nameAsset.equalsIgnoreCase(listInventory.get(i).getNameAsset())) {
+			if (inventId.equals(listInventory.get(i).getId())) {
 				sameAsset = true;
 				indexInven = i;
 			}
@@ -133,6 +133,7 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 				detailTr.setTransactionId(dataTransaction);
 				Asset asset = assetDao.findById(detailTr.getAssetId().getId());
 				detailTr.setAssetId(asset);
+				detailTr.setStatusEmail(false);
 				detailTr.setCreatedBy(dataTransaction.getCreatedBy());
 				detailTr.setIsActive(dataTransaction.getIsActive());
 

@@ -135,4 +135,9 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 		}
 	}
 
+	@Override
+	public List<Brand> findAllFilter(String search) throws Exception {
+		return brandDao.findAllFilter(search);
+	}
+
 }
