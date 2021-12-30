@@ -140,4 +140,42 @@ public class PermissionDetailServiceImpl extends BaseGlexyServiceImpl implements
 		}
 	}
 
+	@Override
+	public PermissionDetail saveOrUpdatePermDetail(PermissionDetail data) throws Exception {
+		try {
+			if (data.getId() != null) {
+				validationUpdate(data);
+				PermissionDetail permissionDetail = findById(data.getId());
+				data.setUpdatedBy(getIdAuth());
+				data.setCreatedAt(permissionDetail.getCreatedAt());
+				data.setCreatedBy(permissionDetail.getCreatedBy());
+				data.setVersion(permissionDetail.getVersion());
+				data.setIsActive(permissionDetail.getIsActive());
+			} else {
+				validationSave(data);
+				data.setCreatedBy("1");
+			}
+			Roles roles = rolesDao.findById(data.getRolesId().getId());
+
+			if (roles == null) {
+				throw new ValidationGlexyException("Roles Not Found");
+			}
+			data.setRolesId(roles);
+
+			Permissions permissions = permissionsService.findById(data.getPermissionsId().getId());
+			if (permissions == null) {
+				throw new ValidationGlexyException("Permission Not Found");
+			}
+			data.setPermissionsId(permissions);
+			begin();
+			data = permissionDetailDao.saveOrUpdate(data);
+			commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+		return data;
+	}
+
 }

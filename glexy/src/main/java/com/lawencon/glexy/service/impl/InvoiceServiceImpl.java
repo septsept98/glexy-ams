@@ -39,7 +39,7 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 				data.setVersion(invoice.getVersion());
 			} else {
 
-				data.setCreatedBy(getIdAuth());
+				data.setCreatedBy("2");
 				data.setIsActive(true);
 
 				validationSave(data);

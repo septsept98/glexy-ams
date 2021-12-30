@@ -135,19 +135,19 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 			asset.setAssetImg(imgAsset);
 
-			Brand brand = brandService.findByCode(asset.getBrandId().getCode());
+			Brand brand = brandService.findById(asset.getBrandId().getId());
 			if (brand == null) {
 				throw new ValidationGlexyException("Brand Not Found");
 			}
-			Company company = companyService.findByCode(asset.getCompanyId().getCode());
+			Company company = companyService.findById(asset.getCompanyId().getId());
 			if (company == null) {
 				throw new ValidationGlexyException("Company Not Found");
 			}
-			StatusAsset statusAsset = statusAssetService.findByCode(asset.getStatusAssetId().getCodeStatusAsset());
+			StatusAsset statusAsset = statusAssetService.findById(asset.getStatusAssetId().getId());
 			if (statusAsset == null) {
 				throw new ValidationGlexyException("Status Asset Not Found");
 			}
-			AssetType assetType = assetTypeService.findByCode(asset.getAssetTypeId().getCode());
+			AssetType assetType = assetTypeService.findById(asset.getAssetTypeId().getId());
 
 			if (assetType == null) {
 				throw new ValidationGlexyException("Asset Type Not Found");
@@ -175,7 +175,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				trackAsset.setCodeAsset(assetInsert.getCode());
 				trackAsset.setNameActivity("New");
 				trackAsset.setDateActivity(LocalDate.now());
-				trackAsset.setUserId(getIdAuth());
+				trackAsset.setUserId("3");
 				trackAsset.setTransactionCode("BBA");
 				trackAsset.setCreatedBy("3");
 				trackAsset.setIsActive(true);
@@ -311,7 +311,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				inventory.setNameAsset(excelUtil.getCellData(i, 0));
 				stock = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
 				String codeInsert = excelUtil.getCellData(i, 2);
-				inventory = inventoryService.findById(codeInsert); // bycode
+				inventory = inventoryService.findByCode(codeInsert); // bycode
 				if (inventory == null) {
 					Inventory inven = new Inventory();
 					inven.setStock(stock);
@@ -323,6 +323,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				} else {
 					stock = inventory.getStock() + stock;
 					int latest = inventory.getLatestStock() + stock;
+					inventory.setStock(stock);
 					inventory.setLatestStock(latest);
 					index = inventory.getStock();
 
@@ -337,11 +338,10 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				invoice.setPurchaseDate(LocalDate.now());
 
 				invoiceService.save(invoice);
-
 				Brand brand = brandService.findByCode(excelUtil.getCellData(i, 5));
 				if (brand == null) {
 					throw new ValidationGlexyException("Brand Not Found");
-				}
+				} 
 
 				AssetType assetType = assetTypeService.findByCode(excelUtil.getCellData(i, 6));
 				if (assetType == null) {
@@ -357,7 +357,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				if (company == null) {
 					throw new ValidationGlexyException("Company Not Found");
 				}
-
+				
 				for (int j = index; j < stock; j++) {
 					Asset assetInsert = new Asset();
 					String codeAsset = generateCode(inventory.getCode(), company.getCode(), stock, j);
@@ -371,11 +371,11 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
 						assetInsert.setExpiredDate(date);
 					}
-
+					
 					assetInsert.setStatusAssetId(statusAsset);
 					assetInsert.setNames(inventory.getNameAsset());
 					assetInsert.setCode(codeAsset);
-					assetInsert.setCreatedBy(getIdAuth());
+					assetInsert.setCreatedBy("3");
 					assetInsert.setInvoiceId(invoice);
 					assetInsert.setInventoryId(inventory);
 
@@ -385,9 +385,9 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 					trackAsset.setCodeAsset(assetInsert.getCode());
 					trackAsset.setNameActivity("New");
 					trackAsset.setDateActivity(LocalDate.now());
-					trackAsset.setUserId(getIdAuth());
+					trackAsset.setUserId("3");
 					trackAsset.setTransactionCode("BBA");
-					trackAsset.setCreatedBy(getIdAuth());
+					trackAsset.setCreatedBy("3");
 					trackAsset.setIsActive(true);
 
 					trackAssetService.saveOrUpdate(trackAsset);

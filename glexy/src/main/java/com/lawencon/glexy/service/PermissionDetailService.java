@@ -23,4 +23,6 @@ public interface PermissionDetailService {
 	void validationSave(PermissionDetail data) throws Exception;
 
 	void validationUpdate(PermissionDetail data) throws Exception;
+	
+	PermissionDetail saveOrUpdatePermDetail(PermissionDetail data) throws Exception;
 }

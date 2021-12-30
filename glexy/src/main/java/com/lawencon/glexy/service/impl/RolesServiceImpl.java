@@ -44,14 +44,14 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 		try {
 			if (data.getRoles().getId() != null) {
-				validationUpdate(null);
+				validationUpdate(data.getRoles());
 				Roles roles = findById(data.getRoles().getId());
 				roles.setNameRole(data.getRoles().getNameRole());
 				roles.setUpdatedBy("1");
 				data.setRoles(roles);
 
 			} else {
-				validationSave(null);
+				validationSave(data.getRoles());
 				Roles roles = new Roles();
 				roles.setNameRole(data.getRoles().getNameRole());
 				roles.setCode(data.getRoles().getCode());
