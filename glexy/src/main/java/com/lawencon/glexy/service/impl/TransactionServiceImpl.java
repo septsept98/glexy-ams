@@ -118,6 +118,7 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 			Transactions dataTransaction = data.getDataTransaction();
 			dataTransaction.setCodeTransaction(generateCode());
 			dataTransaction.setCreatedBy("3");
+			dataTransaction.setQuantity(0);
 			Users users = new Users();
 			users.setId("1");
 			dataTransaction.setUserId(users);
@@ -198,7 +199,7 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 	public String generateCode() throws Exception {
 		String number = "123456789";
 		StringBuilder sb = new StringBuilder();
-		sb.append("TRX");
+		sb.append("TRX-");
 		Random random = new Random();
 		for (int i = 0; i < 7; i++) {
 			int indNumber = random.nextInt(number.length());
