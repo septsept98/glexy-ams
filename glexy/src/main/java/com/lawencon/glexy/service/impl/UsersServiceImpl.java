@@ -79,7 +79,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			String pass = generatePassword();
 			System.out.println(pass);
 			data.setPass(bCryptPasswordEncoder.encode(pass));
-			data.setCreatedBy("1");
+			data.setCreatedBy(getIdAuth());
 			Roles roles = rolesService.findById(data.getRolesId().getId());
 			data.setRolesId(roles);
 			begin();
@@ -111,7 +111,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			commit();
 			EmailHelper email = new EmailHelper();
 			email.setValueName(pass);
-			emailHandler.sendSimpleMessage(user.getEmail(), "Password ini rahasia", "Password", email);
+			emailHandler.sendSimpleMessage(data.getEmail(), "Password ini rahasia", "Password", email);
 			return user;
 
 		} catch (Exception e) {

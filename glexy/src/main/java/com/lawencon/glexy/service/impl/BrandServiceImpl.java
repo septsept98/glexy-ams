@@ -35,7 +35,7 @@ public class BrandServiceImpl extends BaseGlexyServiceImpl implements BrandServi
 				data.setUpdatedBy(getIdAuth());
 				data.setVersion(brand.getVersion());
 			} else {
-				data.setCreatedBy("1");
+				data.setCreatedBy(getIdAuth());
 				validationSave(data);
 			}
 
