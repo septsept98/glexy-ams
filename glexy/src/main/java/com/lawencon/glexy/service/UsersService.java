@@ -36,4 +36,6 @@ public interface UsersService extends UserDetailsService {
 	void validationUpdate(Users data) throws Exception;
 	
 	Users findByIdAuth() throws Exception; 
+	
+	Users resetPassword(String id) throws Exception;
 }

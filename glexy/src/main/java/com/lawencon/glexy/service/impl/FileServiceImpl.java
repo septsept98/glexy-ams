@@ -58,9 +58,9 @@ public class FileServiceImpl extends BaseGlexyServiceImpl implements FileService
 	public boolean deleteById(String id) throws Exception {
 		boolean result = false;
 		try {
-			begin();
+			
 			result = fileDao.deleteById(id);
-			commit();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
