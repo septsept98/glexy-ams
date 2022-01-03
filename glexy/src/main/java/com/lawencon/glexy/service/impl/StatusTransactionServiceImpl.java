@@ -7,7 +7,6 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.StatusTransactionDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
 import com.lawencon.glexy.exception.ValidationGlexyException;
@@ -18,7 +17,7 @@ import com.lawencon.glexy.service.StatusAssetService;
 import com.lawencon.glexy.service.StatusTransactionService;
 
 @Service
-public class StatusTransactionServiceImpl extends BaseServiceImpl implements StatusTransactionService {
+public class StatusTransactionServiceImpl extends BaseGlexyServiceImpl implements StatusTransactionService {
 
 	@Autowired
 	private StatusTransactionDao statusTransactionDao;
@@ -43,11 +42,11 @@ public class StatusTransactionServiceImpl extends BaseServiceImpl implements Sta
 				data.setCodeStatusTr(statusTr.getCodeStatusTr());
 				data.setCreatedAt(statusTr.getCreatedAt());
 				data.setCreatedBy(statusTr.getCreatedBy());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(statusTr.getVersion());
 			} else {
 				validationSave(data);
-				data.setCreatedBy("3");
+				data.setCreatedBy(getIdAuth());
 				data.setCodeStatusTr(generateCodeSTR());
 			}
 

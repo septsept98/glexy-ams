@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.StatusAssetDao;
 import com.lawencon.glexy.dao.StatusTransactionDao;
@@ -18,7 +17,7 @@ import com.lawencon.glexy.model.TransactionDetail;
 import com.lawencon.glexy.service.StatusAssetService;
 
 @Service
-public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAssetService {
+public class StatusAssetServiceImpl extends BaseGlexyServiceImpl implements StatusAssetService {
 
 	@Autowired
 	private StatusAssetDao statusAssetDao;
@@ -41,11 +40,11 @@ public class StatusAssetServiceImpl extends BaseServiceImpl implements StatusAss
 				data.setCodeStatusAsset(statusAsset.getCodeStatusAsset());
 				data.setCreatedAt(statusAsset.getCreatedAt());
 				data.setCreatedBy(statusAsset.getCreatedBy());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(statusAsset.getVersion());
 			} else {
 				validationSave(data);
-				data.setCreatedBy("3");
+				data.setCreatedBy(getIdAuth());
 				data.setCodeStatusAsset(generateCodeSA());
 			}
 

@@ -7,8 +7,10 @@ public class ReportDataTransactionOutDate {
 	private String codeTrx;
 	private String nip;
 	private String employeeName;
+	private String email;
 	private String codeAsset;
 	private String nameAsset;
+	private byte[] image;
 	private LocalDate dueDate;
 	private LocalDate checkinDate;
 
@@ -36,6 +38,14 @@ public class ReportDataTransactionOutDate {
 		this.employeeName = employeeName;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getCodeAsset() {
 		return codeAsset;
 	}
@@ -50,6 +60,14 @@ public class ReportDataTransactionOutDate {
 
 	public void setNameAsset(String nameAsset) {
 		this.nameAsset = nameAsset;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 	public LocalDate getDueDate() {

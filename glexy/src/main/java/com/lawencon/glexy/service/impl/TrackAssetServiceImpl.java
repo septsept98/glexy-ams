@@ -62,8 +62,6 @@ public class TrackAssetServiceImpl extends BaseGlexyServiceImpl implements Track
 
 	@Override
 	public List<TrackAsset> findByAssetTr(String assetCode, String trCode) throws Exception {
-		
-		
 		return trackAssetDao.findByAssetTr(assetCode, trCode);
 	}
 

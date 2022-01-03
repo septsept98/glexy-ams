@@ -27,7 +27,7 @@ import com.lawencon.glexy.dto.InsertResDto;
 import com.lawencon.glexy.dto.ResDto;
 import com.lawencon.glexy.dto.UpdateResDataDto;
 import com.lawencon.glexy.dto.UpdateResDto;
-import com.lawencon.glexy.dto.transaction.InsertReqDataAssetTransactionDto;
+import com.lawencon.glexy.helper.ReportDataExpiredAsset;
 import com.lawencon.glexy.model.Asset;
 import com.lawencon.glexy.service.AssetService;
 
@@ -134,7 +134,6 @@ public class AssetController extends BaseController {
 
 		}, executor);
 		
-		
 	}
 
 	@PutMapping
@@ -204,7 +203,6 @@ public class AssetController extends BaseController {
 	public ResponseEntity<?> getAllBySearch(@RequestParam ("query") String query) throws Exception {
 		List<Asset> result = assetService.searchAssetGeneral(query);
 		return new ResponseEntity<>(result, HttpStatus.OK);
-
 	}
 	
 	@GetMapping("get-invent-brand")
@@ -212,7 +210,13 @@ public class AssetController extends BaseController {
 	public ResponseEntity<?> getAssetByInventBrand(@RequestParam("invent-id") String inventId, @RequestParam("brand-id") String brandId) throws Exception {
 		List<Asset> result = assetService.findAssetByInventBrand(inventId, brandId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
+	@GetMapping("expired-asset")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ReportDataExpiredAsset.class)))
+	public ResponseEntity<?> getAssetExpired() throws Exception {
+		List<ReportDataExpiredAsset> result = assetService.findExpiredAsset();
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 }
