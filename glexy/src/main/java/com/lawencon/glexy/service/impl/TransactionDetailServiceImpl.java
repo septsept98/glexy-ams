@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.constant.StatusAssetEnum;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDetailDao;
@@ -33,7 +32,7 @@ import com.lawencon.glexy.service.UsersService;
 import com.lawencon.util.JasperUtil;
 
 @Service
-public class TransactionDetailServiceImpl extends BaseServiceImpl implements TransactionDetailService {
+public class TransactionDetailServiceImpl extends BaseGlexyServiceImpl implements TransactionDetailService {
 
 	@Autowired
 	private TransactionDetailDao transactionDetailDao;
@@ -77,7 +76,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				TransactionDetail transactionDetail = transactionDetailDao.findById(data.getId());
 				data.setCreatedBy(transactionDetail.getCreatedBy());
 				data.setCreatedAt(transactionDetail.getCreatedAt());
-				data.setUpdatedBy("1");
+				data.setUpdatedBy(getIdAuth());
 				data.setVersion(transactionDetail.getVersion());
 				data.setTransactionId(transactionDetail.getTransactionId());
 				data.setDateCheckin(transactionDetail.getDateCheckin());
@@ -92,7 +91,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 				Asset asset = data.getAssetId();
 				asset.setStatusAssetId(data.getStatusTrCheckinId().getStatusAssetId());
-				asset.setUpdatedBy("1");
+				asset.setUpdatedBy(getIdAuth());
 				asset = assetDao.saveOrUpdate(asset);
 
 				Inventory inventory = asset.getInventoryId();
@@ -100,7 +99,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 					int stockInventory = inventory.getLatestStock();
 					int latestStock = stockInventory + 1;
 
-					inventory.setUpdatedBy("1");
+					inventory.setUpdatedBy(getIdAuth());
 					inventory.setLatestStock(latestStock);
 
 					inventory = inventoryService.saveOrUpdate(inventory);
@@ -110,7 +109,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				trackAsset.setCodeAsset(asset.getCode());
 				trackAsset.setNameActivity(data.getStatusTrCheckinId().getNameStatusTr());
 				trackAsset.setDateActivity(LocalDate.now());
-				trackAsset.setUserId("33");
+				trackAsset.setUserId(getIdAuth());
 				trackAsset.setTransactionCode(data.getTransactionId().getCodeTransaction());
 				trackAsset.setCreatedBy(data.getCreatedBy());
 				trackAsset.setIsActive(data.getIsActive());
@@ -154,7 +153,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 					emailHandler.sendExpiredMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);
           
 					TransactionDetail transactionDetail = listResult.get(i);
-					transactionDetail.setUpdatedBy("1");
+					transactionDetail.setUpdatedBy(getIdAuth());
 					transactionDetail.setStatusEmail(true);
 
 					begin();
@@ -179,8 +178,10 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 				dataTrxOutDate.setCodeTrx(detail.getTransactionId().getCodeTransaction());
 				dataTrxOutDate.setEmployeeName(detail.getTransactionId().getEmployeeId().getNameEmployee());
 				dataTrxOutDate.setNip(detail.getTransactionId().getEmployeeId().getNip());
+				dataTrxOutDate.setEmail(detail.getTransactionId().getEmployeeId().getEmailEmployee());
 				dataTrxOutDate.setCodeAsset(detail.getAssetId().getCode());
 				dataTrxOutDate.setNameAsset(detail.getAssetId().getNames());
+				dataTrxOutDate.setImage(detail.getAssetId().getAssetImg().getFile());
 				dataTrxOutDate.setDueDate(detail.getDurationDate());
 				dataTrxOutDate.setCheckinDate(detail.getDateCheckin());
 
@@ -193,7 +194,7 @@ public class TransactionDetailServiceImpl extends BaseServiceImpl implements Tra
 
 	@Override
 	public byte[] pdfTransactionOutDate() throws Exception {
-		Users users = usersService.findById("1");
+		Users users = usersService.findById(getIdAuth());
 		Company company = users.getEmployeeId().getCompanyId();
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("company", company.getNames());

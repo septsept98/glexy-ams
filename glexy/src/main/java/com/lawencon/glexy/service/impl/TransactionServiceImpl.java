@@ -8,7 +8,6 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.glexy.constant.StatusAssetEnum;
 import com.lawencon.glexy.dao.AssetDao;
 import com.lawencon.glexy.dao.TransactionDao;
@@ -29,7 +28,7 @@ import com.lawencon.glexy.service.TransactionDetailService;
 import com.lawencon.glexy.service.TransactionService;
 
 @Service
-public class TransactionServiceImpl extends BaseServiceImpl implements TransactionService {
+public class TransactionServiceImpl extends BaseGlexyServiceImpl implements TransactionService {
 
 	private TransactionDao transactionDao;
 	private TransactionDetailService transactionDetailService;
@@ -117,10 +116,10 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 
 			Transactions dataTransaction = data.getDataTransaction();
 			dataTransaction.setCodeTransaction(generateCode());
-			dataTransaction.setCreatedBy("3");
+			dataTransaction.setCreatedBy(getIdAuth());
 			dataTransaction.setQuantity(0);
 			Users users = new Users();
-			users.setId("1");
+			users.setId(getIdAuth());
 			dataTransaction.setUserId(users);
 			dataTransaction.setCheckOutDate(LocalDate.now());
 			validationSave(dataTransaction);
@@ -147,7 +146,7 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 				System.out.println(asset.getExpiredDate() + " - " + asset.getNames());
 				if (asset.getId() != null) {
 					asset.setStatusAssetId(statusAsset);
-					asset.setUpdatedBy("22");
+					asset.setUpdatedBy(getIdAuth());
 
 					assetDao.saveOrUpdate(asset);
 				}
@@ -172,7 +171,7 @@ public class TransactionServiceImpl extends BaseServiceImpl implements Transacti
 				trackAsset.setCodeAsset(asset.getCode());
 				trackAsset.setNameActivity(statusAsset.getNameStatusAsset());
 				trackAsset.setDateActivity(LocalDate.now());
-				trackAsset.setUserId("33");
+				trackAsset.setUserId(getIdAuth());
 				trackAsset.setTransactionCode(dataTransaction.getCodeTransaction());
 				trackAsset.setCreatedBy(dataTransaction.getCreatedBy());
 				trackAsset.setIsActive(dataTransaction.getIsActive());
