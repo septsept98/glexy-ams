@@ -95,7 +95,8 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 				throw new ValidationGlexyException("Company Not Found");
 			}
 			employee.setCompanyId(company);
-
+			
+			if(file != null) {
 			File files = new File();
 			files.setFiles(file.getBytes());
 			String ext = file.getOriginalFilename();
@@ -105,7 +106,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			files.setId(files.getId());
 			files.setCreatedBy(data.getCreatedBy());
 			data.setUsersImg(files);
-
+			}
 			data.setEmployeeId(employee);
 			Users user = usersDao.saveOrUpdate(data);
 			commit();
@@ -148,9 +149,11 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	public Users update(Users data, MultipartFile file) throws Exception {
 
 		try {
+			if(file == null) {
 			validationUpdate(data);
+			}
 			Users users = usersDao.findById(data.getId());
-			users.setUpdatedBy("1");
+			users.setUpdatedBy(getIdAuth());
 			users.setVersion(data.getVersion());
 
 			Roles roles = rolesService.findById(data.getRolesId().getId());
@@ -164,15 +167,18 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			if (company == null) {
 				throw new ValidationGlexyException("Company Not Found");
 			}
-			employee.setCompanyId(company);
-
+			
 			if (file != null) {
+				
 				File files = new File();
 				files.setFiles(file.getBytes());
 				String ext = file.getOriginalFilename();
 				ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
 				files.setExtension(ext);
-				files.setId(users.getUsersImg().getId());
+				if(users.getUsersImg() != null) {
+					files.setId(users.getUsersImg().getId());
+				}
+				
 				files.setUpdatedBy(getIdAuth());
 
 				files = fileService.saveOrUpdate(files);
@@ -292,6 +298,18 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	public Users findByIdAuth() throws Exception {
 
 		return usersDao.findById(getIdAuth());
+	}
+
+	@Override
+	public Users resetPassword(String id) throws Exception {
+		String newPassword = generatePassword(); 
+		Users users = findById(id);
+		users.setPass(newPassword);
+		users = updatePassword(users);
+		EmailHelper email = new EmailHelper();
+		email.setValueName(newPassword);
+		emailHandler.sendSimpleMessage(users.getEmail(), "Password ini rahasia", "Password", email);
+		return users;
 	}
 
 }

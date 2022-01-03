@@ -33,18 +33,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("users")
-public class UsersController {
-	
+public class UsersController extends BaseController {
+
 	@Autowired
 	private UsersService usersService;
-	
+
 	@GetMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
 	public ResponseEntity<?> getAll() throws Exception {
 		List<Users> result = usersService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
 	public ResponseEntity<?> getById(@PathVariable("id") String id) throws Exception {
@@ -52,47 +52,47 @@ public class UsersController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-	
+
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
-	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
-		Users user =   usersService.save(new ObjectMapper().readValue(data, Users.class), file);
+	public ResponseEntity<?> insert(@RequestBody Users data) throws Exception {
+		Users user = usersService.save(data, null);
 		InsertResDataDto id = new InsertResDataDto();
 		id.setId(user.getId());
-		
+
 		InsertResDto result = new InsertResDto();
 		result.setData(id);
 		result.setMsg(MessageEnum.CREATED.getMsg());
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
-	public ResponseEntity<?> update(@RequestBody Users data ) throws Exception {
+	public ResponseEntity<?> update(@RequestBody Users data) throws Exception {
 		Users user = usersService.update(data, null);
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(user.getVersion());
-		
+
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
 		result.setMsg(MessageEnum.UPDATED.getMsg());
-		
+
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = ResDto.class)))
 	public ResponseEntity<?> delete(@PathVariable("id") String id) throws Exception {
 		boolean data = usersService.deleteById(id);
-		
+
 		ResDto result = new ResDto();
-		
-		if(data) {
+
+		if (data) {
 			result.setMsg(MessageEnum.SUCCESS.getMsg());
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/email/{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
 	public ResponseEntity<?> getByEmail(@PathVariable("id") String id) throws Exception {
@@ -100,34 +100,61 @@ public class UsersController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-	
+
 	@GetMapping("/nip")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
-	public ResponseEntity<?> getByNip(@RequestParam (required = false) String nip) throws Exception {
+	public ResponseEntity<?> getByNip(@RequestParam(required = false) String nip) throws Exception {
 		Users result = usersService.getByNip(nip);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-	
+
 	@PostMapping("/password")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> updatePassword(@RequestBody Users data) throws Exception {
-		Users user =   usersService.updatePassword(data);
+		Users user = usersService.updatePassword(data);
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(user.getVersion());
-		
+
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
 		result.setMsg(MessageEnum.UPDATED.getMsg());
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/profile")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Users.class)))
 	public ResponseEntity<?> getByIdAuth() throws Exception {
 		Users result = usersService.findByIdAuth();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
+	}
+
+	@PutMapping("/update-photo")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
+	public ResponseEntity<?> updatePhoto(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Users user = usersService.update(convertToModel(data, Users.class), file);
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(user.getVersion());
+
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PutMapping("/reset-password")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
+	public ResponseEntity<?> resetPassword(@RequestBody Users data) throws Exception {
+		Users user = usersService.resetPassword(data.getId());
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(user.getVersion());
+
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 }
