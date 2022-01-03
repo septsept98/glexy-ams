@@ -53,21 +53,6 @@ public class CompanyController extends BaseController{
 
 	}
 	
-	@PostMapping
-	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
-	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
-		Company company = companyService.save(convertToModel(data, Company.class), file);
-		
-		InsertResDataDto id = new InsertResDataDto();
-		id.setId(company.getId());
-		
-		InsertResDto result = new InsertResDto();
-		result.setData(id);
-		result.setMsg(MessageEnum.CREATED.getMsg());
-		
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> update(@RequestBody Company data) throws Exception {
@@ -79,6 +64,36 @@ public class CompanyController extends BaseController{
 		UpdateResDto result = new UpdateResDto();
 		result.setData(ver);
 		result.setMsg(MessageEnum.UPDATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PutMapping("/image")
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
+	public ResponseEntity<?> updateImage(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Company company = companyService.updateImage(convertToModel(data, Company.class), file);
+		
+		UpdateResDataDto ver = new UpdateResDataDto();
+		ver.setVersion(company.getVersion());
+		
+		UpdateResDto result = new UpdateResDto();
+		result.setData(ver);
+		result.setMsg(MessageEnum.UPDATED.getMsg());
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping
+	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
+	public ResponseEntity<?> insert(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Company company = companyService.save(convertToModel(data, Company.class), file);
+		
+		InsertResDataDto id = new InsertResDataDto();
+		id.setId(company.getId());
+		
+		InsertResDto result = new InsertResDto();
+		result.setData(id);
+		result.setMsg(MessageEnum.CREATED.getMsg());
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

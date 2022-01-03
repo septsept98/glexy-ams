@@ -40,8 +40,8 @@ public class FileServiceImpl extends BaseGlexyServiceImpl implements FileService
 				data.setUpdatedBy(getIdAuth());
 			}else {
 
-			data.setCreatedBy("1");
-			data.setIsActive(true);
+				data.setCreatedBy("1");
+				data.setIsActive(true);
 			}
 			
 			data = fileDao.saveOrUpdate(data);

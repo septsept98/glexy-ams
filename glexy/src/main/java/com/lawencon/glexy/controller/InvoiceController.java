@@ -70,8 +70,8 @@ public class InvoiceController extends BaseController{
 
 	@PutMapping
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
-	public ResponseEntity<?> update(@RequestPart String code, @RequestPart MultipartFile file) throws Exception {
-		Invoice invoice = invoiceService.update(new ObjectMapper().readValue(code, Invoice.class), file);
+	public ResponseEntity<?> update(@RequestPart String data, @RequestPart MultipartFile file) throws Exception {
+		Invoice invoice = invoiceService.update(convertToModel(data, Invoice.class), file);
 		
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(invoice.getVersion());

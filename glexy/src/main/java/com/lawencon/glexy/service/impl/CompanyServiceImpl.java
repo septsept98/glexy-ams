@@ -87,6 +87,47 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 		commit();
 		return data;
 	}
+	
+
+	@Override
+	public Company updateImage(Company data, MultipartFile file) throws Exception {
+		Company company = companyDao.findById(data.getId());
+		data.setCode(company.getCode());
+		data.setDescription(company.getDescription());
+		data.setAddress(company.getAddress());
+		data.setEmail(company.getEmail());
+		data.setFax(company.getFax());
+		data.setWebsite(company.getWebsite());
+		data.setPhoneNumber(company.getPhoneNumber());
+		data.setCreatedBy(company.getCreatedBy());
+		data.setCreatedAt(company.getCreatedAt());
+		data.setIsActive(company.getIsActive());
+		data.setVersion(company.getVersion());
+		
+		File imgCompany = new File();
+
+		imgCompany.setFiles(file.getBytes());
+		String ext = file.getOriginalFilename();
+		ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
+		imgCompany.setExtension(ext);
+
+		File imgInsert = fileService.findByByte(imgCompany.getFile(), ext);
+
+		if (imgInsert != null) {
+			data.setCompanyImg(imgInsert);
+		} else {
+			imgCompany = fileService.saveOrUpdate(imgCompany);
+			data.setCompanyImg(imgCompany);
+		}
+
+		data.setUpdatedBy(getIdAuth());
+
+		begin();
+		data = companyDao.saveOrUpdate(data);
+		commit();
+
+		return data;
+	}
 
 	@Override
 	public Company findById(String id) throws Exception {

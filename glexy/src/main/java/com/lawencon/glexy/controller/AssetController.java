@@ -155,7 +155,7 @@ public class AssetController extends BaseController {
 	@PutMapping("/image")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = UpdateResDataDto.class)))
 	public ResponseEntity<?> updateImage(@RequestPart String data, MultipartFile file) throws Exception {
-		Asset asset = assetService.updateImage(data, file);
+		Asset asset = assetService.updateImage(convertToModel(data, Asset.class), file);
 
 		UpdateResDataDto ver = new UpdateResDataDto();
 		ver.setVersion(asset.getVersion());
