@@ -62,11 +62,12 @@ public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {
 		try {
 
 			StringBuilder sql = new StringBuilder();
-			sql.append("Select id ");
-			sql.append("FROM companies ");
-			sql.append("WHERE code=:code");
+			sql.append("SELECT c ");
+			sql.append("FROM Company as c ");
+			sql.append("WHERE code LIKE '%" + code + "%'");
 
-			Object result = createNativeQuery(sql.toString()).setParameter("code", code).getSingleResult();
+			Object result = createQuery(sql.toString(), Company.class)
+					.getSingleResult();
 			if (result != null) {
 				company.setId(result.toString());
 				company = getById(company.getId());

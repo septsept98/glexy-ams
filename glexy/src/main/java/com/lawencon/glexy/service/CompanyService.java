@@ -11,6 +11,8 @@ public interface CompanyService {
 	Company save(Company data, MultipartFile files) throws Exception;
 	
 	Company update(Company data) throws Exception;
+	
+	Company updateImage(Company data, MultipartFile file) throws Exception;
 
 	Company findById(String id) throws Exception;
 	
