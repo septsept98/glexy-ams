@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -87,4 +88,15 @@ public class BaseController {
 		
 		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(MissingServletRequestPartException.class)
+	public ResponseEntity<?> exception(MissingServletRequestPartException e){
+		Map<String, Object> mapError = new HashMap<String, Object>();
+		
+		mapError.put("msg", NestedExceptionUtils.getRootCause(e).getMessage());
+		
+		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
+	}
+	
+	
 }

@@ -165,7 +165,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				assetInsert.setNames(inven.getNameAsset());
 				assetInsert.setAssetImg(asset.getAssetImg());
 				assetInsert.setCode(codeAsset);
-				assetInsert.setCreatedBy("3");
+				assetInsert.setCreatedBy(getIdAuth());
 				assetInsert.setInvoiceId(invoice);
 				assetInsert.setInventoryId(inven);
 
@@ -175,9 +175,9 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				trackAsset.setCodeAsset(assetInsert.getCode());
 				trackAsset.setNameActivity("New");
 				trackAsset.setDateActivity(LocalDate.now());
-				trackAsset.setUserId("3");
+				trackAsset.setUserId(getIdAuth());
 				trackAsset.setTransactionCode("BBA");
-				trackAsset.setCreatedBy("3");
+				trackAsset.setCreatedBy(getIdAuth());
 				trackAsset.setIsActive(true);
 
 				trackAssetService.saveOrUpdate(trackAsset);
@@ -370,7 +370,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
 						assetInsert.setExpiredDate(date);
-					}
+					} 
 					
 					assetInsert.setStatusAssetId(statusAsset);
 					assetInsert.setNames(inventory.getNameAsset());
@@ -403,9 +403,20 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	}
 
 	@Override
-	public Asset updateImage(String id, MultipartFile assetImg) throws Exception {
+	public Asset updateImage(Asset data, MultipartFile assetImg) throws Exception {
 		File imgAsset = new File();
-		Asset asset = assetDao.findById(id);
+		Asset asset = assetDao.findById(data.getId());
+		data.setAssetTypeId(asset.getAssetTypeId());
+		data.setBrandId(asset.getBrandId());
+		data.setCode(asset.getCode());
+		data.setCompanyId(asset.getCompanyId());
+		data.setCreatedBy(asset.getCreatedBy());
+		data.setCreatedAt(asset.getCreatedAt());
+		data.setExpiredDate(asset.getExpiredDate());
+		data.setInventoryId(asset.getInventoryId());
+		data.setInvoiceId(asset.getInvoiceId());
+		data.setVersion(asset.getVersion());
+		data.setIsActive(asset.getIsActive());
 
 		imgAsset.setFiles(assetImg.getBytes());
 		String ext = assetImg.getOriginalFilename();
@@ -414,17 +425,18 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 		File imgInsert = fileService.findByByte(imgAsset.getFile(), ext);
 		if (imgInsert != null) {
-			asset.setAssetImg(imgInsert);
+			data.setAssetImg(imgInsert);
 		} else {
-			asset.setAssetImg(imgAsset);
+			imgAsset = fileService.saveOrUpdate(imgAsset);
+			data.setAssetImg(imgAsset);
 		}
-		asset.setUpdatedBy(getIdAuth());
+		data.setUpdatedBy(getIdAuth());
 
 		begin();
-		asset = assetDao.saveOrUpdate(asset);
+		data = assetDao.saveOrUpdate(data);
 		commit();
 
-		return asset;
+		return data;
 	}
 
 	@Override

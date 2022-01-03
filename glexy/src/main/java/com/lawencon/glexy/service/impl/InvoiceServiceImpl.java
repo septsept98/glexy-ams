@@ -56,7 +56,13 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 
 	@Override
 	public Invoice update(Invoice data, MultipartFile file) throws Exception {
-		Invoice invoice = invoiceDao.findByCode(data.getCode());
+		Invoice invoice = invoiceDao.findById(data.getId());
+		data.setCode(invoice.getCode());
+		data.setCreatedBy(invoice.getCreatedBy());
+		data.setCreatedAt(invoice.getCreatedAt());
+		data.setIsActive(invoice.getIsActive());
+		data.setVersion(invoice.getVersion());
+		
 		File imgInvoice = new File();
 
 		imgInvoice.setFiles(file.getBytes());
@@ -67,18 +73,19 @@ public class InvoiceServiceImpl extends BaseGlexyServiceImpl implements InvoiceS
 		File imgInsert = fileService.findByByte(imgInvoice.getFile(), ext);
 
 		if (imgInsert != null) {
-			invoice.setInvoiceImg(imgInsert);
+			data.setInvoiceImg(imgInsert);
 		} else {
-			invoice.setInvoiceImg(imgInvoice);
+			imgInvoice = fileService.saveOrUpdate(imgInvoice);
+			data.setInvoiceImg(imgInvoice);
 		}
 
-		invoice.setUpdatedBy(getIdAuth());
+		data.setUpdatedBy(getIdAuth());
 
 		begin();
-		invoice = invoiceDao.saveOrUpdate(invoice);
+		data = invoiceDao.saveOrUpdate(data);
 		commit();
 
-		return invoice;
+		return data;
 	}
 
 	@Override

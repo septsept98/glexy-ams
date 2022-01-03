@@ -40,8 +40,8 @@ public class FileServiceImpl extends BaseGlexyServiceImpl implements FileService
 				data.setUpdatedBy(getIdAuth());
 			}else {
 
-			data.setCreatedBy("1");
-			data.setIsActive(true);
+				data.setCreatedBy("1");
+				data.setIsActive(true);
 			}
 			
 			data = fileDao.saveOrUpdate(data);
@@ -58,9 +58,9 @@ public class FileServiceImpl extends BaseGlexyServiceImpl implements FileService
 	public boolean deleteById(String id) throws Exception {
 		boolean result = false;
 		try {
-			begin();
+			
 			result = fileDao.deleteById(id);
-			commit();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			rollback();
