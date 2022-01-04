@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -106,7 +107,6 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			Inventory inventory = inventoryService.findByCode(inven.getCode()); // code
 			if (inventory != null) {
 				stock = inventory.getStock() + stockInven;
-				System.out.println("Stock Inventory : " + stock);
 				int latest = inventory.getLatestStock() + stockInven;
 				inven.setId(inventory.getId());
 				inven.setNameAsset(inventory.getNameAsset());
@@ -304,7 +304,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		try {
 			Integer stock = 0;
 			int index = 0;
-			excelUtil.init("Assets", file.getInputStream());
+			excelUtil.initRead("Assets", file.getInputStream());
 			begin();
 			for (int i = 1; i < excelUtil.getRowCountInSheet(); i++) {
 				Inventory inventory = new Inventory();
@@ -564,4 +564,74 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			return result;
 		}
 	}
+
+	@Override
+	public byte[] downloadTemplateExcel() throws Exception {
+		List<Brand> brandList = brandService.findAll();
+		List<Company> companyList = companyService.findAll();
+		List<AssetType> assetTypeList = assetTypeService.findAll();
+		List<StatusAsset> statusAssetList = statusAssetService.findAll();
+		List<Inventory> inventoryList = inventoryService.findAll();
+		
+		List<String> header = new ArrayList<>();
+		header.add("Code");
+		header.add("Name");
+		
+		List<String> brand = new ArrayList<>();
+		for(int i = 0; i < brandList.size(); i++) {
+			brand.add(brandList.get(i).getCode());
+			brand.add(brandList.get(i).getNames());
+		}
+		
+		excelUtil.setCellValue("Inventory Code", 0, header);
+		for(int i = 1; i < inventoryList.size(); i++) {
+			excelUtil.setCellValue("Inventory Code", i, brand);
+		}
+		
+		String[] brandArray =  new String[brandList.size()+1];
+		brandArray[0] = "Code Brand";
+		for(int i = 1; i < brandArray.length; i++) {
+			brandArray[i] = brandList.get(i-1).getCode();
+		}
+		
+		String[] companyArray =  new String[companyList.size()+1];
+		companyArray[0] = "Code Company";
+		for(int i = 1; i < companyArray.length; i++) {
+			companyArray[i] = companyList.get(i-1).getCode();
+		}
+		
+		String[] assetTypeArray =  new String[assetTypeList.size()+1];
+		assetTypeArray[0] = "Code Asset Type";
+		for(int i = 1; i < assetTypeArray.length; i++) {
+			assetTypeArray[i] = assetTypeList.get(i-1).getCode();
+		}
+		
+		String[] statusAssetArray =  new String[statusAssetList.size()+1];
+		statusAssetArray[0] = "Code Status Asset";
+		for(int i = 1; i < statusAssetArray.length; i++) {
+			statusAssetArray[i] = statusAssetList.get(i-1).getCodeStatusAsset();
+		}
+		
+		String[] inventoryArray =  new String[inventoryList.size()+1];
+		inventoryArray[0] = "Code Asset Type";
+		for(int i = 1; i < inventoryArray.length; i++) {
+			inventoryArray[i] = inventoryList.get(i-1).getCode();
+		}
+		
+		
+		excelUtil.initWrite("Assets", "Inventory Code", "Brand Code", "Asset Type Code", "Status Asset Code", "Company Code");
+		
+		String[] headerAsset = {"Name Asset", "Quantity", "Code Inventory", "Invoice Code", "Total Price", "Brand Code", "Asset Type Code", "Expired Date", 
+				"Status Asset Code", "Company Code"};
+		
+		
+		excelUtil.setCellValue("Assets", 0, Arrays.asList(headerAsset));
+		
+		
+		byte[] template = excelUtil.getByteArrayFile();
+		
+		return template;
+	}
+	
+	
 }

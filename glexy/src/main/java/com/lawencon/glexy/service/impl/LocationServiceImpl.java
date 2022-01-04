@@ -39,7 +39,6 @@ public class LocationServiceImpl extends BaseGlexyServiceImpl implements Locatio
 			} else {
 
 				data.setCreatedBy(getIdAuth());
-
 				validationSave(data);
 
 			}
