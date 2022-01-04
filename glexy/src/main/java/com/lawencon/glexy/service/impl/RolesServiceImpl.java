@@ -29,8 +29,18 @@ public class RolesServiceImpl extends BaseGlexyServiceImpl implements RolesServi
 
 	@Override
 	public List<Roles> findAll() throws Exception {
-
-		return rolesDao.findAll();
+		List<Roles> listRoles = rolesDao.findAll();
+		for(int i = 0; i<listRoles.size();i++) {
+			if(listRoles.get(i).getCode().equals("SA")) {
+				listRoles.remove(i);
+			}
+		}
+		for(int i = 0; i<listRoles.size();i++) {
+			if(listRoles.get(i).getCode().equals("S")) {
+				listRoles.remove(i);
+			}
+		}
+		return listRoles;
 	}
 
 	@Override
