@@ -53,5 +53,7 @@ public interface AssetService {
 	List<Asset> searchAssetGeneral(String search) throws Exception;
 	
 	List<Asset> findAssetByInventBrand(String inventId, String brandId) throws Exception;
+	
+	byte[] downloadTemplateExcel() throws Exception;
 
 }

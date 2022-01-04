@@ -17,3 +17,4 @@ INSERT INTO employees(name_employee, nip, email_employee, phone_number, gender,c
 INSERT INTO users(email, pass, roles_id,employee_id, "version", created_by, created_at, is_active,id) VALUES
 	('septianardi053@gmail.com','$2a$10$Tv9mievZDYyio/NcGkVQW.Ho7qC9vPO5CzSDFWVofdChYNVIET/lm', '1', '1', 0, '1', now(), true,'1'),
 	('glexyamms03@gmail.com', '$2a$10$Tv9mievZDYyio/NcGkVQW.Ho7qC9vPO5CzSDFWVofdChYNVIET/lm', '2', '2', 0, '1', now(), true,'2');
+
