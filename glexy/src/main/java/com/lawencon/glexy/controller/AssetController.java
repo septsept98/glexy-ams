@@ -218,5 +218,15 @@ public class AssetController extends BaseController {
 		List<ReportDataExpiredAsset> result = assetService.findExpiredAsset();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/excel")
+	public ResponseEntity<byte[]> generateExcel() throws Exception, JRException {
+		
+		byte[] data = assetService.downloadTemplateExcel();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=assets-glexy.xlsx");
+		
+		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+	}
 
 }

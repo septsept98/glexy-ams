@@ -2,40 +2,42 @@ package com.lawencon.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * @author lawencon05
  */
 public class ExcelUtil {
 
-	private HSSFWorkbook workbook;
-	private HSSFSheet sheet;
-	private HSSFCell cell;
+	private XSSFWorkbook workbook;
+	private XSSFSheet sheet;
+	private XSSFCell cell;
 	private ByteArrayOutputStream bos;
 
-	/**
-	 * Empty InputStream means Create New Workbook
-	 * 
-	 * @param sheetName
-	 * @param file
-	 * @throws Exception
-	 */
-	public void init(String sheetName, InputStream file) throws Exception {
-		if (file != null) {
-			workbook = new HSSFWorkbook(file);
-			sheet = workbook.getSheet(sheetName);
-		} else {
-			workbook = new HSSFWorkbook();
-			sheet = workbook.createSheet(sheetName);
-			bos = new ByteArrayOutputStream();
-		}
+	public void initRead(String sheetName, InputStream file) throws Exception {
+		if (workbook == null)
+			workbook = new XSSFWorkbook(file);
+
+		sheet = workbook.getSheet(sheetName);
 	}
+
+	public void initWrite(String... sheetNames) throws Exception {
+		workbook = new XSSFWorkbook();
+		for (String sheetName : sheetNames) {
+			workbook.createSheet(sheetName);
+		}
+		bos = new ByteArrayOutputStream();
+	}
+	
 
 	public String getCellData(int rowNumber, int cellNumber) {
 		try {
@@ -71,16 +73,20 @@ public class ExcelUtil {
 		return sheet.getRow(row).getLastCellNum();
 	}
 
-	public void setCellValue(int rowNumber, String[] cellValue) throws Exception {
+	public void setCellValue(int rowNumber, List<String> cellValue) throws Exception {
 		Row row = sheet.createRow(rowNumber);
-		for (int i = 0; i < cellValue.length; i++) {
-			row.createCell(i).setCellValue(cellValue[i]);
+		for (int i = 0; i < cellValue.size(); i++) {
+			row.createCell(i).setCellValue(cellValue.get(i));
 		}
+	}
 
-		workbook.write(bos);
+	public void setCellValue(String sheetName, int rowNumber, List<String> cellValue) throws Exception {
+		sheet = workbook.getSheet(sheetName);
+		setCellValue(rowNumber, cellValue);
 	}
 
 	public byte[] getByteArrayFile() throws Exception {
+		workbook.write(bos);
 		bos.close();
 		return bos.toByteArray();
 	}
