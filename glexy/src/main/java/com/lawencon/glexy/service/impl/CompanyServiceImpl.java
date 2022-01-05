@@ -92,6 +92,7 @@ public class CompanyServiceImpl extends BaseGlexyServiceImpl implements CompanyS
 	@Override
 	public Company updateImage(Company data, MultipartFile file) throws Exception {
 		Company company = companyDao.findById(data.getId());
+		data.setNames(company.getNames());
 		data.setCode(company.getCode());
 		data.setDescription(company.getDescription());
 		data.setAddress(company.getAddress());
