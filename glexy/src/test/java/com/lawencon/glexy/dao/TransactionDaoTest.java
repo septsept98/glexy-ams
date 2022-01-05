@@ -206,7 +206,6 @@ class TransactionDaoTest {
 		transactions.setCheckOutDate(LocalDate.parse("2025-03-03",dateTimeFormatter));
 		transactions.setCodeTransaction("HKIY22345");
 		transactions.setDescription("Untuk Bootcamp");
-		transactions.setQuantity(1);
 		transactions.setAssetGeneralId(asset);
 		transactions.setEmployeeId(employee);
 		transactions.setLocationId(location);

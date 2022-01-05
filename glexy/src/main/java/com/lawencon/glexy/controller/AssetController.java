@@ -224,9 +224,15 @@ public class AssetController extends BaseController {
 		
 		byte[] data = assetService.downloadTemplateExcel();
 		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=assets-glexy.xlsx");
+		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=glexy-asset.xlsx");
 		
-		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM).body(data);
+	}
+	
+	@GetMapping("/undeploy-asset")
+	public ResponseEntity<?> getAllUndeployAsset() throws Exception {
+		List<Asset> result = assetService.findAssetUndeployable();
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "pic/{id}", produces = MediaType.IMAGE_JPEG_VALUE)

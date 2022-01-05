@@ -194,19 +194,48 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 	@Override
 	public Asset update(Asset data) throws Exception {
+		String update = "";
 		Asset asset = findById(data.getId());
-		if (asset == null) {
+		if(asset == null) {
 			throw new ValidationGlexyException("Asset Not Found");
 		}
 		StatusAsset statusAsset = new StatusAsset();
+		Brand brand = new Brand();
+		Company company = new Company();
+		AssetType assetType = new AssetType();
 
 		statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
-		if (statusAsset == null) {
+		if(statusAsset == null) {
 			throw new ValidationGlexyException("Status Asset Not Found");
 		}
+		
+		brand = brandService.findById(data.getBrandId().getId());
+		if(brand == null) {
+			throw new ValidationGlexyException("Brand Not Found");
+		}
+		
+		company = companyService.findById(data.getCompanyId().getId());
+		if(company == null) {
+			throw new ValidationGlexyException("Company Not Found");
+		}
+		
+		assetType = assetTypeService.findById(data.getAssetTypeId().getId());
+		if(assetType == null) {
+			throw new ValidationGlexyException("Asset Type Not Found");
+		}
+		
+		if(!asset.getAssetTypeId().getId().equals(data.getAssetTypeId().getId()) || !asset.getBrandId().getId().equals(data.getBrandId().getId()) || 
+				!asset.getCompanyId().getId().equals(data.getCompanyId().getId()) || asset.getExpiredDate() != data.getExpiredDate()) {
+			update = "Update Asset";
+		} else if(!asset.getStatusAssetId().getId().equals(data.getStatusAssetId().getId())) {
+			update = "Update Status Asset";
+		}
 
-		statusAsset.setId(data.getStatusAssetId().getId());
 		asset.setStatusAssetId(statusAsset);
+		asset.setBrandId(brand);
+		asset.setCompanyId(company);
+		asset.setAssetTypeId(assetType);
+		asset.setExpiredDate(data.getExpiredDate());
 		asset.setUpdatedBy(getIdAuth());
 
 		begin();
@@ -214,7 +243,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 		TrackAsset trackAsset = new TrackAsset();
 		trackAsset.setCodeAsset(asset.getCode());
-		trackAsset.setNameActivity("Update Status Asset");
+		trackAsset.setNameActivity(update);
 		trackAsset.setDateActivity(LocalDate.now());
 		trackAsset.setUserId(getIdAuth());
 		trackAsset.setCreatedBy(getIdAuth());
@@ -319,11 +348,14 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 					inventory = inven;
 					index = 0;
 				} else {
+					index = inventory.getStock();
+					System.out.println("index : "+ index);
 					stock = inventory.getStock() + stock;
+					System.out.println("stock : "+stock);
 					int latest = inventory.getLatestStock() + stock;
+					System.out.println("latest : " + latest);
 					inventory.setStock(stock);
 					inventory.setLatestStock(latest);
-					index = inventory.getStock();
 
 				}
 
@@ -384,7 +416,6 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 					trackAsset.setNameActivity("New");
 					trackAsset.setDateActivity(LocalDate.now());
 					trackAsset.setUserId(getIdAuth());
-					trackAsset.setTransactionCode("BBA");
 					trackAsset.setCreatedBy(getIdAuth());
 					trackAsset.setIsActive(true);
 
@@ -395,6 +426,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			commit();
 
 		} catch (Exception e) {
+			rollback();
 			throw new Exception("fail to store excel data: " + e.getMessage());
 		}
 
@@ -404,13 +436,15 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public Asset updateImage(Asset data, MultipartFile assetImg) throws Exception {
 		File imgAsset = new File();
 		Asset asset = assetDao.findById(data.getId());
-		data.setAssetTypeId(asset.getAssetTypeId());
-		data.setBrandId(asset.getBrandId());
+		data.setNames(asset.getNames());
 		data.setCode(asset.getCode());
+		data.setExpiredDate(asset.getExpiredDate());
+		data.setAssetTypeId(asset.getAssetTypeId());
+		data.setStatusAssetId(asset.getStatusAssetId());
+		data.setBrandId(asset.getBrandId());
 		data.setCompanyId(asset.getCompanyId());
 		data.setCreatedBy(asset.getCreatedBy());
 		data.setCreatedAt(asset.getCreatedAt());
-		data.setExpiredDate(asset.getExpiredDate());
 		data.setInventoryId(asset.getInventoryId());
 		data.setInvoiceId(asset.getInvoiceId());
 		data.setVersion(asset.getVersion());
@@ -572,64 +606,73 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		List<StatusAsset> statusAssetList = statusAssetService.findAll();
 		List<Inventory> inventoryList = inventoryService.findAll();
 		
+		
+		excelUtil.initWrite("Assets", "Inventory Code", "Brand Code", "Asset Type Code", "Status Asset Code", "Company Code");
+		
 		List<String> header = new ArrayList<>();
 		header.add("Code");
 		header.add("Name");
 		
+		excelUtil.setCellValue("Brand Code", 0, header, true);
 		List<String> brand = new ArrayList<>();
 		for(int i = 0; i < brandList.size(); i++) {
 			brand.add(brandList.get(i).getCode());
 			brand.add(brandList.get(i).getNames());
+			excelUtil.setCellValue("Brand Code", i+1, brand , false);
+			brand.removeAll(brand);
 		}
 		
-		excelUtil.setCellValue("Inventory Code", 0, header);
-		for(int i = 1; i < inventoryList.size(); i++) {
-			excelUtil.setCellValue("Inventory Code", i, brand);
+		excelUtil.setCellValue("Company Code", 0, header, true);
+		List<String> company = new ArrayList<>();
+		for(int i = 0; i < companyList.size(); i++) {
+			company.add(companyList.get(i).getCode());
+			company.add(companyList.get(i).getNames());
+			excelUtil.setCellValue("Company Code", i+1, company, false);
+			company.removeAll(company);
 		}
 		
-		String[] brandArray =  new String[brandList.size()+1];
-		brandArray[0] = "Code Brand";
-		for(int i = 1; i < brandArray.length; i++) {
-			brandArray[i] = brandList.get(i-1).getCode();
+		excelUtil.setCellValue("Asset Type Code", 0, header, true);
+		List<String> assetType = new ArrayList<>();
+		for(int i = 0; i < assetTypeList.size(); i++) {
+			assetType.add(assetTypeList.get(i).getCode());
+			assetType.add(assetTypeList.get(i).getNames());
+			excelUtil.setCellValue("Asset Type Code", i+1, assetType, false);
+			assetType.removeAll(assetType);
 		}
 		
-		String[] companyArray =  new String[companyList.size()+1];
-		companyArray[0] = "Code Company";
-		for(int i = 1; i < companyArray.length; i++) {
-			companyArray[i] = companyList.get(i-1).getCode();
+		excelUtil.setCellValue("Status Asset Code", 0, header, true);
+		List<String> statusAsset = new ArrayList<>();
+		for(int i = 0; i < statusAssetList.size(); i++) {
+			statusAsset.add(statusAssetList.get(i).getCodeStatusAsset());
+			statusAsset.add(statusAssetList.get(i).getNameStatusAsset());
+			excelUtil.setCellValue("Status Asset Code", i+1, statusAsset, false);
+			statusAsset.removeAll(statusAsset);
 		}
 		
-		String[] assetTypeArray =  new String[assetTypeList.size()+1];
-		assetTypeArray[0] = "Code Asset Type";
-		for(int i = 1; i < assetTypeArray.length; i++) {
-			assetTypeArray[i] = assetTypeList.get(i-1).getCode();
+		excelUtil.setCellValue("Inventory Code", 0, header, true);
+		List<String> inventory = new ArrayList<>();
+		for(int i = 0; i < inventoryList.size(); i++) {
+			inventory.add(inventoryList.get(i).getCode());
+			inventory.add(inventoryList.get(i).getNameAsset());
+			excelUtil.setCellValue("Inventory Code", i+1, inventory, false);
+			inventory.removeAll(inventory);
 		}
-		
-		String[] statusAssetArray =  new String[statusAssetList.size()+1];
-		statusAssetArray[0] = "Code Status Asset";
-		for(int i = 1; i < statusAssetArray.length; i++) {
-			statusAssetArray[i] = statusAssetList.get(i-1).getCodeStatusAsset();
-		}
-		
-		String[] inventoryArray =  new String[inventoryList.size()+1];
-		inventoryArray[0] = "Code Asset Type";
-		for(int i = 1; i < inventoryArray.length; i++) {
-			inventoryArray[i] = inventoryList.get(i-1).getCode();
-		}
-		
-		
-		excelUtil.initWrite("Assets", "Inventory Code", "Brand Code", "Asset Type Code", "Status Asset Code", "Company Code");
-		
+
 		String[] headerAsset = {"Name Asset", "Quantity", "Code Inventory", "Invoice Code", "Total Price", "Brand Code", "Asset Type Code", "Expired Date", 
 				"Status Asset Code", "Company Code"};
 		
-		
-		excelUtil.setCellValue("Assets", 0, Arrays.asList(headerAsset));
+		excelUtil.setCellValue("Assets", 0, Arrays.asList(headerAsset), true);
 		
 		
 		byte[] template = excelUtil.getByteArrayFile();
 		
 		return template;
+	}
+
+	@Override
+	public List<Asset> findAssetUndeployable() throws Exception {
+		
+		return assetDao.findAssetUndeployable();
 	}
 	
 	

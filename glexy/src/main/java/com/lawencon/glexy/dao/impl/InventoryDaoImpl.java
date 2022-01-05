@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 
 import org.springframework.stereotype.Repository;
 
@@ -74,7 +75,9 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 
 		} catch (NoResultException e) {
 			return null;
-		} 
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+		}
 		return inven;
 	}
 

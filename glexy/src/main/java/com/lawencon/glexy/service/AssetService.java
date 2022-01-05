@@ -55,5 +55,7 @@ public interface AssetService {
 	List<Asset> findAssetByInventBrand(String inventId, String brandId) throws Exception;
 	
 	byte[] downloadTemplateExcel() throws Exception;
+	
+	List<Asset> findAssetUndeployable() throws Exception;
 
 }
