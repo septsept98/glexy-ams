@@ -99,7 +99,7 @@ public class StatusTransactionServiceImpl extends BaseGlexyServiceImpl implement
 		String code = "STR";
 		List<StatusTransaction> listStatusTransactions = findAll();
 		int index = 1;
-		if (listStatusTransactions != null) {
+		if (listStatusTransactions.size() > 0) {
 			index = listStatusTransactions.size();
 		}
 		String codeSTR = code + index;

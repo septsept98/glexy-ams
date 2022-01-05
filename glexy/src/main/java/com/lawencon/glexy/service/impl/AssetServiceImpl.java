@@ -176,7 +176,6 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				trackAsset.setNameActivity("New");
 				trackAsset.setDateActivity(LocalDate.now());
 				trackAsset.setUserId(getIdAuth());
-				trackAsset.setTransactionCode("BBA");
 				trackAsset.setCreatedBy(getIdAuth());
 				trackAsset.setIsActive(true);
 
@@ -218,7 +217,6 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		trackAsset.setNameActivity("Update Status Asset");
 		trackAsset.setDateActivity(LocalDate.now());
 		trackAsset.setUserId(getIdAuth());
-		trackAsset.setTransactionCode("BBA");
 		trackAsset.setCreatedBy(getIdAuth());
 		trackAsset.setIsActive(true);
 

@@ -22,8 +22,6 @@ public class Transactions extends BaseEntity{
 	@Column(name = "checkout_date", nullable = false)
 	private LocalDate checkOutDate;
 	
-	private Integer quantity;
-	
 	private String description;
 	
 	@ManyToOne
@@ -56,14 +54,6 @@ public class Transactions extends BaseEntity{
 
 	public void setCheckOutDate(LocalDate checkOutDate) {
 		this.checkOutDate = checkOutDate;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
 	}
 
 	public String getDescription() {

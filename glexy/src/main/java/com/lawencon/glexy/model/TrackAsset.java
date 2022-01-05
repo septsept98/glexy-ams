@@ -26,7 +26,7 @@ public class TrackAsset extends BaseEntity {
 	@Column(name = "user_id", length = 36, nullable = false)
 	private String userId;
 
-	@Column(name = "transaction_code", length = 20, nullable = false)
+	@Column(name = "transaction_code", length = 20)
 	private String transactionCode;
 
 	public String getCodeAsset() {

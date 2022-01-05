@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @SpringBootApplication
 @ComponentScan(basePackages = "com.lawencon")
-@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
+//@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 public class App {
 	
 	public static void main(String[] args) {
