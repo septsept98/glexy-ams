@@ -630,6 +630,12 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		
 		return template;
 	}
+
+	@Override
+	public List<Asset> findAssetUndeployable() throws Exception {
+		
+		return assetDao.findAssetUndeployable();
+	}
 	
 	
 }

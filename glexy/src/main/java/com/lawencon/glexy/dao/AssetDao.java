@@ -37,4 +37,6 @@ public interface AssetDao {
 	List<Asset> searchAssetGeneral(String search) throws Exception;
 	
 	List<Asset> findAssetByInventBrand(String inventId, String brandId) throws Exception;
+	
+	List<Asset> findAssetUndeployable() throws Exception;
 }

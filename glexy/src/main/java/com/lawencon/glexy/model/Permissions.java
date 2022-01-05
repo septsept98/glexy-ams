@@ -10,7 +10,7 @@ import com.lawencon.base.BaseEntity;
 @Table
 public class Permissions extends BaseEntity {
 
-	private static final long serialVersionUID = -2221432347755352384L;
+	private static final long serialVersionUID = -8311003583935667203L;
 
 	@Column(name ="name_permission",length = 30, nullable = false)
 	private String namePermission;
@@ -32,6 +32,11 @@ public class Permissions extends BaseEntity {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	

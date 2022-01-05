@@ -44,7 +44,7 @@ public class PermissionDetailDaoImpl extends BaseDaoImpl<PermissionDetail> imple
 	public List<PermissionDetail> findByRoleCode(String code) throws Exception {
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT pe.name_permission,pe.code , pr.id FROM permission_role AS pr ");
+		sql.append("SELECT pe.name_permission,pe.code, pr.id FROM permission_role AS pr ");
 		sql.append("INNER JOIN permissions AS pe ON pr.permissions_id = pe.id ");
 		sql.append("INNER JOIN roles AS r ON pr.roles_id = r.id ");
 		sql.append("WHERE r.code = :code");
