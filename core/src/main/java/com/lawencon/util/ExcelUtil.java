@@ -4,12 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -22,11 +22,12 @@ public class ExcelUtil {
 	private XSSFSheet sheet;
 	private XSSFCell cell;
 	private ByteArrayOutputStream bos;
+	private XSSFCellStyle boldStyle;
 
 	public void initRead(String sheetName, InputStream file) throws Exception {
 		if (workbook == null)
 			workbook = new XSSFWorkbook(file);
-
+		
 		sheet = workbook.getSheet(sheetName);
 	}
 
@@ -73,22 +74,37 @@ public class ExcelUtil {
 		return sheet.getRow(row).getLastCellNum();
 	}
 
-	public void setCellValue(int rowNumber, List<String> cellValue) throws Exception {
+	public void setCellValue(int rowNumber, List<String> cellValues, boolean isBold) throws Exception {
 		Row row = sheet.createRow(rowNumber);
-		for (int i = 0; i < cellValue.size(); i++) {
-			row.createCell(i).setCellValue(cellValue.get(i));
+		for (int i = 0; i < cellValues.size(); i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellValue(cellValues.get(i));
+
+			if (isBold)
+				cell.setCellStyle(boldStyle());
 		}
 	}
 
-	public void setCellValue(String sheetName, int rowNumber, List<String> cellValue) throws Exception {
+	public void setCellValue(String sheetName, int rowNumber, List<String> cellValues, boolean isBold)
+			throws Exception {
 		sheet = workbook.getSheet(sheetName);
-		setCellValue(rowNumber, cellValue);
+		setCellValue(rowNumber, cellValues, isBold);
 	}
 
 	public byte[] getByteArrayFile() throws Exception {
 		workbook.write(bos);
 		bos.close();
 		return bos.toByteArray();
+	}
+	
+	private XSSFCellStyle boldStyle() {
+		if (boldStyle == null) {
+			boldStyle = workbook.createCellStyle();
+			XSSFFont fontBold = workbook.createFont();
+			fontBold.setBold(true);
+			boldStyle.setFont(fontBold);
+		}
+		return boldStyle;
 	}
 
 }
