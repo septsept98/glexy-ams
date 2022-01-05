@@ -255,10 +255,12 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 	public List<Asset> searchAssetGeneral(String search) throws Exception {
 		List<Asset> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
-		sql.append("Select id ");
-		sql.append("FROM assets ");
-		sql.append("WHERE status_asset_id = (SELECT id FROM asset_types WHERE lower(names) = 'general') AND ");
-		sql.append("(lower(names) LIKE lower('%" + search + "%') OR lower(code) LIKE lower('%" + search + "%'))");
+		sql.append("SELECT a.id FROM assets a ");
+		sql.append("INNER JOIN asset_types at2 ON at2.id = a.asset_type_id ");
+		sql.append("INNER JOIN status_assets sa ON sa.id = a.status_asset_id ");
+		sql.append("WHERE lower(at2.names) = lower('General') AND ");
+		sql.append("lower(sa.code_status_asset) = lower('SA1') AND ");
+		sql.append("(lower(a.names) LIKE lower('%" + search + "%') OR lower(a.code) LIKE lower('%" + search + "%'))");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 

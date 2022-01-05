@@ -117,7 +117,6 @@ public class TransactionServiceImpl extends BaseGlexyServiceImpl implements Tran
 			Transactions dataTransaction = data.getDataTransaction();
 			dataTransaction.setCodeTransaction(generateCode());
 			dataTransaction.setCreatedBy(getIdAuth());
-			dataTransaction.setQuantity(0);
 			Users users = new Users();
 			users.setId(getIdAuth());
 			dataTransaction.setUserId(users);
@@ -200,7 +199,7 @@ public class TransactionServiceImpl extends BaseGlexyServiceImpl implements Tran
 		StringBuilder sb = new StringBuilder();
 		sb.append("TRX-");
 		Random random = new Random();
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 8; i++) {
 			int indNumber = random.nextInt(number.length());
 			sb.append(number.charAt(indNumber));
 		}

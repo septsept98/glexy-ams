@@ -93,7 +93,7 @@ public class StatusAssetServiceImpl extends BaseGlexyServiceImpl implements Stat
 		String code = "SA";
 		List<StatusAsset> listStatusAsset = findAll();
 		int index = 1;
-		if (listStatusAsset != null) {
+		if (listStatusAsset.size() > 0) {
 			index = listStatusAsset.size();
 		}
 		String codeSA = code + index;
@@ -103,7 +103,6 @@ public class StatusAssetServiceImpl extends BaseGlexyServiceImpl implements Stat
 			}
 			codeSA = code + index;
 		}
-
 		return codeSA;
 	}
 
