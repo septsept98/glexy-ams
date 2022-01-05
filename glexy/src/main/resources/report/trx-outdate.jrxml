@@ -63,7 +63,7 @@
 	<pageHeader>
 		<band height="232" splitType="Stretch">
 			<textField pattern="d MMMM yyyy">
-				<reportElement x="30" y="90" width="110" height="20" uuid="d5554308-66f3-4aad-8e23-86a9ec9bf03c"/>
+				<reportElement x="30" y="110" width="110" height="20" uuid="d5554308-66f3-4aad-8e23-86a9ec9bf03c"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -180,71 +180,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{title}.toUpperCase()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="200" y="0" width="445" height="30" uuid="573a3ff8-d8cb-40ac-ac37-c085df20e131"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="22" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{company}.toUpperCase()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="200" y="44" width="445" height="20" uuid="aff6e0d0-696e-4499-a892-1e6dd4468236"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{address}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="284" y="60" width="106" height="20" uuid="2c8edd13-db9c-40aa-837b-cfa3cd02ee06"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{website}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="231" y="60" width="60" height="20" uuid="240be3f7-87bf-4482-9ea8-919148bd8af1"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Website : ]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="430" y="60" width="72" height="20" uuid="7e7bcdea-27f8-40b6-a140-8b9a9cc38bf7"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{telp}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="397" y="60" width="40" height="20" uuid="b01a8ba2-b8b1-4831-926c-f7c7f2773a91"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Telp : ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="510" y="60" width="90" height="20" uuid="dd5393ae-2494-46c3-aea8-930974109a40"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Fax : ]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="540" y="60" width="100" height="20" uuid="f8eaed5a-36c2-4d83-be49-98085a6df8aa"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{fax}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="200" y="30" width="445" height="19" uuid="8349ddb1-e1b5-47be-b534-b56444a10908"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="13" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{description}]]></textFieldExpression>
-			</textField>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="22" y="80" width="759" height="1" uuid="e2179a3c-ffe9-4939-9a5d-f7ec70b8709a">
+				<reportElement positionType="FixRelativeToBottom" x="22" y="98" width="759" height="1" uuid="eed6caea-0ef4-4062-a1f2-619e728d9600">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -252,6 +189,73 @@
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
+			<textField>
+				<reportElement x="140" y="0" width="370" height="30" uuid="d3b95545-91af-4dd1-a888-4caf3cf3874f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="22" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{company}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="44" width="370" height="20" uuid="227e26e8-2e1c-4c16-b091-6de865ac4d7a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="194" y="59" width="316" height="20" uuid="64106f36-c13c-4040-a3ea-9dc00d4d9571"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{website}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="140" y="59" width="60" height="20" uuid="e9f61a57-c40d-47fe-a253-dd5583d15517"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Website : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="176" y="74" width="120" height="20" uuid="929a0325-fa45-4da2-83e0-d160c7a3d0c8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{telp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="140" y="74" width="40" height="20" uuid="b29c630d-7661-4fe2-815f-4baa3f0d2a4b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Telp : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="74" width="30" height="20" uuid="95536b99-86e5-462c-9a80-5388f19dc4ad"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fax : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="340" y="74" width="140" height="20" uuid="c4cea95f-17f2-4651-93bf-fac1e7f02a1b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fax}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="28" width="370" height="19" uuid="7ef63d48-89cd-460d-ad09-1c6137f21de8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{description}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="50" y="12" width="70" height="70" uuid="d525f6d3-be2b-4acd-9e8b-19c0de81955c"/>
+				<imageExpression><![CDATA["http://localhost:1234/companies/pic/"+$P{logo}]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<detail>

@@ -20,4 +20,6 @@ public interface InventoryDao {
 	
 	List<Inventory> searchByCodeName(String search) throws Exception;
 	
+	List<Inventory> searchByCodeNameComp(String search) throws Exception;
+	
 }

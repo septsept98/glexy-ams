@@ -228,5 +228,10 @@ public class AssetController extends BaseController {
 		
 		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
 	}
+	
+	@GetMapping(value = "pic/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] getPic(@PathVariable("id") String id) throws Exception {
+		return assetService.findById(id).getAssetImg().getFile();
+	}
 
 }

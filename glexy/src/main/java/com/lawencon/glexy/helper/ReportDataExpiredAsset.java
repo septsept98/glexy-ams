@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 public class ReportDataExpiredAsset {
 
-	private String image;
+	private byte[] image;
+	private String idAsset;
 	private String codeAsset;
 	private String nameAsset;
 	private String brand;
@@ -12,12 +13,20 @@ public class ReportDataExpiredAsset {
 	private String statusAsset;
 	private LocalDate expiredDate;
 
-	public String getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public String getIdAsset() {
+		return idAsset;
+	}
+
+	public void setIdAsset(String idAsset) {
+		this.idAsset = idAsset;
 	}
 
 	public String getCodeAsset() {

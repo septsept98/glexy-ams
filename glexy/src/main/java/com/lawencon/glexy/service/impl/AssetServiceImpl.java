@@ -455,7 +455,8 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		for (int i = 0; i < listAsset.size(); i++) {
 			ReportDataExpiredAsset assetDto = new ReportDataExpiredAsset();
 			Asset asset = listAsset.get(i);
-			assetDto.setImage(asset.getId());
+			assetDto.setImage(asset.getAssetImg().getFile());
+			assetDto.setIdAsset(asset.getId());
 			assetDto.setCodeAsset(asset.getCode());
 			assetDto.setNameAsset(asset.getNames());
 			assetDto.setBrand(asset.getBrandId().getNames());
@@ -483,7 +484,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		map.put("logo", company.getId());
 		map.put("title", "LICENSE ASSETS EXPIRED");
 
-		byte[] data = JasperUtil.responseToByteArray(findExpiredAsset(), "asset-expired", map);
+		byte[] data = JasperUtil.responseToByteArray(findExpiredAsset(), "assets-expired", map);
 
 		return data;
 	}
