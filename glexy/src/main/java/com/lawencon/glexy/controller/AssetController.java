@@ -228,5 +228,11 @@ public class AssetController extends BaseController {
 		
 		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM).body(data);
 	}
+	
+	@GetMapping("/undeploy-asset")
+	public ResponseEntity<?> getAllUndeployAsset() throws Exception {
+		List<Asset> result = assetService.findAssetUndeployable();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 }
