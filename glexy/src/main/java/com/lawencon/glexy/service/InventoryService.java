@@ -13,6 +13,8 @@ public interface InventoryService {
 	List<Inventory> findAll() throws Exception;
 	
 	List<Inventory> searchByNameCode(String search) throws Exception;
+
+	List<Inventory> searchByCodeNameComp(String search) throws Exception;
 	
 	Inventory findByCode(String code) throws Exception;
 

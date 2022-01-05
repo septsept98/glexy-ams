@@ -234,5 +234,10 @@ public class AssetController extends BaseController {
 		List<Asset> result = assetService.findAssetUndeployable();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "pic/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] getPic(@PathVariable("id") String id) throws Exception {
+		return assetService.findById(id).getAssetImg().getFile();
+	}
 
 }

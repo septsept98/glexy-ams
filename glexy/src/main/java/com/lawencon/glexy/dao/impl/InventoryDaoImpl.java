@@ -101,4 +101,29 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 
 		return listResult;
 	}
+
+	@Override
+	public List<Inventory> searchByCodeNameComp(String search) throws Exception {
+		List<Inventory> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select i.id ");
+		sql.append("FROM inventories i ");
+		sql.append("INNER JOIN assets a ON a.inventory_id = i.id ");
+		sql.append("INNER JOIN asset_types at2 ON at2.id = a.asset_type_id ");
+		sql.append("WHERE lower(at2.names) = lower('Component') AND ");
+		sql.append("(lower(code) LIKE lower('%" + search + "%') OR lower(name_asset) LIKE lower('%" + search + "%')) ");
+		sql.append("GROUP BY i.id ");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+		
+		result.forEach(rs -> {
+			Inventory invent = new Inventory();
+			invent.setId(rs.toString());
+			invent = getById(invent.getId());
+
+			listResult.add(invent);
+		});
+
+		return listResult;
+	}
 }

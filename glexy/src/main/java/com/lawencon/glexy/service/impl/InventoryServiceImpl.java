@@ -139,4 +139,9 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 		}
 	}
 
+	@Override
+	public List<Inventory> searchByCodeNameComp(String search) throws Exception {
+		return inventoryDao.searchByCodeNameComp(search);
+	}
+
 }

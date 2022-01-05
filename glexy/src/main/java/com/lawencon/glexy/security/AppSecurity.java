@@ -17,38 +17,39 @@ import com.lawencon.glexy.service.UsersService;
 //@Profile("test")
 @EnableWebSecurity
 public class AppSecurity extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private UsersService usersService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
 	private JwtComponent jwtComponent;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated();
-		http.addFilter(new AuntificationFilter(super.authenticationManager(), objectMapper, jwtComponent, usersService));
+		http.addFilter(
+				new AuntificationFilter(super.authenticationManager(), objectMapper, jwtComponent, usersService));
 		http.addFilter(new AuthorizationFilter(super.authenticationManager(), jwtComponent));
 
 	}
-	
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-	
+
 		auth.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder);
 	}
-	
+
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.POST ,"/users" )
-		.antMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/assets/excel");
+		web.ignoring().antMatchers(HttpMethod.POST, "/users").antMatchers(HttpMethod.GET, "/swagger-ui.html",
+				"/swagger-ui/**", "/v3/api-docs/**", "/assets/excel", "/assets/pdf", "/track-assets/pdf",
+				"/transaction-details/pdf","/companies/pic/**","/assets/pic/**");
 	}
-	
 
 }

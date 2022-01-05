@@ -58,6 +58,14 @@ public class InventoryController {
 
 	}
 	
+	@GetMapping("search-component")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
+	public ResponseEntity<?> getAllBySearchComponent(@RequestParam ("query") String query) throws Exception {
+		List<Inventory> result = inventoryService.searchByCodeNameComp(query);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
 	@GetMapping("/code/{code}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> getByCode(@PathVariable("code") String code) throws Exception {
