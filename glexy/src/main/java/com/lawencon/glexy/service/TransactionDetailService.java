@@ -27,5 +27,7 @@ public interface TransactionDetailService {
 	ResDto sendEmailTrxExpiredReport() throws Exception;
 	
 	void validationSave(TransactionDetail data) throws Exception;
+	
+	List<TransactionDetail> findByTrNotCheckIn(String id) throws Exception;
 
 }

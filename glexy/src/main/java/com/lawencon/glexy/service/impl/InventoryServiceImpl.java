@@ -144,4 +144,9 @@ public class InventoryServiceImpl extends BaseGlexyServiceImpl implements Invent
 		return inventoryDao.searchByCodeNameComp(search);
 	}
 
+	@Override
+	public List<Inventory> searchByCodeNameLicn(String search) throws Exception {
+		return inventoryDao.searchByCodeNameLicn(search);
+	}
+
 }

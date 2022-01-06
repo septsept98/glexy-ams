@@ -18,8 +18,8 @@ public interface InventoryDao {
 	
 	boolean removeById(String id) throws Exception;
 	
-	List<Inventory> searchByCodeName(String search) throws Exception;
-	
 	List<Inventory> searchByCodeNameComp(String search) throws Exception;
+	
+	List<Inventory> searchByCodeNameLicn(String search) throws Exception;
 	
 }

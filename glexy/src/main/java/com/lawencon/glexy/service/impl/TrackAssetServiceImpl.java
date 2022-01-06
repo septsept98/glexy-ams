@@ -72,7 +72,7 @@ public class TrackAssetServiceImpl extends BaseGlexyServiceImpl implements Track
 
 	@Override
 	public byte[] pdfTrackAsset() throws Exception {
-		Users users = usersService.findById("1");
+		Users users = usersService.findByIdAuth();
 		Company company = users.getEmployeeId().getCompanyId();
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("company", company.getNames());
@@ -97,7 +97,9 @@ public class TrackAssetServiceImpl extends BaseGlexyServiceImpl implements Track
 		emailHelper.setAttach(data);
 		emailHelper.setFileName("track-asset.pdf");
 		
-		emailHandler.sendSimpleMessage("septianardi053@gmail.com", "Track Asset Report", "Track Asset", emailHelper);
+		Users users = usersService.findByIdAuth();
+		
+		emailHandler.sendReport(users.getEmail(), "Track Asset Report", "Track Asset", emailHelper);
 		
 		ResDto resDto = new ResDto();
 		resDto.setMsg("Send to Email");

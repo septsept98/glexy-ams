@@ -1,6 +1,5 @@
 package com.lawencon.glexy.service.impl;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -58,7 +57,6 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public List<Users> findAll() throws Exception {
-		
 		return usersDao.findAllUsers();
 	}
 

@@ -8,6 +8,10 @@ public interface TransactionDao {
 
 	List<Transactions> findAll() throws Exception;
 
+	List<Transactions> findAllNotCheckIn() throws Exception;
+
+	List<Transactions> findAllCheckIn() throws Exception;
+
 	Transactions findById(String id) throws Exception;
 
 	Transactions saveOrUpdate(Transactions data) throws Exception;

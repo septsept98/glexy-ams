@@ -358,6 +358,21 @@ public class EmailHandler {
 	    		+ "</body>"
 	    		+ "</html>",true);
 	    
+	    mailSender.send(message);
+	}
+	
+	@Async
+	public void sendReport(String to, String subject, String header ,EmailHelper data) throws Exception{
+
+		MimeMessage message = mailSender.createMimeMessage();
+	     
+	    MimeMessageHelper helper = new MimeMessageHelper(message, true);
+	   
+	    helper.setFrom("noreply@baeldung.com");
+	    helper.setTo(to);
+	    helper.setSubject(subject);
+	    helper.setText("Report " + data.getFileName(),true);
+	    
 	    DataSource dataSource = new ByteArrayDataSource(data.getAttach(), "application/pdf");
 	    helper.addAttachment(data.getFileName(), dataSource);
 	    

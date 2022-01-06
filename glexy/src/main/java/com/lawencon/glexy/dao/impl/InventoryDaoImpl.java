@@ -83,12 +83,16 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 	}
 
 	@Override
-	public List<Inventory> searchByCodeName(String search) throws Exception {
+	public List<Inventory> searchByCodeNameComp(String search) throws Exception {
 		List<Inventory> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
-		sql.append("Select id ");
-		sql.append("FROM inventories ");
-		sql.append("WHERE lower(code) LIKE lower('%" + search + "%') OR lower(name_asset) LIKE lower('%" + search + "%')");
+		sql.append("Select i.id ");
+		sql.append("FROM inventories i ");
+		sql.append("INNER JOIN assets a ON a.inventory_id = i.id ");
+		sql.append("INNER JOIN asset_types at2 ON at2.id = a.asset_type_id ");
+		sql.append("WHERE lower(at2.names) = lower('Component') AND ");
+		sql.append("(lower(i.code) LIKE lower('%" + search + "%') OR lower(i.name_asset) LIKE lower('%" + search + "%')) ");
+		sql.append("GROUP BY i.id ");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 		
@@ -104,15 +108,15 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 	}
 
 	@Override
-	public List<Inventory> searchByCodeNameComp(String search) throws Exception {
+	public List<Inventory> searchByCodeNameLicn(String search) throws Exception {
 		List<Inventory> listResult = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select i.id ");
 		sql.append("FROM inventories i ");
 		sql.append("INNER JOIN assets a ON a.inventory_id = i.id ");
 		sql.append("INNER JOIN asset_types at2 ON at2.id = a.asset_type_id ");
-		sql.append("WHERE lower(at2.names) = lower('Component') AND ");
-		sql.append("(lower(code) LIKE lower('%" + search + "%') OR lower(name_asset) LIKE lower('%" + search + "%')) ");
+		sql.append("WHERE lower(at2.names) NOT IN (lower('License')) ");
+		sql.append("(lower(i.code) LIKE lower('%" + search + "%') OR lower(i.name_asset) LIKE lower('%" + search + "%')) ");
 		sql.append("GROUP BY i.id ");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();

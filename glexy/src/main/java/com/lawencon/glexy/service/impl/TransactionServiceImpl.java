@@ -206,4 +206,14 @@ public class TransactionServiceImpl extends BaseGlexyServiceImpl implements Tran
 		return sb.toString();
 	}
 
+	@Override
+	public List<Transactions> findAllNotCheckIn() throws Exception {
+		return transactionDao.findAllNotCheckIn();
+	}
+
+	@Override
+	public List<Transactions> findAllCheckIn() throws Exception {
+		return transactionDao.findAllCheckIn();
+	}
+
 }

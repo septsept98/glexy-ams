@@ -16,6 +16,8 @@ public interface InventoryService {
 
 	List<Inventory> searchByCodeNameComp(String search) throws Exception;
 	
+	List<Inventory> searchByCodeNameLicn(String search) throws Exception;
+	
 	Inventory findByCode(String code) throws Exception;
 
 	boolean removeById(String id) throws Exception;

@@ -153,7 +153,7 @@ public class TransactionDetailServiceImpl extends BaseGlexyServiceImpl implement
 					emailHandler.sendExpiredMessage(emailEmployee, "Expired Asset Reminder", "Close To Expired", email);
           
 					TransactionDetail transactionDetail = listResult.get(i);
-					transactionDetail.setUpdatedBy(getIdAuth());
+					transactionDetail.setUpdatedBy("2");
 					transactionDetail.setStatusEmail(true);
 
 					begin();
@@ -194,7 +194,7 @@ public class TransactionDetailServiceImpl extends BaseGlexyServiceImpl implement
 
 	@Override
 	public byte[] pdfTransactionOutDate() throws Exception {
-		Users users = usersService.findById(getIdAuth());
+		Users users = usersService.findByIdAuth();
 		Company company = users.getEmployeeId().getCompanyId();
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("company", company.getNames());
@@ -224,7 +224,9 @@ public class TransactionDetailServiceImpl extends BaseGlexyServiceImpl implement
 		emailHelper.setAttach(data);
 		emailHelper.setFileName("trx-outdate.pdf");
 		
-		emailHandler.sendSimpleMessage("septianardi053@gmail.com", "Transaction Expired Report", "Expired Transaction", emailHelper);
+		Users users = usersService.findByIdAuth();
+		
+		emailHandler.sendReport(users.getEmail(), "Transaction Expired Report", "Expired Transaction", emailHelper);
 		
 		ResDto resDto = new ResDto();
 		resDto.setMsg("Send to Email");
@@ -237,6 +239,11 @@ public class TransactionDetailServiceImpl extends BaseGlexyServiceImpl implement
 			throw new ValidationGlexyException("Data not Complete");
 		}
 		
+	}
+
+	@Override
+	public List<TransactionDetail> findByTrNotCheckIn(String id) throws Exception {
+		return transactionDetailDao.findByTrNotCheckIn(id);
 	}
 
 }
