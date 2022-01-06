@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @ComponentScan(basePackages = "com.lawencon")
 //@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
-public class App {
+public class App {	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);

@@ -57,7 +57,7 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 
 	@Override
 	public Inventory findByCode(String code) throws Exception {
-		Inventory inven = new Inventory();
+		Inventory inven = null;
 		try {
 			
 			StringBuilder sql = new StringBuilder();
@@ -69,6 +69,7 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 					.setParameter("code", code)
 					.getSingleResult();	
 			if(result != null) {
+				inven = new Inventory();
 				inven.setId(result.toString());
 				inven = getById(inven.getId());
 			}
