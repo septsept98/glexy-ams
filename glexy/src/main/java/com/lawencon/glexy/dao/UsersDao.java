@@ -23,4 +23,6 @@ public interface UsersDao {
 	List<Users> findByRolesId(String id)throws Exception;
 	
 	List<Users> findByEmployeeId(String id)throws Exception;
+	
+	List<Users> findAllUsers() throws Exception; 
 }

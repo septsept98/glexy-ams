@@ -58,12 +58,8 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public List<Users> findAll() throws Exception {
-		EmailHelper data = new EmailHelper();
-		data.setEmployeeName("septian");
-		data.setValueName("lenovo");
-		data.setExpiredDate(LocalDate.now());
-		emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Expired Asset Reminder", "Close To Expired", data);
-		return usersDao.findAll();
+		
+		return usersDao.findAllUsers();
 	}
 
 	@Override
@@ -267,7 +263,7 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 	@Override
 	public void validationSave(Users data) throws Exception {
 		if (data != null) {
-			if (data.getEmail().isBlank()  || data.getRolesId() == null || data.getIsActive() == null) {
+			if (data.getEmail() == null  || data.getRolesId() == null || data.getIsActive() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {

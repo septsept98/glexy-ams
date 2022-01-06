@@ -18,4 +18,5 @@ public interface EmployeeDao {
 	
 	List<Employee> search(String search) throws Exception;
 	
+	List<Employee> findAllEmployees() throws Exception; 
 }

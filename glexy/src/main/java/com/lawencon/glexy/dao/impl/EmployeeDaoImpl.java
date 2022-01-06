@@ -78,5 +78,28 @@ public class EmployeeDaoImpl extends BaseDaoImpl<Employee> implements EmployeeDa
 		return listResult;
 	}
 
+	@Override
+	public List<Employee> findAllEmployees() throws Exception {
+		
+		List<Employee> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id ");
+		sql.append("FROM employees ");
+		sql.append("WHERE nip NOT IN ('system', 'super admin')");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			
+			Employee employee = new Employee();
+			employee.setId(rs.toString());
+			employee = getById(employee.getId());
+
+			listResult.add(employee);
+		});
+
+		return listResult;
+	}
+
 
 }

@@ -121,4 +121,17 @@ public class UsersDaoImpl extends BaseDaoImpl<Users> implements UsersDao {
 		return resultUsers;
 	}
 
+	@Override
+	public List<Users> findAllUsers() throws Exception {
+		List<Users> list = null;
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT u FROM Users u ");
+		sql.append("INNER JOIN FETCH u.rolesId AS e ");
+		sql.append("WHERE e.code  not in ('S','SA')");
+			list = createQuery(sql.toString(), Users.class).getResultList();
+			
+			
+			return list;
+	}
+
 }
