@@ -59,8 +59,6 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	@Autowired
 	private TrackAssetService trackAssetService;
 	@Autowired
-	private ExcelUtil excelUtil;
-	@Autowired
 	private CompanyService companyService;
 	@Autowired
 	private BrandService brandService;
@@ -291,6 +289,11 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public List<Asset> findByInvent(String idInvent) throws Exception {
 		return assetDao.findByInvent(idInvent);
 	}
+	
+	@Override
+	public List<Asset> findByInvoice(String idInvoice) throws Exception {
+		return assetDao.findByInvoiceId(idInvoice);
+	}
 
 	@Override
 	public List<Asset> findByBrandId(String idBrand) throws Exception {
@@ -327,39 +330,45 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 	@Override
 	public void saveExcel(MultipartFile file) throws Exception {
-
+		ExcelUtil excelUtil = new ExcelUtil();
 		try {
-			Integer stock = 0;
-			int index = 0;
 			excelUtil.initRead("Assets", file.getInputStream());
 			begin();
 			for (int i = 1; i < excelUtil.getRowCountInSheet(); i++) {
-				Inventory inventory = new Inventory();
-				inventory.setNameAsset(excelUtil.getCellData(i, 0));
-				stock = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
+				Integer stock = 0;
+				int index = 0;
+				Inventory inven = new Inventory();
+				Integer stockInven = null;
+				
+				if(excelUtil.getCellData(i, 0) == null) {
+					break;
+				} 
+				stockInven = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
 				String codeInsert = excelUtil.getCellData(i, 2);
-				inventory = inventoryService.findByCode(codeInsert); // bycode
+				Inventory inventory = inventoryService.findByCode(codeInsert); // bycode
 				if (inventory == null) {
-					Inventory inven = new Inventory();
-					inven.setStock(stock);
+					inven.setStock(stockInven);
 					inven.setNameAsset(excelUtil.getCellData(i, 0));
-					inven.setLatestStock(stock);
+					inven.setLatestStock(stockInven);
 					inven.setCode(codeInsert);
-					inventory = inven;
-					index = 0;
+					stock = stockInven;
 				} else {
 					index = inventory.getStock();
-					System.out.println("index : "+ index);
-					stock = inventory.getStock() + stock;
-					System.out.println("stock : "+stock);
-					int latest = inventory.getLatestStock() + stock;
-					System.out.println("latest : " + latest);
-					inventory.setStock(stock);
-					inventory.setLatestStock(latest);
+					stock = inventory.getStock() + stockInven;
+					int latest = inventory.getLatestStock() + stockInven;
+					inven.setId(inventory.getId());
+					inven.setNameAsset(inventory.getNameAsset());
+					inven.setCode(inventory.getCode());
+					inven.setStock(stock);
+					inven.setLatestStock(latest);
+					inven.setCreatedBy(inventory.getCreatedBy());
+					inven.setCreatedAt(inventory.getCreatedAt());
+					inven.setIsActive(inventory.getIsActive());
+					inven.setVersion(inventory.getVersion());
 
 				}
 
-				inventoryService.saveOrUpdate(inventory);
+				inven = inventoryService.saveOrUpdate(inven);
 
 				Invoice invoice = new Invoice();
 				invoice.setCode(excelUtil.getCellData(i, 3));
@@ -390,7 +399,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				
 				for (int j = index; j < stock; j++) {
 					Asset assetInsert = new Asset();
-					String codeAsset = generateCode(inventory.getCode(), company.getCode(), stock, j);
+					String codeAsset = generateCode(inven.getCode(), company.getCode(), stock, j);
 					assetInsert.setAssetTypeId(assetType);
 
 					assetInsert.setBrandId(brand);
@@ -403,11 +412,11 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 					} 
 					
 					assetInsert.setStatusAssetId(statusAsset);
-					assetInsert.setNames(inventory.getNameAsset());
+					assetInsert.setNames(inven.getNameAsset());
 					assetInsert.setCode(codeAsset);
 					assetInsert.setCreatedBy(getIdAuth());
 					assetInsert.setInvoiceId(invoice);
-					assetInsert.setInventoryId(inventory);
+					assetInsert.setInventoryId(inven);
 
 					assetDao.saveOrUpdate(assetInsert);
 
@@ -427,6 +436,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 		} catch (Exception e) {
 			rollback();
+			e.printStackTrace();
 			throw new Exception("fail to store excel data: " + e.getMessage());
 		}
 
@@ -434,39 +444,48 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 	@Override
 	public Asset updateImage(Asset data, MultipartFile assetImg) throws Exception {
-		File imgAsset = new File();
-		Asset asset = assetDao.findById(data.getId());
-		data.setNames(asset.getNames());
-		data.setCode(asset.getCode());
-		data.setExpiredDate(asset.getExpiredDate());
-		data.setAssetTypeId(asset.getAssetTypeId());
-		data.setStatusAssetId(asset.getStatusAssetId());
-		data.setBrandId(asset.getBrandId());
-		data.setCompanyId(asset.getCompanyId());
-		data.setCreatedBy(asset.getCreatedBy());
-		data.setCreatedAt(asset.getCreatedAt());
-		data.setInventoryId(asset.getInventoryId());
-		data.setInvoiceId(asset.getInvoiceId());
-		data.setVersion(asset.getVersion());
-		data.setIsActive(asset.getIsActive());
-
-		imgAsset.setFiles(assetImg.getBytes());
-		String ext = assetImg.getOriginalFilename();
-		ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
-		imgAsset.setExtension(ext);
-
-		File imgInsert = fileService.findByByte(imgAsset.getFile(), ext);
-		if (imgInsert != null) {
-			data.setAssetImg(imgInsert);
-		} else {
-			imgAsset = fileService.saveOrUpdate(imgAsset);
-			data.setAssetImg(imgAsset);
+		
+		try {
+			
+			File imgAsset = new File();
+			Asset asset = assetDao.findById(data.getId());
+			data.setNames(asset.getNames());
+			data.setCode(asset.getCode());
+			data.setExpiredDate(asset.getExpiredDate());
+			data.setAssetTypeId(asset.getAssetTypeId());
+			data.setStatusAssetId(asset.getStatusAssetId());
+			data.setBrandId(asset.getBrandId());
+			data.setCompanyId(asset.getCompanyId());
+			data.setCreatedBy(asset.getCreatedBy());
+			data.setCreatedAt(asset.getCreatedAt());
+			data.setInventoryId(asset.getInventoryId());
+			data.setInvoiceId(asset.getInvoiceId());
+			data.setVersion(asset.getVersion());
+			data.setIsActive(asset.getIsActive());
+			
+			imgAsset.setFiles(assetImg.getBytes());
+			String ext = assetImg.getOriginalFilename();
+			ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
+			imgAsset.setExtension(ext);
+			
+			File imgInsert = fileService.findByByte(imgAsset.getFile(), ext);
+			if (imgInsert != null) {
+				data.setAssetImg(imgInsert);
+			} else {
+				imgAsset = fileService.saveOrUpdate(imgAsset);
+				data.setAssetImg(imgAsset);
+			}
+			data.setUpdatedBy(getIdAuth());
+			
+			begin();
+			data = assetDao.saveOrUpdate(data);
+			commit();
+			
+		} catch (Exception e) {
+			rollback();
+			e.printStackTrace();
+			throw new Exception("fail to store excel data: " + e.getMessage());
 		}
-		data.setUpdatedBy(getIdAuth());
-
-		begin();
-		data = assetDao.saveOrUpdate(data);
-		commit();
 
 		return data;
 	}
@@ -600,6 +619,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 	@Override
 	public byte[] downloadTemplateExcel() throws Exception {
+		ExcelUtil excelUtil = new ExcelUtil();
 		List<Brand> brandList = brandService.findAll();
 		List<Company> companyList = companyService.findAll();
 		List<AssetType> assetTypeList = assetTypeService.findAll();

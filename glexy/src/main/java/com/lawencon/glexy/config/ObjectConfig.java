@@ -7,10 +7,12 @@ import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.concurrent.DelegatingSecurityContextExecutor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,11 +49,6 @@ public class ObjectConfig {
 		liquibase.setChangeLog("/db/init_data.sql");
 
 		return liquibase;
-	}
-
-	@Bean
-	public ExcelUtil excelUtil() {
-		return new ExcelUtil();
 	}
 	
 	@Bean
