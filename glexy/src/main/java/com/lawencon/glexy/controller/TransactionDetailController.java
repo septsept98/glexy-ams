@@ -65,6 +65,13 @@ public class TransactionDetailController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	@GetMapping("/details-not-checkin/{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
+	public ResponseEntity<?> NotCheckIn(@PathVariable("id") String id) throws Exception {
+		List<TransactionDetail> result = transactionDetailService.findByTrNotCheckIn(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
 	@PostMapping
 	@ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = InsertResDataDto.class)))
 	public ResponseEntity<?> insert(@RequestBody TransactionDetail data) throws Exception {

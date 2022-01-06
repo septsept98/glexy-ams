@@ -38,6 +38,20 @@ public class TransactionsController {
 		List<Transactions> result = transactionService.findAll();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("not-check-in")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Transactions.class)))
+	public ResponseEntity<?> getAllNotCheckIn() throws Exception {
+		List<Transactions> result = transactionService.findAllNotCheckIn();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("check-in")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Transactions.class)))
+	public ResponseEntity<?> getAllCheckIn() throws Exception {
+		List<Transactions> result = transactionService.findAllCheckIn();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	@GetMapping("{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Transactions.class)))

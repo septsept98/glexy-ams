@@ -1,6 +1,5 @@
 package com.lawencon.glexy.service.impl;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -58,11 +57,6 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public List<Users> findAll() throws Exception {
-		EmailHelper data = new EmailHelper();
-		data.setEmployeeName("septian");
-		data.setValueName("lenovo");
-		data.setExpiredDate(LocalDate.now());
-		emailHandler.sendSimpleMessage("glenn9828@gmail.com", "Expired Asset Reminder", "Close To Expired", data);
 		return usersDao.findAll();
 	}
 

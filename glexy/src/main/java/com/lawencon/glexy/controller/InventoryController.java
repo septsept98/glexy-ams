@@ -66,6 +66,14 @@ public class InventoryController {
 
 	}
 	
+	@GetMapping("search-not-license")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
+	public ResponseEntity<?> getAllBySearchNotLicense(@RequestParam ("query") String query) throws Exception {
+		List<Inventory> result = inventoryService.searchByCodeNameLicn(query);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+	
 	@GetMapping("/code/{code}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Inventory.class)))
 	public ResponseEntity<?> getByCode(@PathVariable("code") String code) throws Exception {

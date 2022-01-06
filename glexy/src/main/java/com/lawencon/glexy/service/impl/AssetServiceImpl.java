@@ -506,7 +506,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 	@Override
 	public byte[] pdfAssetExpired() throws Exception {
-		Users users = usersService.findById("1");
+		Users users = usersService.findByIdAuth();
 		Company company = users.getEmployeeId().getCompanyId();
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("company", company.getNames());
@@ -531,8 +531,9 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		emailHelper.setAttach(data);
 		emailHelper.setFileName("asset-expired.pdf");
 
-		emailHandler.sendSimpleMessage("septianardi053@gmail.com", "License Asset Expired Report", "Expired Asset",
-				emailHelper);
+		Users users = usersService.findByIdAuth();
+
+		emailHandler.sendReport(users.getEmail(), "License Asset Expired Report", "Expired Asset", emailHelper);
 
 		ResDto resDto = new ResDto();
 		resDto.setMsg("Send to Email");

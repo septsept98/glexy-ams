@@ -103,5 +103,50 @@ public class TransactionDaoImpl extends BaseDaoImpl<Transactions> implements Tra
 		return resultTransaction;
 	}
 
+	@Override
+	public List<Transactions> findAllNotCheckIn() throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT t.id ");
+		sql.append("FROM transactions t ");
+		sql.append("INNER JOIN transaction_details td ON td.transaction_id = t.id ");
+		sql.append("WHERE td.date_checkin ISNULL ");
+		sql.append("AND td.status_tr_checkin_id ISNULL ");
+		sql.append("GROUP BY t.id ");
+		sql.append("ORDER BY t.checkout_date ASC");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		List<Transactions> resultTransaction = new ArrayList<>();
+
+		result.forEach(rs -> {
+			Transactions data = getById(rs.toString());
+			resultTransaction.add(data);
+		});
+
+		return resultTransaction;
+	}
+
+	@Override
+	public List<Transactions> findAllCheckIn() throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT t.id ");
+		sql.append("FROM transactions t ");
+		sql.append("INNER JOIN transaction_details td ON td.transaction_id = t.id ");
+		sql.append("WHERE td.date_checkin NOTNULL ");
+		sql.append("AND td.status_tr_checkin_id NOTNULL ");
+		sql.append("GROUP BY t.id");
+
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		List<Transactions> resultTransaction = new ArrayList<>();
+
+		result.forEach(rs -> {
+			Transactions data = getById(rs.toString());
+			resultTransaction.add(data);
+		});
+
+		return resultTransaction;
+	}
+
 	
 }

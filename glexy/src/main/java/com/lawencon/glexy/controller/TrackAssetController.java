@@ -78,7 +78,7 @@ public class TrackAssetController {
 	}
 	
 	@GetMapping("/pdf")
-	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
+	public ResponseEntity<?> generatePdf() throws Exception, JRException {
 		
 		byte[] data = trackAssetService.pdfTrackAsset();
 		HttpHeaders headers = new HttpHeaders();

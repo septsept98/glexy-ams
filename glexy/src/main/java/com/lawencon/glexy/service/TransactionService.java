@@ -11,6 +11,10 @@ public interface TransactionService {
 
 	List<Transactions> findAll() throws Exception;
 
+	List<Transactions> findAllNotCheckIn() throws Exception;
+
+	List<Transactions> findAllCheckIn() throws Exception;
+
 	Transactions findById(String id) throws Exception;
 	
 	List<Asset> findAssetDetail(InsertReqDataAssetTransactionDto data) throws Exception;

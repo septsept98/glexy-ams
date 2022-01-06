@@ -45,15 +45,13 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		sql.append("Select id ");
 		sql.append("FROM transaction_details ");
 		sql.append("WHERE transaction_id=:id");
-		List<?> result = createNativeQuery(sql.toString())
-				.setParameter("id", id)
-				.getResultList();
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
 
 		result.forEach(rs -> {
 			TransactionDetail transactionDetail = new TransactionDetail();
 			transactionDetail.setId(rs.toString());
 			transactionDetail = getById(transactionDetail.getId());
-			
+
 			listResult.add(transactionDetail);
 		});
 		return listResult;
@@ -66,14 +64,13 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		sql.append("SELECT id ");
 		sql.append("FROM transaction_details ");
 		sql.append("WHERE (date_part('day', duration_date) - date_part('day', now())) <= 7 AND status_email = false");
-		List<?> result = createNativeQuery(sql.toString())
-				.getResultList();
-		
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
 		result.forEach(res -> {
 			TransactionDetail transactionDetail = new TransactionDetail();
 			transactionDetail.setId(res.toString());
 			transactionDetail = getById(transactionDetail.getId());
-			
+
 			listResult.add(transactionDetail);
 		});
 		return listResult;
@@ -109,19 +106,18 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		sql.append("FROM transaction_details ");
 		sql.append("WHERE date_checkin > duration_date ");
 		sql.append("ORDER BY duration_date ASC");
-		List<?> result = createNativeQuery(sql.toString())
-				.getResultList();
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
 
 		result.forEach(rs -> {
 			TransactionDetail transactionDetail = new TransactionDetail();
 			transactionDetail.setId(rs.toString());
 			transactionDetail = getById(transactionDetail.getId());
-			
+
 			listResult.add(transactionDetail);
 		});
 		return listResult;
 	}
-  
+
 	public List<TransactionDetail> findByStatusAssetId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT status_asset_checkout_id FROM transaction_details ");
@@ -164,5 +160,26 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 
 		return resultTransactionDetail;
 	}
-	
+
+	@Override
+	public List<TransactionDetail> findByTrNotCheckIn(String id) throws Exception {
+		List<TransactionDetail> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select td.id ");
+		sql.append("FROM transaction_details td ");
+		sql.append("INNER JOIN transactions t ON t.id = td.transaction_id ");
+		sql.append("WHERE td.date_checkin ISNULL AND td.status_tr_checkin_id ISNULL AND ");
+		sql.append("t.id=:id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		result.forEach(rs -> {
+			TransactionDetail transactionDetail = new TransactionDetail();
+			transactionDetail.setId(rs.toString());
+			transactionDetail = getById(transactionDetail.getId());
+
+			listResult.add(transactionDetail);
+		});
+		return listResult;
+	}
+
 }
