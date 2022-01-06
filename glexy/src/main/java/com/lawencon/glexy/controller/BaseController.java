@@ -71,20 +71,12 @@ public class BaseController {
 				.readValue(src, clazz);
 	}
 	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> exception(Exception e){
-		Map<String, Object> mapError = new HashMap<String, Object>();
-		
-		mapError.put("msg", NestedExceptionUtils.getRootCause(e).getMessage());
-		
-		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
-	}
 	
 	@ExceptionHandler(ValidationGlexyException.class)
 	public ResponseEntity<?> exception(ValidationGlexyException e){
 		Map<String, Object> mapError = new HashMap<String, Object>();
 		
-		mapError.put("msg", NestedExceptionUtils.getRootCause(e).getMessage());
+		mapError.put("msg",e.getMessage());
 		
 		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}

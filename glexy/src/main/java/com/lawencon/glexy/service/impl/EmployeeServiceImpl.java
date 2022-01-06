@@ -35,7 +35,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 	@Override
 	public List<Employee> findAll() throws Exception {
 
-		return employeeDao.findAll();
+		return employeeDao.findAllEmployees();
 	}
 
 	@Override
