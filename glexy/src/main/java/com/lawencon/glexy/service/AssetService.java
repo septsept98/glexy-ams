@@ -18,6 +18,8 @@ public interface AssetService {
 	
 	List<Asset> findByInvent(String idInvent) throws Exception;
 	
+	List<Asset> findByInvoice(String idInvoice) throws Exception;
+	
 	List<Asset> findByBrandId(String idBrand) throws Exception;
 	
 	List<Asset> findByCompanyId(String idCompany) throws Exception;

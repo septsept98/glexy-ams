@@ -80,6 +80,14 @@ public class AssetController extends BaseController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
+	
+	@GetMapping("/invoice/{invoId}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))
+	public ResponseEntity<?> getByInvoice(@PathVariable("invoId") String invoId) throws Exception {
+		List<Asset> result = assetService.findByInvoice(invoId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
 
 	@GetMapping("/brand/{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Asset.class)))

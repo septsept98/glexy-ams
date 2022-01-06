@@ -188,7 +188,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
   
 	public List<Asset> findByInventoryId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT asset_type_id FROM assets ");
+		sql.append("SELECT id FROM assets ");
 		sql.append("WHERE inventory_id = :id");
 		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
 
@@ -197,10 +197,9 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		result.forEach(rs -> {
 
 			Asset data = new Asset();
-
-			AssetType assetType = new AssetType();
-			assetType.setId(rs.toString());
-			data.setAssetTypeId(assetType);
+			data.setId(rs.toString());
+			
+			data = getById(data.getId());
 			resultAsset.add(data);
 		});
 
@@ -210,7 +209,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 	@Override
 	public List<Asset> findByInvoiceId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT asset_type_id FROM assets ");
+		sql.append("SELECT id FROM assets ");
 		sql.append("WHERE invoice_id = :id");
 		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
 
@@ -219,10 +218,8 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		result.forEach(rs -> {
 
 			Asset data = new Asset();
-
-			AssetType assetType = new AssetType();
-			assetType.setId(rs.toString());
-			data.setAssetTypeId(assetType);
+			data.setId(rs.toString());
+			data = getById(data.getId());
 			resultAsset.add(data);
 		});
 
@@ -232,7 +229,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 	@Override
 	public List<Asset> findByStatusAssetId(String id) throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT status_asset_id FROM assets ");
+		sql.append("SELECT id FROM assets ");
 		sql.append("WHERE status_asset_id = :id");
 		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
 
@@ -241,10 +238,8 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		result.forEach(rs -> {
 
 			Asset data = new Asset();
-
-			StatusAsset statusAsset = new StatusAsset();
-			statusAsset.setId(rs.toString());
-			data.setStatusAssetId(statusAsset);
+			data.setId(rs.toString());
+			data = getById(data.getId());
 			resultAsset.add(data);
 		});
 
