@@ -3,9 +3,7 @@ package com.lawencon.glexy.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +42,20 @@ public class TransactionDetailController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	@GetMapping("all-check-in")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
+	public ResponseEntity<?> getAllCheckIn() throws Exception {
+		List<TransactionDetail> result = transactionDetailService.findAllCheckIn();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("all-not-check-in")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
+	public ResponseEntity<?> getAllNotCheckIn() throws Exception {
+		List<TransactionDetail> result = transactionDetailService.findAllNotCheckIn();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	@GetMapping("/exp-duration")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
 	public ResponseEntity<?> getAllExpDurationAssign() throws Exception {
@@ -67,8 +79,15 @@ public class TransactionDetailController {
 
 	@GetMapping("/details-not-checkin/{id}")
 	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
-	public ResponseEntity<?> NotCheckIn(@PathVariable("id") String id) throws Exception {
+	public ResponseEntity<?> getNotCheckIn(@PathVariable("id") String id) throws Exception {
 		List<TransactionDetail> result = transactionDetailService.findByTrNotCheckIn(id);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/details-checkin/{id}")
+	@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = TransactionDetail.class)))
+	public ResponseEntity<?> getCheckIn(@PathVariable("id") String id) throws Exception {
+		List<TransactionDetail> result = transactionDetailService.findByTrCheckIn(id);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -103,13 +122,11 @@ public class TransactionDetailController {
 	}
 	
 	@GetMapping("/pdf")
-	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
+	public byte[] generatePdf() throws Exception, JRException {
+		
 		byte[] data = transactionDetailService.pdfTransactionOutDate();
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=trx-outdate.pdf");
-		
-		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+		return data;
 	}
 	
 	@GetMapping("/out-date")

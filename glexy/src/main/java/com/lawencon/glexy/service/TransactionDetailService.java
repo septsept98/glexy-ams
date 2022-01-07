@@ -29,5 +29,11 @@ public interface TransactionDetailService {
 	void validationSave(TransactionDetail data) throws Exception;
 	
 	List<TransactionDetail> findByTrNotCheckIn(String id) throws Exception;
+	
+	List<TransactionDetail> findByTrCheckIn(String id) throws Exception;
+	
+	List<TransactionDetail> findAllNotCheckIn() throws Exception;
+	
+	List<TransactionDetail> findAllCheckIn() throws Exception;
 
 }

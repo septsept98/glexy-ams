@@ -189,13 +189,11 @@ public class AssetController extends BaseController {
 	}
 	
 	@GetMapping("/pdf")
-	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
+	public byte[] generatePdf() throws Exception, JRException {
 		
 		byte[] data = assetService.pdfAssetExpired();
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=assets-expired.pdf");
 		
-		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+		return data;
 	}
 	
 	@GetMapping("/send-email")
