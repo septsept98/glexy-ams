@@ -3,9 +3,7 @@ package com.lawencon.glexy.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -124,13 +122,11 @@ public class TransactionDetailController {
 	}
 	
 	@GetMapping("/pdf")
-	public ResponseEntity<byte[]> generatePdf() throws Exception, JRException {
+	public byte[] generatePdf() throws Exception, JRException {
+		
 		byte[] data = transactionDetailService.pdfTransactionOutDate();
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=trx-outdate.pdf");
-		
-		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+		return data;
 	}
 	
 	@GetMapping("/out-date")

@@ -77,14 +77,21 @@ public class TrackAssetController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+//	@GetMapping("/pdf")
+//	public ResponseEntity<?> generatePdf() throws Exception, JRException {
+//		
+//		byte[] data = trackAssetService.pdfTrackAsset();
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=track-asset.pdf");
+//		
+//		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+//	}
 	@GetMapping("/pdf")
-	public ResponseEntity<?> generatePdf() throws Exception, JRException {
+	public byte[] generatePdf() throws Exception, JRException {
 		
 		byte[] data = trackAssetService.pdfTrackAsset();
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=track-asset.pdf");
 		
-		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+		return data;
 	}
 	
 	@GetMapping("/send-email")
