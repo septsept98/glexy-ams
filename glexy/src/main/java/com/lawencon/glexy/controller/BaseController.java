@@ -90,5 +90,4 @@ public class BaseController {
 		return new ResponseEntity<>(mapError, HttpStatus.BAD_REQUEST);
 	}
 	
-	
 }
