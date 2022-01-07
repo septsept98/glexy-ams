@@ -115,7 +115,7 @@ public class InventoryDaoImpl extends BaseDaoImpl<Inventory> implements Inventor
 		sql.append("FROM inventories i ");
 		sql.append("INNER JOIN assets a ON a.inventory_id = i.id ");
 		sql.append("INNER JOIN asset_types at2 ON at2.id = a.asset_type_id ");
-		sql.append("WHERE lower(at2.names) NOT IN (lower('License')) ");
+		sql.append("WHERE lower(at2.names) NOT IN (lower('License')) AND ");
 		sql.append("(lower(i.code) LIKE lower('%" + search + "%') OR lower(i.name_asset) LIKE lower('%" + search + "%')) ");
 		sql.append("GROUP BY i.id ");
 

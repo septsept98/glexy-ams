@@ -104,7 +104,7 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		StringBuilder sql = new StringBuilder();
 		sql.append("Select id ");
 		sql.append("FROM transaction_details ");
-		sql.append("WHERE date_checkin > duration_date ");
+		sql.append("WHERE now() >= duration_date ");
 		sql.append("ORDER BY duration_date ASC");
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 
@@ -169,6 +169,67 @@ public class TransactionDetailDaoImpl extends BaseDaoImpl<TransactionDetail> imp
 		sql.append("FROM transaction_details td ");
 		sql.append("INNER JOIN transactions t ON t.id = td.transaction_id ");
 		sql.append("WHERE td.date_checkin ISNULL AND td.status_tr_checkin_id ISNULL AND ");
+		sql.append("t.id=:id");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
+
+		result.forEach(rs -> {
+			TransactionDetail transactionDetail = new TransactionDetail();
+			transactionDetail.setId(rs.toString());
+			transactionDetail = getById(transactionDetail.getId());
+
+			listResult.add(transactionDetail);
+		});
+		return listResult;
+	}
+
+	@Override
+	public List<TransactionDetail> findAllNotCheckIn() throws Exception {
+		List<TransactionDetail> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select td.id ");
+		sql.append("FROM transaction_details td ");
+		sql.append("INNER JOIN transactions t ON t.id = td.transaction_id ");
+		sql.append("WHERE td.date_checkin ISNULL AND td.status_tr_checkin_id ISNULL ");
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			TransactionDetail transactionDetail = new TransactionDetail();
+			transactionDetail.setId(rs.toString());
+			transactionDetail = getById(transactionDetail.getId());
+
+			listResult.add(transactionDetail);
+		});
+		return listResult;
+	}
+
+	@Override
+	public List<TransactionDetail> findAllCheckIn() throws Exception {
+		List<TransactionDetail> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select td.id ");
+		sql.append("FROM transaction_details td ");
+		sql.append("INNER JOIN transactions t ON t.id = td.transaction_id ");
+		sql.append("WHERE td.date_checkin NOTNULL AND td.status_tr_checkin_id NOTNULL ");
+		List<?> result = createNativeQuery(sql.toString()).getResultList();
+
+		result.forEach(rs -> {
+			TransactionDetail transactionDetail = new TransactionDetail();
+			transactionDetail.setId(rs.toString());
+			transactionDetail = getById(transactionDetail.getId());
+
+			listResult.add(transactionDetail);
+		});
+		return listResult;
+	}
+
+	@Override
+	public List<TransactionDetail> findByTrCheckIn(String id) throws Exception {
+		List<TransactionDetail> listResult = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("Select td.id ");
+		sql.append("FROM transaction_details td ");
+		sql.append("INNER JOIN transactions t ON t.id = td.transaction_id ");
+		sql.append("WHERE td.date_checkin NOTNULL AND td.status_tr_checkin_id NOTNULL AND ");
 		sql.append("t.id=:id");
 		List<?> result = createNativeQuery(sql.toString()).setParameter("id", id).getResultList();
 

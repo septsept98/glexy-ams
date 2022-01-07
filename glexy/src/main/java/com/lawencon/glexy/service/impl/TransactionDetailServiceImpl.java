@@ -246,4 +246,19 @@ public class TransactionDetailServiceImpl extends BaseGlexyServiceImpl implement
 		return transactionDetailDao.findByTrNotCheckIn(id);
 	}
 
+	@Override
+	public List<TransactionDetail> findAllNotCheckIn() throws Exception {
+		return transactionDetailDao.findAllNotCheckIn();
+	}
+
+	@Override
+	public List<TransactionDetail> findAllCheckIn() throws Exception {
+		return transactionDetailDao.findAllCheckIn();
+	}
+
+	@Override
+	public List<TransactionDetail> findByTrCheckIn(String id) throws Exception {
+		return transactionDetailDao.findByTrCheckIn(id);
+	}
+
 }
