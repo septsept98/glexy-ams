@@ -349,7 +349,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[java.util.Date.from($F{checkinDate}.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{checkinDate}!=null?java.util.Date.from($F{checkinDate}.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()):" - "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="473" y="0" width="100" height="30" uuid="40c1edec-e669-493f-91e3-5789148ed246"/>
