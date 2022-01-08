@@ -241,6 +241,18 @@ public class AssetController extends BaseController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	@GetMapping("/pending-asset")
+	public ResponseEntity<?> getAllPendingAsset() throws Exception {
+		List<Asset> result = assetService.findAssetPending();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/archived-asset")
+	public ResponseEntity<?> getAllArchivedAsset() throws Exception {
+		List<Asset> result = assetService.findAssetArchived();
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "pic/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] getPic(@PathVariable("id") String id) throws Exception {
 		return assetService.findById(id).getAssetImg().getFile();

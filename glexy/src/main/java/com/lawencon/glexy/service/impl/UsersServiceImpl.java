@@ -157,6 +157,9 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 			if (employee == null) {
 				throw new ValidationGlexyException("Employee Not Found");
 			}
+			if(data.getEmployeeId().getCompanyId() == null) {
+				throw new ValidationGlexyException("Company Not Found");
+			}
 			Company company = companyService.findById(data.getEmployeeId().getCompanyId().getId());
 			if (company == null) {
 				throw new ValidationGlexyException("Company Not Found");
@@ -260,8 +263,9 @@ public class UsersServiceImpl extends BaseGlexyServiceImpl implements UsersServi
 
 	@Override
 	public void validationSave(Users data) throws Exception {
+	
 		if (data != null) {
-			if (data.getEmail() == null  || data.getRolesId() == null || data.getIsActive() == null) {
+			if (data.getEmail() == null  || data.getRolesId() == null || data.getIsActive() == null ) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {

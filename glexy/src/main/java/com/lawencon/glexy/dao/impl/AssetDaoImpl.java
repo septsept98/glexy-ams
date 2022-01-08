@@ -316,4 +316,48 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		return resultAsset;
 	}
 
+	@Override
+	public List<Asset> findAssetPending() throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT status_asset_id FROM assets ");
+		sql.append("WHERE status_asset_id = (SELECT id FROM status_assets WHERE code_status_asset = :code)");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("code", "SA4").getResultList();
+
+		List<Asset> resultAsset = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			Asset data = new Asset();
+
+			StatusAsset statusAsset = new StatusAsset();
+			statusAsset.setId(rs.toString());
+			data.setStatusAssetId(statusAsset);
+			resultAsset.add(data);
+		});
+
+		return resultAsset;
+	}
+
+	@Override
+	public List<Asset> findAssetArchived() throws Exception {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT status_asset_id FROM assets ");
+		sql.append("WHERE status_asset_id = (SELECT id FROM status_assets WHERE code_status_asset = :code)");
+		List<?> result = createNativeQuery(sql.toString()).setParameter("code", "SA3").getResultList();
+
+		List<Asset> resultAsset = new ArrayList<>();
+
+		result.forEach(rs -> {
+
+			Asset data = new Asset();
+
+			StatusAsset statusAsset = new StatusAsset();
+			statusAsset.setId(rs.toString());
+			data.setStatusAssetId(statusAsset);
+			resultAsset.add(data);
+		});
+
+		return resultAsset;
+	}
+
 }
