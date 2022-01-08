@@ -695,6 +695,18 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		
 		return assetDao.findAssetUndeployable();
 	}
+
+	@Override
+	public List<Asset> findAssetPending() throws Exception {
+		
+		return assetDao.findAssetPending();
+	}
+
+	@Override
+	public List<Asset> findAssetArchived() throws Exception {
+		// TODO Auto-generated method stub
+		return assetDao.findAssetArchived();
+	}
 	
 	
 }

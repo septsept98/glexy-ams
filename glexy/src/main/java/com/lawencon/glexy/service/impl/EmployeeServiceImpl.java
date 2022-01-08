@@ -62,7 +62,9 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 				data.setCreatedBy("2");
 
 			}
-
+			if(data.getCompanyId() == null) {
+				throw new ValidationGlexyException("Company Not Found");
+			}
 			Company company = companyService.findById(data.getCompanyId().getId());
 			if (company == null) {
 				throw new ValidationGlexyException("Company Not Found");
@@ -109,7 +111,7 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 	public void validationSave(Employee data) throws Exception {
 		if (data != null) {
 			if (data.getGender().isBlank()  || data.getNameEmployee().isBlank()  || data.getNip().isBlank() 
-					|| data.getPhoneNumber().isBlank() ) {
+					|| data.getPhoneNumber().isBlank() || data.getCompanyId() == null) {
 				throw new ValidationGlexyException("Data not Complete");
 			}
 		} else {
