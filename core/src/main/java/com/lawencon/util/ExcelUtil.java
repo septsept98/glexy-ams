@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -40,31 +41,38 @@ public class ExcelUtil {
 	}
 	
 
-	public String getCellData(int rowNumber, int cellNumber) {
-		try {
-			cell = sheet.getRow(rowNumber).getCell(cellNumber);
-			if(cell != null) {
-				CellType type = cell.getCellType();
-				if (type == CellType.STRING) {
-					return cell.getRichStringCellValue().toString();
-				} else if (type == CellType.NUMERIC) {
-					return String.valueOf(cell.getNumericCellValue());
-				} else if (type == CellType.BOOLEAN) {
-					return String.valueOf(cell.getBooleanCellValue());
-				} else if (type == CellType.BLANK) {
-					return null;
-				}
-				
-			} else {
-				return null;
-			}
+	@SuppressWarnings("unchecked")
+    public <T> T getCellData(int rowNumber, int cellNumber) {
+        T result = null;
+        try {
+            cell = sheet.getRow(rowNumber).getCell(cellNumber);
+            if (cell != null) {
+                CellType type = cell.getCellType();
+                switch (type) {
+                case STRING:
+                    result = (T) cell.getRichStringCellValue().toString();
+                    break;
+                case NUMERIC:
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        result = (T) cell.getDateCellValue();
+                    } else {
+                        result = (T) (Double) cell.getNumericCellValue();
+                    }
+                    break;
+                case BOOLEAN:
+                    result = (T) (Boolean) cell.getBooleanCellValue();
+                    break;
+                default:
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-			return cell.getStringCellValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+        return result;
+    }
+
 
 	public int getRowCountInSheet() {
 		return sheet.getLastRowNum() + 1;
