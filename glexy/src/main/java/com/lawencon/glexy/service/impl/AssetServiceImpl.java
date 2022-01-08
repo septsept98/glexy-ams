@@ -407,8 +407,13 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 					if (excelUtil.getCellData(i, 7) != null) {
 						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
-						assetInsert.setExpiredDate(date);
+						try {
+							LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
+							assetInsert.setExpiredDate(date);
+							
+						} catch(Exception e) {
+							throw new ValidationGlexyException("Date Expired must be type Date");
+						}
 					} 
 					
 					assetInsert.setStatusAssetId(statusAsset);
