@@ -2,9 +2,11 @@ package com.lawencon.glexy.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -194,7 +196,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public Asset update(Asset data) throws Exception {
 		String update = "";
 		Asset asset = findById(data.getId());
-		if(asset == null) {
+		if (asset == null) {
 			throw new ValidationGlexyException("Asset Not Found");
 		}
 		StatusAsset statusAsset = new StatusAsset();
@@ -203,29 +205,31 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		AssetType assetType = new AssetType();
 
 		statusAsset = statusAssetService.findById(data.getStatusAssetId().getId());
-		if(statusAsset == null) {
+		if (statusAsset == null) {
 			throw new ValidationGlexyException("Status Asset Not Found");
 		}
-		
+
 		brand = brandService.findById(data.getBrandId().getId());
-		if(brand == null) {
+		if (brand == null) {
 			throw new ValidationGlexyException("Brand Not Found");
 		}
-		
+
 		company = companyService.findById(data.getCompanyId().getId());
-		if(company == null) {
+		if (company == null) {
 			throw new ValidationGlexyException("Company Not Found");
 		}
-		
+
 		assetType = assetTypeService.findById(data.getAssetTypeId().getId());
-		if(assetType == null) {
+		if (assetType == null) {
 			throw new ValidationGlexyException("Asset Type Not Found");
 		}
-		
-		if(!asset.getAssetTypeId().getId().equals(data.getAssetTypeId().getId()) || !asset.getBrandId().getId().equals(data.getBrandId().getId()) || 
-				!asset.getCompanyId().getId().equals(data.getCompanyId().getId()) || asset.getExpiredDate() != data.getExpiredDate()) {
+
+		if (!asset.getAssetTypeId().getId().equals(data.getAssetTypeId().getId())
+				|| !asset.getBrandId().getId().equals(data.getBrandId().getId())
+				|| !asset.getCompanyId().getId().equals(data.getCompanyId().getId())
+				|| asset.getExpiredDate() != data.getExpiredDate()) {
 			update = "Update Asset";
-		} else if(!asset.getStatusAssetId().getId().equals(data.getStatusAssetId().getId())) {
+		} else if (!asset.getStatusAssetId().getId().equals(data.getStatusAssetId().getId())) {
 			update = "Update Status Asset";
 		}
 
@@ -289,7 +293,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public List<Asset> findByInvent(String idInvent) throws Exception {
 		return assetDao.findByInvent(idInvent);
 	}
-	
+
 	@Override
 	public List<Asset> findByInvoice(String idInvoice) throws Exception {
 		return assetDao.findByInvoiceId(idInvoice);
@@ -339,10 +343,10 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				int index = 0;
 				Inventory inven = new Inventory();
 				Integer stockInven = null;
-				
-				if(excelUtil.getCellData(i, 0) == null) {
+
+				if (excelUtil.getCellData(i, 0) == null) {
 					break;
-				} 
+				}
 				stockInven = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
 				String codeInsert = excelUtil.getCellData(i, 2);
 				Inventory inventory = inventoryService.findByCode(codeInsert); // bycode
@@ -372,15 +376,14 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 				Invoice invoice = new Invoice();
 				invoice.setCode(excelUtil.getCellData(i, 3));
-				BigDecimal bigDecimal = new BigDecimal(excelUtil.getCellData(i, 4));
-				invoice.setTotalPrice(bigDecimal);
+				invoice.setTotalPrice(excelUtil.getCellData(i, 4));
 				invoice.setPurchaseDate(LocalDate.now());
 
 				invoiceService.save(invoice);
 				Brand brand = brandService.findByCode(excelUtil.getCellData(i, 5));
 				if (brand == null) {
 					throw new ValidationGlexyException("Brand Not Found");
-				} 
+				}
 
 				AssetType assetType = assetTypeService.findByCode(excelUtil.getCellData(i, 6));
 				if (assetType == null) {
@@ -396,7 +399,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				if (company == null) {
 					throw new ValidationGlexyException("Company Not Found");
 				}
-				
+
 				for (int j = index; j < stock; j++) {
 					Asset assetInsert = new Asset();
 					String codeAsset = generateCode(inven.getCode(), company.getCode(), stock, j);
@@ -406,16 +409,17 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 					assetInsert.setCompanyId(company);
 
 					if (excelUtil.getCellData(i, 7) != null) {
-						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-						try {
-							LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
-							assetInsert.setExpiredDate(date);
-							
-						} catch(Exception e) {
-							throw new ValidationGlexyException("Date Expired must be type Date");
-						}
-					} 
-					
+//						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+//						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
+						Date date = excelUtil.getCellData(i, 7);
+						LocalDate localDate = date.toInstant()
+							      .atZone(ZoneId.systemDefault())
+							      .toLocalDate();
+						assetInsert.setExpiredDate(localDate);
+
+					}
+
 					assetInsert.setStatusAssetId(statusAsset);
 					assetInsert.setNames(inven.getNameAsset());
 					assetInsert.setCode(codeAsset);
@@ -449,9 +453,9 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 	@Override
 	public Asset updateImage(Asset data, MultipartFile assetImg) throws Exception {
-		
+
 		try {
-			
+
 			File imgAsset = new File();
 			Asset asset = assetDao.findById(data.getId());
 			data.setNames(asset.getNames());
@@ -467,12 +471,12 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 			data.setInvoiceId(asset.getInvoiceId());
 			data.setVersion(asset.getVersion());
 			data.setIsActive(asset.getIsActive());
-			
+
 			imgAsset.setFiles(assetImg.getBytes());
 			String ext = assetImg.getOriginalFilename();
 			ext = ext.substring(ext.lastIndexOf(".") + 1, ext.length());
 			imgAsset.setExtension(ext);
-			
+
 			File imgInsert = fileService.findByByte(imgAsset.getFile(), ext);
 			if (imgInsert != null) {
 				data.setAssetImg(imgInsert);
@@ -481,11 +485,11 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				data.setAssetImg(imgAsset);
 			}
 			data.setUpdatedBy(getIdAuth());
-			
+
 			begin();
 			data = assetDao.saveOrUpdate(data);
 			commit();
-			
+
 		} catch (Exception e) {
 			rollback();
 			e.printStackTrace();
@@ -568,8 +572,8 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public void validationSave(Asset data) throws Exception {
 		if (data != null) {
 			if (data.getAssetTypeId() == null || data.getBrandId() == null || data.getCompanyId() == null
-					|| data.getInventoryId() == null || data.getInvoiceId() == null || data.getStatusAssetId() == null) {
-
+					|| data.getInventoryId() == null || data.getInvoiceId() == null
+					|| data.getStatusAssetId() == null) {
 
 				throw new ValidationGlexyException("Data not Complete");
 			}
@@ -604,7 +608,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	@Override
 	public List<Asset> searchAssetGeneral(String search) throws Exception {
 		List<Asset> result = new ArrayList<>();
-		if(search.isBlank()) {
+		if (search.isBlank()) {
 			return result;
 		} else {
 			result = assetDao.searchAssetGeneral(search);
@@ -615,7 +619,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	@Override
 	public List<Asset> findAssetByInventBrand(String inventId, String brandId) throws Exception {
 		List<Asset> result = new ArrayList<>();
-		if(inventId.isBlank() && brandId.isBlank()) {
+		if (inventId.isBlank() && brandId.isBlank()) {
 			return result;
 		} else {
 			result = assetDao.findAssetByInventBrand(inventId, brandId);
@@ -631,79 +635,78 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		List<AssetType> assetTypeList = assetTypeService.findAll();
 		List<StatusAsset> statusAssetList = statusAssetService.findAll();
 		List<Inventory> inventoryList = inventoryService.findAll();
-		
-		
-		excelUtil.initWrite("Assets", "Inventory Code", "Brand Code", "Asset Type Code", "Status Asset Code", "Company Code");
-		
+
+		excelUtil.initWrite("Assets", "Inventory Code", "Brand Code", "Asset Type Code", "Status Asset Code",
+				"Company Code");
+
 		List<String> header = new ArrayList<>();
 		header.add("Code");
 		header.add("Name");
-		
+
 		excelUtil.setCellValue("Brand Code", 0, header, true);
 		List<String> brand = new ArrayList<>();
-		for(int i = 0; i < brandList.size(); i++) {
+		for (int i = 0; i < brandList.size(); i++) {
 			brand.add(brandList.get(i).getCode());
 			brand.add(brandList.get(i).getNames());
-			excelUtil.setCellValue("Brand Code", i+1, brand , false);
+			excelUtil.setCellValue("Brand Code", i + 1, brand, false);
 			brand.removeAll(brand);
 		}
-		
+
 		excelUtil.setCellValue("Company Code", 0, header, true);
 		List<String> company = new ArrayList<>();
-		for(int i = 0; i < companyList.size(); i++) {
+		for (int i = 0; i < companyList.size(); i++) {
 			company.add(companyList.get(i).getCode());
 			company.add(companyList.get(i).getNames());
-			excelUtil.setCellValue("Company Code", i+1, company, false);
+			excelUtil.setCellValue("Company Code", i + 1, company, false);
 			company.removeAll(company);
 		}
-		
+
 		excelUtil.setCellValue("Asset Type Code", 0, header, true);
 		List<String> assetType = new ArrayList<>();
-		for(int i = 0; i < assetTypeList.size(); i++) {
+		for (int i = 0; i < assetTypeList.size(); i++) {
 			assetType.add(assetTypeList.get(i).getCode());
 			assetType.add(assetTypeList.get(i).getNames());
-			excelUtil.setCellValue("Asset Type Code", i+1, assetType, false);
+			excelUtil.setCellValue("Asset Type Code", i + 1, assetType, false);
 			assetType.removeAll(assetType);
 		}
-		
+
 		excelUtil.setCellValue("Status Asset Code", 0, header, true);
 		List<String> statusAsset = new ArrayList<>();
-		for(int i = 0; i < statusAssetList.size(); i++) {
+		for (int i = 0; i < statusAssetList.size(); i++) {
 			statusAsset.add(statusAssetList.get(i).getCodeStatusAsset());
 			statusAsset.add(statusAssetList.get(i).getNameStatusAsset());
-			excelUtil.setCellValue("Status Asset Code", i+1, statusAsset, false);
+			excelUtil.setCellValue("Status Asset Code", i + 1, statusAsset, false);
 			statusAsset.removeAll(statusAsset);
 		}
-		
+
 		excelUtil.setCellValue("Inventory Code", 0, header, true);
 		List<String> inventory = new ArrayList<>();
-		for(int i = 0; i < inventoryList.size(); i++) {
+		for (int i = 0; i < inventoryList.size(); i++) {
 			inventory.add(inventoryList.get(i).getCode());
 			inventory.add(inventoryList.get(i).getNameAsset());
-			excelUtil.setCellValue("Inventory Code", i+1, inventory, false);
+			excelUtil.setCellValue("Inventory Code", i + 1, inventory, false);
 			inventory.removeAll(inventory);
 		}
 
-		String[] headerAsset = {"Name Asset", "Quantity", "Code Inventory", "Invoice Code", "Total Price", "Brand Code", "Asset Type Code", "Expired Date", 
-				"Status Asset Code", "Company Code"};
-		
+		String[] headerAsset = { "Name Asset", "Quantity", "Code Inventory", "Invoice Code", "Total Price",
+				"Brand Code", "Asset Type Code", "Expired Date", "Status Asset Code", "Company Code" };
+
 		excelUtil.setCellValue("Assets", 0, Arrays.asList(headerAsset), true);
-		
-		
+
 		byte[] template = excelUtil.getByteArrayFile();
-		
+
 		return template;
 	}
 
 	@Override
 	public List<Asset> findAssetUndeployable() throws Exception {
-		
+
 		return assetDao.findAssetUndeployable();
 	}
 
 	@Override
 	public List<Asset> findAssetPending() throws Exception {
-		
+
 		return assetDao.findAssetPending();
 	}
 
@@ -712,6 +715,5 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 		// TODO Auto-generated method stub
 		return assetDao.findAssetArchived();
 	}
-	
-	
+
 }
