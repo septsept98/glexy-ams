@@ -161,6 +161,9 @@ public class EmployeeServiceImpl extends BaseGlexyServiceImpl implements Employe
 				data.setCreatedBy(employee.getCreatedBy());
 				data.setVersion(employee.getVersion());
 				data.setIsActive(employee.getIsActive());
+				
+			
+				
 
 			} else {
 				validationSave(data);
