@@ -85,7 +85,7 @@ public class EmployeeDaoImpl extends BaseDaoImpl<Employee> implements EmployeeDa
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id ");
 		sql.append("FROM employees ");
-		sql.append("WHERE nip NOT IN ('system', 'super admin')");
+		sql.append("WHERE nip NOT IN ('k227', 'k228')");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 

@@ -136,7 +136,7 @@ public class TransactionDetailController {
 	}
 	
 	@GetMapping("/send-email")
-	public ResponseEntity<?> sendEmailTrackAsset() throws Exception, JRException {
+	public ResponseEntity<?> sendEmailTrxExpiredReport() throws Exception, JRException {
 		
 		ResDto resDto = transactionDetailService.sendEmailTrxExpiredReport();
 		
