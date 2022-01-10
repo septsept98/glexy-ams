@@ -253,7 +253,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		sql.append("SELECT a.id FROM assets a ");
 		sql.append("INNER JOIN asset_types at2 ON at2.id = a.asset_type_id ");
 		sql.append("INNER JOIN status_assets sa ON sa.id = a.status_asset_id ");
-		sql.append("WHERE lower(at2.names) = lower('General') AND ");
+		sql.append("WHERE lower(at2.code) = lower('GNR') AND ");
 		sql.append("lower(sa.code_status_asset) = lower('SA1') AND ");
 		sql.append("(lower(a.names) LIKE lower('%" + search + "%') OR lower(a.code) LIKE lower('%" + search + "%'))");
 
@@ -279,7 +279,9 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao{
 		sql.append("INNER JOIN inventories i ON i.id = a.inventory_id ");
 		sql.append("INNER JOIN brands b ON b.id = a.brand_id ");
 		sql.append("INNER JOIN status_assets sa ON sa.id = a.status_asset_id ");
-		sql.append("WHERE sa.code_status_asset = 'SA1' AND i.id = '" + inventId + "' AND b.id = '" + brandId + "' ");
+		sql.append("WHERE sa.code_status_asset = 'SA1' ");
+		sql.append("AND (a.expired_date > now() OR a.expired_date ISNULL) ");
+		sql.append("AND i.id = '" + inventId + "' AND b.id = '" + brandId + "' ");
 
 		List<?> result = createNativeQuery(sql.toString()).getResultList();
 

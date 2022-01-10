@@ -24,7 +24,7 @@ public class JwtComponent {
 		claims.put("userId", userId);
 		claims.put("username", email);
 		String token = Jwts.builder().signWith(key).setClaims(claims)
-				.setExpiration(new Date(new Date().getTime() + 5000000)).compact();
+				.setExpiration(new Date(new Date().getTime() + 14400000)).compact();
 
 		return token;
 	}
