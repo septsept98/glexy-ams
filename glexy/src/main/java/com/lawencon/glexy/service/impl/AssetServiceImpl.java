@@ -3,7 +3,6 @@ package com.lawencon.glexy.service.impl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -230,7 +229,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				|| asset.getExpiredDate() != data.getExpiredDate()) {
 			update = "Update Asset";
 		} else if (!asset.getStatusAssetId().getId().equals(data.getStatusAssetId().getId())) {
-			update = "Update Status Asset";
+			update = "Update to " + data.getStatusAssetId().getNameStatusAsset();
 		}
 
 		asset.setStatusAssetId(statusAsset);
@@ -278,8 +277,22 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 	public boolean removeById(String id) throws Exception {
 		boolean result = false;
 		try {
-			validationFk(id);
 			begin();
+			Asset asset = assetDao.findById(id);
+			Inventory inventory = inventoryService.findById(asset.getInventoryId().getId());
+			inventory.setLatestStock(inventory.getLatestStock()-1);
+			inventoryService.saveOrUpdate(inventory);
+			
+			TrackAsset trackAsset = new TrackAsset();
+			trackAsset.setCodeAsset(asset.getCode());
+			trackAsset.setNameActivity("Deleted");
+			trackAsset.setDateActivity(LocalDate.now());
+			trackAsset.setUserId(getIdAuth());
+			trackAsset.setCreatedBy(getIdAuth());
+			trackAsset.setIsActive(true);
+
+			trackAssetService.saveOrUpdate(trackAsset);
+			
 			result = assetDao.removeById(id);
 			commit();
 		} catch (Exception e) {
@@ -343,13 +356,19 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 				int index = 0;
 				Inventory inven = new Inventory();
 				Integer stockInven = null;
+				
+				if(i == 1 && excelUtil.getCellData(i, 0) == null) {
+					throw new ValidationGlexyException("Excel is Empty 2");
+				}
 
 				if (excelUtil.getCellData(i, 0) == null) {
-					break;
+					throw new ValidationGlexyException("Excel is Empty");
+//					break;
 				}
-				stockInven = Double.valueOf(excelUtil.getCellData(i, 1)).intValue();
+				Double stok = excelUtil.getCellData(i, 1); 
+				stockInven = stok.intValue();
 				String codeInsert = excelUtil.getCellData(i, 2);
-				Inventory inventory = inventoryService.findByCode(codeInsert); // bycode
+				Inventory inventory = inventoryService.findByCode(codeInsert);
 				if (inventory == null) {
 					inven.setStock(stockInven);
 					inven.setNameAsset(excelUtil.getCellData(i, 0));
@@ -376,7 +395,9 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 				Invoice invoice = new Invoice();
 				invoice.setCode(excelUtil.getCellData(i, 3));
-				invoice.setTotalPrice(excelUtil.getCellData(i, 4));
+				Double prc = excelUtil.getCellData(i, 4);
+				BigDecimal price = new BigDecimal(prc);
+				invoice.setTotalPrice(price);
 				invoice.setPurchaseDate(LocalDate.now());
 
 				invoiceService.save(invoice);
@@ -409,9 +430,6 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 					assetInsert.setCompanyId(company);
 
 					if (excelUtil.getCellData(i, 7) != null) {
-//						DateTimeFormatter patern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-//						LocalDate date = LocalDate.parse(excelUtil.getCellData(i, 7), patern);
 						Date date = excelUtil.getCellData(i, 7);
 						LocalDate localDate = date.toInstant()
 							      .atZone(ZoneId.systemDefault())
@@ -712,7 +730,7 @@ public class AssetServiceImpl extends BaseGlexyServiceImpl implements AssetServi
 
 	@Override
 	public List<Asset> findAssetArchived() throws Exception {
-		// TODO Auto-generated method stub
+		
 		return assetDao.findAssetArchived();
 	}
 

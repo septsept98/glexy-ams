@@ -550,7 +550,6 @@ ALTER TABLE track_assets
 	ALTER COLUMN name_activity SET NOT NULL,
 	ALTER COLUMN date_activity SET NOT NULL,
 	ALTER COLUMN user_id SET NOT NULL,
-	ALTER COLUMN transaction_code SET NOT NULL,
 	ALTER COLUMN version SET NOT NULL,
 	ALTER COLUMN created_by SET NOT NULL,
 	ALTER COLUMN created_at SET NOT NULL,
